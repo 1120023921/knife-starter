@@ -1,3 +1,4 @@
 rootProject.name = 'ace-starter'
 include 'ace-mybatis-plus-config-starter'
+include 'ace-spring-security-config-starter'
 
