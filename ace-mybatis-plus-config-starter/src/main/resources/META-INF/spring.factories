@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cintsoft.mybatis.plus.properties.AceTenantConfigProperties, \
+com.cintsoft.mybatis.plus.MybatisPlusAutoConfig
+
