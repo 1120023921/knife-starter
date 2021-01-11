@@ -1,6 +1,5 @@
 package com.cintsoft.spring.security.provider;
 
-import com.cintsoft.mybatis.plus.tenant.TenantContextHolder;
 import com.cintsoft.spring.security.model.AceUser;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
