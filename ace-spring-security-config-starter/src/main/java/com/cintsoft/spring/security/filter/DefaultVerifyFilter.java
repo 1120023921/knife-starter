@@ -2,7 +2,7 @@ package com.cintsoft.spring.security.filter;
 
 import com.cintsoft.spring.security.common.bean.ErrorCodeInfo;
 import com.cintsoft.spring.security.common.bean.ResultBean;
-import com.cintsoft.spring.security.common.constant.SecurityConstant;
+import com.cintsoft.spring.security.common.constant.SecurityConstants;
 import com.cintsoft.spring.security.model.AceUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,7 +41,7 @@ public class DefaultVerifyFilter extends OncePerRequestFilter {
         final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final AceUser aceUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstant.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
+            final AceUser aceUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
             if (aceUser != null) {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(aceUser, null, aceUser.getAuthorities()));
             } else {
