@@ -1,6 +1,5 @@
 package com.cintsoft.spring.security.handler;
 
-import com.cintsoft.mybatis.plus.tenant.TenantContextHolder;
 import com.cintsoft.spring.security.common.bean.ErrorCodeInfo;
 import com.cintsoft.spring.security.common.bean.ResultBean;
 import com.cintsoft.spring.security.common.constant.SecurityConstant;
@@ -39,12 +38,13 @@ public class AceLogoutHandler implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         final String header = request.getHeader("Authorization");
+        final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final AceUser aceUser = userDatailRedisTemplate.opsForValue().get(String.format(SecurityConstant.USER_DETAIL_PREFIX, TenantContextHolder.getTenantId(), header.split(" ")[1]));
+            final AceUser aceUser = userDatailRedisTemplate.opsForValue().get(String.format(SecurityConstant.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
             if (aceUser != null) {
                 //缓存删除用户
-                userDatailRedisTemplate.delete(String.format(SecurityConstant.USER_DETAIL_PREFIX, TenantContextHolder.getTenantId(), header.split(" ")[1]));
+                userDatailRedisTemplate.delete(String.format(SecurityConstant.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
                 //缓存删除Token
                 tokenRedisTemplate.delete(String.format(SecurityConstant.TOKEN_PREFIX, aceUser.getTenantId(), aceUser.getUsername()));
             }
