@@ -1,6 +1,5 @@
 package com.cintsoft.spring.security.filter;
 
-import com.cintsoft.mybatis.plus.tenant.TenantContextHolder;
 import com.cintsoft.spring.security.common.bean.ErrorCodeInfo;
 import com.cintsoft.spring.security.common.bean.ResultBean;
 import com.cintsoft.spring.security.common.constant.SecurityConstant;
@@ -39,9 +38,10 @@ public class DefaultVerifyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         final String header = request.getHeader("Authorization");
+        final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final AceUser aceUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstant.USER_DETAIL_PREFIX, TenantContextHolder.getTenantId(), header.split(" ")[1]));
+            final AceUser aceUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstant.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
             if (aceUser != null) {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(aceUser, null, aceUser.getAuthorities()));
             } else {

@@ -1,7 +1,7 @@
 description('Mybatis Plus自动配置')
 
 group 'com.cintsoft'
-version '2.2'
+version '2.3'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,7 +10,6 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
-    compile project(':ace-mybatis-plus-config-starter')
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
