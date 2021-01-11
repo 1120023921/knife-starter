@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * Time: 20:57
  * Mail: huhao9277@gmail.com
  */
-public class SeurityUtils {
+public class SecurityUtils {
 
     public static AceUser getUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
