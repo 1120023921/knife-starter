@@ -243,7 +243,7 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean
     @Bean
-    public Map<String, AceSocialLoginHandler> openIdLoginHanderMap() {
+    public Map<String, AceSocialLoginHandler> aceSocialLoginHandlerMap() {
         return Collections.emptyMap();
     }
 
