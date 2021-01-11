@@ -4,7 +4,6 @@ import com.cintsoft.spring.security.handler.AceAccessDeniedHandler;
 import com.cintsoft.spring.security.handler.AceAuthenticationFailureHandler;
 import com.cintsoft.spring.security.handler.AceLogoutHandler;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
