@@ -3,14 +3,17 @@ package com.cintsoft.spring.security;
 import com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties;
 import com.cintsoft.spring.security.expression.CintSecurity;
 import com.cintsoft.spring.security.filter.DefaultLoginFilter;
+import com.cintsoft.spring.security.filter.DefaultSocialLoginFilter;
 import com.cintsoft.spring.security.filter.DefaultVerifyFilter;
 import com.cintsoft.spring.security.handler.AceAccessDeniedHandler;
 import com.cintsoft.spring.security.handler.AceAuthenticationFailureHandler;
 import com.cintsoft.spring.security.handler.AceLogoutHandler;
+import com.cintsoft.spring.security.handler.AceSocialLoginHandler;
 import com.cintsoft.spring.security.model.AceOAuth2AccessToken;
 import com.cintsoft.spring.security.model.AceUser;
 import com.cintsoft.spring.security.provider.AceDaoAuthenticationProvider;
 import com.cintsoft.spring.security.provider.AceInMemoryAuthenticationProvider;
+import com.cintsoft.spring.security.provider.AceSocialAuthenticationProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,9 +28,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.servlet.Filter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 胡昊
@@ -121,6 +125,18 @@ public class SecurityAutoConfig {
     }
 
     /**
+     * @description 默认第三方认证
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2021/1/11 10:01
+     */
+    @ConditionalOnMissingBean
+    @Bean
+    public AceSocialAuthenticationProvider aceSocialAuthenticationProvider(Map<String, AceSocialLoginHandler> aceSocialLoginHandlerMap) {
+        return new AceSocialAuthenticationProvider(aceSocialLoginHandlerMap);
+    }
+
+    /**
      * @param aceDaoAuthenticationProvider      默认数据库认证
      * @param aceInMemoryAuthenticationProvider 默认内存认证
      * @description
@@ -130,8 +146,8 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean
     @Bean
-    public List<AuthenticationProvider> authenticationProviderList(AceDaoAuthenticationProvider aceDaoAuthenticationProvider, AceInMemoryAuthenticationProvider aceInMemoryAuthenticationProvider) {
-        return Arrays.asList(aceDaoAuthenticationProvider, aceInMemoryAuthenticationProvider);
+    public List<AuthenticationProvider> authenticationProviderList(AceDaoAuthenticationProvider aceDaoAuthenticationProvider, AceSocialAuthenticationProvider aceSocialAuthenticationProvider, AceInMemoryAuthenticationProvider aceInMemoryAuthenticationProvider) {
+        return Arrays.asList(aceDaoAuthenticationProvider, aceSocialAuthenticationProvider, aceInMemoryAuthenticationProvider);
     }
 
     /**
@@ -157,6 +173,18 @@ public class SecurityAutoConfig {
     @Bean
     public DefaultLoginFilter defaultLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, AceSecurityConfigProperties aceSecurityConfigProperties, ObjectMapper objectMapper) {
         return new DefaultLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
+    }
+
+    /**
+     * @description 默认第三方登录过滤器
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2021/1/11 10:13
+     */
+    @ConditionalOnMissingBean
+    @Bean
+    public DefaultSocialLoginFilter defaultSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, AceSecurityConfigProperties aceSecurityConfigProperties, ObjectMapper objectMapper) {
+        return new DefaultSocialLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
     }
 
     /**
@@ -205,6 +233,18 @@ public class SecurityAutoConfig {
     @Bean
     public AceAuthenticationFailureHandler aceAuthenticationFailureHandler(ObjectMapper objectMapper) {
         return new AceAuthenticationFailureHandler(objectMapper);
+    }
+
+    /**
+     * @description 第三方OpenId认证处理器集合
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2021/1/11 9:57
+     */
+    @ConditionalOnMissingBean
+    @Bean
+    public Map<String, AceSocialLoginHandler> openIdLoginHanderMap() {
+        return Collections.emptyMap();
     }
 
     @ConditionalOnMissingBean

@@ -57,10 +57,14 @@ public class AceUser implements Serializable, UserDetails {
 
     private String tenantId;
 
+    private List<String> resourceKeyList;
+
+    private List<String> roleKeyList;
+
     private List<? extends GrantedAuthority> sysResourceList = Collections.emptyList();
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities(){
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return sysResourceList;
     }
 
