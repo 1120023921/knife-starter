@@ -1,7 +1,7 @@
 package com.cintsoft.spring.security.filter;
 
-import com.cintsoft.spring.security.common.bean.ErrorCodeInfo;
-import com.cintsoft.spring.security.common.bean.ResultBean;
+import com.cintsoft.common.web.ErrorCodeInfo;
+import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.spring.security.common.constant.SecurityConstants;
 import com.cintsoft.spring.security.model.AceUser;
 import com.fasterxml.jackson.databind.ObjectMapper;

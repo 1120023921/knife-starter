@@ -1,7 +1,7 @@
 package com.cintsoft.spring.security.handler;
 
-import com.cintsoft.spring.security.common.bean.ErrorCodeInfo;
-import com.cintsoft.spring.security.common.bean.ResultBean;
+import com.cintsoft.common.web.ErrorCodeInfo;
+import com.cintsoft.common.web.ResultBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

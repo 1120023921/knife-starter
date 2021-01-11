@@ -1,4 +1,4 @@
-package com.cintsoft.spring.security.common.bean;
+package com.cintsoft.common.web;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
-description('Mybatis Plus自动配置')
+description('ACE公共模块')
 
 group 'com.cintsoft'
-version '3.0'
+version '1.0'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,12 +10,6 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
-    compile project(':ace-common-starter')
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.cloud:spring-cloud-starter-security'
 }
 
 // 上传source
