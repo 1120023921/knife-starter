@@ -1,5 +1,6 @@
 package com.cintsoft.common.web;
 
+import com.cintsoft.common.exception.BusinessCode;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -28,5 +29,9 @@ public class ResultBean<T> implements Serializable {
 
     public static <T> ResultBean<T> restResult(T data, ErrorCodeInfo errorCode) {
         return restResult(data, errorCode.getCode(), errorCode.getMsg());
+    }
+
+    public static <T> ResultBean<T> restResult(T data, BusinessCode businessCode) {
+        return restResult(data, businessCode.getCode(), businessCode.getMsg());
     }
 }
