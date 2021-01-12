@@ -60,14 +60,14 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
     @SneakyThrows
     @Override
     public String authorize(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, AceAuthorizeParams aceAuthorizeParams) {
-        String tenantId = request.getHeader("TENANT_ID");
-        if (StringUtils.isEmpty(tenantId)) {
-            tenantId = "1";
+        if (StringUtils.isEmpty(aceAuthorizeParams.tenantId)) {
+            aceAuthorizeParams.tenantId = "1";
         }
-        TenantContextHolder.setTenantId(tenantId);
+        TenantContextHolder.setTenantId(aceAuthorizeParams.tenantId);
 
         final String username = (String) session.getAttribute("username");
-        if (StringUtils.isEmpty(username)) {
+        final String tenantId = (String) session.getAttribute("tenantId");
+        if (StringUtils.isEmpty(username) || !aceAuthorizeParams.tenantId.equals(tenantId)) {
             model.addAttribute("aceAuthorizeParams", aceAuthorizeParams);
             return "login";
         }
@@ -87,10 +87,10 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
         }
         if (AceOAuthConstant.GRANT_TYPE_CODE.equals(aceAuthorizeParams.responseType)) {
             final String code = UUID.randomUUID().toString();
-            tokenRedisTemplate.opsForValue().set(String.format(AceOAuthConstant.CODE_PREFIX_TENANT_ID, tenantId, code), aceOAuth2AccessToken, aceOAuthConfigProperties.getCodeExpire(), TimeUnit.SECONDS);
-            response.sendRedirect(String.format(AceOAuthConstant.AUTHORIZATION_CODE_URL_TENANT_ID, clientDetails.getWebServerRedirectUri(), code, tenantId, aceAuthorizeParams.state));
+            tokenRedisTemplate.opsForValue().set(String.format(AceOAuthConstant.CODE_PREFIX_TENANT_ID, aceAuthorizeParams.tenantId, code), aceOAuth2AccessToken, aceOAuthConfigProperties.getCodeExpire(), TimeUnit.SECONDS);
+            response.sendRedirect(String.format(AceOAuthConstant.AUTHORIZATION_CODE_URL_TENANT_ID, clientDetails.getWebServerRedirectUri(), code, aceAuthorizeParams.tenantId, aceAuthorizeParams.state));
         } else if (AceOAuthConstant.GRANT_TYPE_TOKEN.equals(aceAuthorizeParams.responseType)) {
-            response.sendRedirect(String.format(AceOAuthConstant.IMPLICIT_REDIRECT_URL_TENANT_ID, clientDetails.getWebServerRedirectUri(), aceOAuth2AccessToken.getAccessToken(), tenantId, aceAuthorizeParams.state));
+            response.sendRedirect(String.format(AceOAuthConstant.IMPLICIT_REDIRECT_URL_TENANT_ID, clientDetails.getWebServerRedirectUri(), aceOAuth2AccessToken.getAccessToken(), aceAuthorizeParams.tenantId, aceAuthorizeParams.state));
         } else if (AceOAuthConstant.GRANT_TYPE_PASSWORD.equals(aceAuthorizeParams.responseType)) {
             final AceOAuth2AccessToken passwordToken = passwordToken(response, aceAuthorizeParams.clientId, aceAuthorizeParams.username, aceAuthorizeParams.password);
             response.setCharacterEncoding("UTF-8");
@@ -168,6 +168,7 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
             if (authenticate != null) {
                 final AceUser aceUser = (AceUser) authenticate.getPrincipal();
                 session.setAttribute("username", aceUser.getUsername());
+                session.setAttribute("tenantId", aceAuthorizeParams.tenantId);
                 session.removeAttribute("errMsg");
             }
         } catch (AuthenticationException e) {
