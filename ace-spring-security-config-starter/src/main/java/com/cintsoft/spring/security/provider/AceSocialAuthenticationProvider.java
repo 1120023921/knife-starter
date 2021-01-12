@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @author 胡昊
- * Description: 数据库认证
+ * Description: 第三方认证
  * Date: 2020/7/27
  * Time: 10:43
  * Mail: huhao9277@gmail.com

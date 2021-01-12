@@ -22,13 +22,13 @@ import java.io.PrintWriter;
  * Time: 21:11
  * Mail: huhao9277@gmail.com
  */
-public class AceLogoutHandler implements LogoutHandler {
+public class AceLogoutTenantHandler implements LogoutHandler {
 
     private final RedisTemplate<String, AceUser> userDatailRedisTemplate;
     private final RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate;
     private final ObjectMapper objectMapper;
 
-    public AceLogoutHandler(RedisTemplate<String, AceUser> userDatailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
+    public AceLogoutTenantHandler(RedisTemplate<String, AceUser> userDatailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
         this.userDatailRedisTemplate = userDatailRedisTemplate;
         this.tokenRedisTemplate = tokenRedisTemplate;
         this.objectMapper = objectMapper;
@@ -38,12 +38,13 @@ public class AceLogoutHandler implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         final String header = request.getHeader("Authorization");
+        final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final AceUser aceUser = userDatailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX, header.split(" ")[1]));
+            final AceUser aceUser = userDatailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
             if (aceUser != null) {
                 //缓存删除用户
-                userDatailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX, header.split(" ")[1]));
+                userDatailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
                 //缓存删除Token
                 tokenRedisTemplate.delete(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
             }

@@ -25,12 +25,12 @@ import java.io.PrintWriter;
  * Time: 10:39
  * Mail: huhao9277@gmail.com
  */
-public class DefaultVerifyFilter extends OncePerRequestFilter {
+public class AceVerifyTenantFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, AceUser> userDetailRedisTemplate;
     private final ObjectMapper objectMapper;
 
-    public DefaultVerifyFilter(RedisTemplate<String, AceUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
+    public AceVerifyTenantFilter(RedisTemplate<String, AceUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
         this.userDetailRedisTemplate = userDetailRedisTemplate;
         this.objectMapper = objectMapper;
     }

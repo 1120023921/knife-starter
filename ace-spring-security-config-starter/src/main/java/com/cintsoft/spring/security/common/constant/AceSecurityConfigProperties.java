@@ -20,4 +20,8 @@ public class AceSecurityConfigProperties {
 
     //Token过期时间
     private Integer tokenExpire = 7200;
+    //默认内存用户启用状态
+    private Boolean defaultInMemoryEnable = false;
+    //租户模式
+    private Boolean tenantEnable = true;
 }

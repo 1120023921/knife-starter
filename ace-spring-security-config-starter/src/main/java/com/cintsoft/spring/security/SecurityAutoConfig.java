@@ -1,37 +1,37 @@
 package com.cintsoft.spring.security;
 
+import com.cintsoft.spring.security.aspect.AceSecurityInnerAspect;
 import com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties;
 import com.cintsoft.spring.security.expression.CintSecurity;
-import com.cintsoft.spring.security.filter.DefaultLoginFilter;
-import com.cintsoft.spring.security.filter.DefaultSocialLoginFilter;
-import com.cintsoft.spring.security.filter.DefaultVerifyFilter;
-import com.cintsoft.spring.security.handler.AceAccessDeniedHandler;
-import com.cintsoft.spring.security.handler.AceAuthenticationFailureHandler;
-import com.cintsoft.spring.security.handler.AceLogoutHandler;
-import com.cintsoft.spring.security.handler.AceSocialLoginHandler;
+import com.cintsoft.spring.security.filter.*;
+import com.cintsoft.spring.security.handler.*;
 import com.cintsoft.spring.security.model.AceOAuth2AccessToken;
 import com.cintsoft.spring.security.model.AceUser;
 import com.cintsoft.spring.security.provider.AceDaoAuthenticationProvider;
 import com.cintsoft.spring.security.provider.AceInMemoryAuthenticationProvider;
 import com.cintsoft.spring.security.provider.AceSocialAuthenticationProvider;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * @author 胡昊
@@ -53,8 +53,12 @@ public class SecurityAutoConfig {
     @ConditionalOnMissingBean(name = {"userDetailRedisTemplate"})
     @Bean("userDetailRedisTemplate")
     public RedisTemplate<String, AceUser> userDetailRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        final RedisTemplate<String, AceUser> redisTemplate = new RedisTemplate<>();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        RedisTemplate<String, AceUser> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
 
@@ -70,7 +74,22 @@ public class SecurityAutoConfig {
     public RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         final RedisTemplate<String, AceOAuth2AccessToken> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    /**
+     * @description 内部调用拦截器
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2021/1/12 19:13
+     */
+    @ConditionalOnMissingBean
+    @Bean
+    public AceSecurityInnerAspect aceSecurityInnerAspect(HttpServletRequest request) {
+        return new AceSecurityInnerAspect(request);
     }
 
     /**
@@ -82,7 +101,9 @@ public class SecurityAutoConfig {
     @ConditionalOnMissingBean
     @Bean
     public ObjectMapper objectMapper() {
-        return new ObjectMapper();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return objectMapper;
     }
 
     /**
@@ -118,6 +139,7 @@ public class SecurityAutoConfig {
      * @email huhao9277@gmail.com
      * @date 2021/1/10 21:49
      */
+    @ConditionalOnProperty(name = "ace.security.default-inMemory-enable", havingValue = "true")
     @ConditionalOnMissingBean
     @Bean
     public AceInMemoryAuthenticationProvider aceInMemoryAuthenticationProvider(PasswordEncoder bCryptPasswordEncoder) {
@@ -147,7 +169,17 @@ public class SecurityAutoConfig {
     @ConditionalOnMissingBean
     @Bean
     public List<AuthenticationProvider> authenticationProviderList(AceDaoAuthenticationProvider aceDaoAuthenticationProvider, AceSocialAuthenticationProvider aceSocialAuthenticationProvider, AceInMemoryAuthenticationProvider aceInMemoryAuthenticationProvider) {
-        return Arrays.asList(aceDaoAuthenticationProvider, aceSocialAuthenticationProvider, aceInMemoryAuthenticationProvider);
+        final List<AuthenticationProvider> authenticationProviderList = new ArrayList<>();
+        if (aceDaoAuthenticationProvider != null) {
+            authenticationProviderList.add(aceDaoAuthenticationProvider);
+        }
+        if (aceSocialAuthenticationProvider != null) {
+            authenticationProviderList.add(aceSocialAuthenticationProvider);
+        }
+        if (aceInMemoryAuthenticationProvider != null) {
+            authenticationProviderList.add(aceInMemoryAuthenticationProvider);
+        }
+        return authenticationProviderList;
     }
 
     /**
@@ -169,10 +201,14 @@ public class SecurityAutoConfig {
      * @email huhao9277@gmail.com
      * @date 2021/1/10 21:49
      */
-    @ConditionalOnMissingBean
-    @Bean
-    public DefaultLoginFilter defaultLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, AceSecurityConfigProperties aceSecurityConfigProperties, ObjectMapper objectMapper) {
-        return new DefaultLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
+    @ConditionalOnMissingBean(name = "aceLoginFilter")
+    @Bean("aceLoginFilter")
+    public AbstractAuthenticationProcessingFilter aceLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, AceSecurityConfigProperties aceSecurityConfigProperties, ObjectMapper objectMapper) {
+        if (aceSecurityConfigProperties.getTenantEnable()) {
+            return new AceLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
+        } else {
+            return new AceLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
+        }
     }
 
     /**
@@ -181,10 +217,14 @@ public class SecurityAutoConfig {
      * @email huhao9277@gmail.com
      * @date 2021/1/11 10:13
      */
-    @ConditionalOnMissingBean
-    @Bean
-    public DefaultSocialLoginFilter defaultSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, AceSecurityConfigProperties aceSecurityConfigProperties, ObjectMapper objectMapper) {
-        return new DefaultSocialLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
+    @ConditionalOnMissingBean(name = "aceSocialLoginFilter")
+    @Bean("aceSocialLoginFilter")
+    public AbstractAuthenticationProcessingFilter aceSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, AceSecurityConfigProperties aceSecurityConfigProperties, ObjectMapper objectMapper) {
+        if (aceSecurityConfigProperties.getTenantEnable()) {
+            return new AceSocialLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
+        } else {
+            return new AceSocialLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, aceSecurityConfigProperties, objectMapper);
+        }
     }
 
     /**
@@ -193,10 +233,14 @@ public class SecurityAutoConfig {
      * @email huhao9277@gmail.com
      * @date 2021/1/10 21:50
      */
-    @ConditionalOnMissingBean
-    @Bean
-    public DefaultVerifyFilter defaultVerifyFilter(RedisTemplate<String, AceUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
-        return new DefaultVerifyFilter(userDetailRedisTemplate, objectMapper);
+    @ConditionalOnMissingBean(name = "aceVerifyFilter")
+    @Bean("aceVerifyFilter")
+    public OncePerRequestFilter aceVerifyFilter(AceSecurityConfigProperties aceSecurityConfigProperties, RedisTemplate<String, AceUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
+        if (aceSecurityConfigProperties.getTenantEnable()) {
+            return new AceVerifyTenantFilter(userDetailRedisTemplate, objectMapper);
+        } else {
+            return new AceVerifyFilter(userDetailRedisTemplate, objectMapper);
+        }
     }
 
     /**
@@ -205,10 +249,14 @@ public class SecurityAutoConfig {
      * @email huhao9277@gmail.com
      * @date 2021/1/10 21:51
      */
-    @ConditionalOnMissingBean
-    @Bean
-    public AceLogoutHandler aceLogoutHandler(RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
-        return new AceLogoutHandler(userDetailRedisTemplate, tokenRedisTemplate, objectMapper);
+    @ConditionalOnMissingBean(name = "aceLogoutHandler")
+    @Bean("aceLogoutHandler")
+    public LogoutHandler aceLogoutHandler(AceSecurityConfigProperties aceSecurityConfigProperties, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
+        if (aceSecurityConfigProperties.getTenantEnable()) {
+            return new AceLogoutTenantHandler(userDetailRedisTemplate, tokenRedisTemplate, objectMapper);
+        } else {
+            return new AceLogoutHandler(userDetailRedisTemplate, tokenRedisTemplate, objectMapper);
+        }
     }
 
     /**

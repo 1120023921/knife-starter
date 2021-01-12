@@ -2,7 +2,6 @@ package com.cintsoft.spring.security;
 
 import com.cintsoft.spring.security.handler.AceAccessDeniedHandler;
 import com.cintsoft.spring.security.handler.AceAuthenticationFailureHandler;
-import com.cintsoft.spring.security.handler.AceLogoutHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 /**
  * @author 胡昊
@@ -26,7 +26,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
-    private final AceLogoutHandler aceLogoutHandler;
+    private final LogoutHandler aceLogoutHandler;
     private final AceAccessDeniedHandler aceAccessDeniedHandler;
     private final AceAuthenticationFailureHandler aceAuthenticationFailureHandler;
 

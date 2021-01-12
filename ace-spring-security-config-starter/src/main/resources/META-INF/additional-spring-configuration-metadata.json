@@ -2,6 +2,32 @@
   "hints": [
     {
       "name": "ace.security.token-expire"
+    },
+    {
+      "name": "ace.security.tenant-enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
+    },
+    {
+      "name": "ace.security.default-inMemory-enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
     }
   ],
   "groups": [
@@ -18,6 +44,20 @@
       "type": "java.lang.Integer",
       "description": "Token有效时间（秒）",
       "defaultValue": 7200
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties",
+      "name": "ace.security.tenant-enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用租户模式",
+      "defaultValue": true
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties",
+      "name": "ace.security.default-inMemory-enable",
+      "type": "java.lang.Boolean",
+      "description": "默认内存用户启用状态",
+      "defaultValue": true
     }
   ]
 }
