@@ -1,0 +1,23 @@
+{
+  "hints": [
+    {
+      "name": "ace.security.token-expire"
+    }
+  ],
+  "groups": [
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties",
+      "name": "ace.security",
+      "type": "com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties",
+      "name": "ace.security.token-expire",
+      "type": "java.lang.Integer",
+      "description": "Token有效时间（秒）",
+      "defaultValue": 7200
+    }
+  ]
+}

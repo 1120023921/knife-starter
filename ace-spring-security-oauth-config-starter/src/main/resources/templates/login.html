@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <span th:text="${session.username}"> </span>
+    <span th:text="${session.errMsg}"> </span>
+    <form action="/oauth/login" method="post">
+        登录名：<input type="text" name="username" id="username"/><br/>
+        密码：<input type="text" name="password" id="password"/><br/>
+        <input type="submit"/>
+        <input type="hidden" name="responseType" id="responseType" th:value="${aceAuthorizeParams.responseType}"/><br/>
+        <input type="hidden" name="state" id="state" th:value="${aceAuthorizeParams.state}"/><br/>
+        <input type="hidden" name="clientId" id="clientId" th:value="${aceAuthorizeParams.clientId}"/><br/>
+        <input type="hidden" name="tenantId" id="tenantId" th:value="${aceAuthorizeParams.tenantId}"/><br/>
+    </form>
+</body>
+</html>

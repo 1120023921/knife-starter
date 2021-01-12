@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cintsoft.ace.business.provider.oauth.dao.SysOauthClientDetailsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cintsoft.spring.security.oauth.model.SysOauthClientDetails">
+        <id column="client_id" property="clientId" />
+        <result column="resource_ids" property="resourceIds" />
+        <result column="client_secret" property="clientSecret" />
+        <result column="scope" property="scope" />
+        <result column="authorized_grant_types" property="authorizedGrantTypes" />
+        <result column="web_server_redirect_uri" property="webServerRedirectUri" />
+        <result column="authorities" property="authorities" />
+        <result column="access_token_validity" property="accessTokenValidity" />
+        <result column="refresh_token_validity" property="refreshTokenValidity" />
+        <result column="additional_information" property="additionalInformation" />
+        <result column="autoapprove" property="autoapprove" />
+        <result column="client_name" property="clientName" />
+        <result column="prefix" property="prefix" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="version" property="version" />
+        <result column="deleted" property="deleted" />
+        <result column="extra" property="extra" />
+        <result column="tenant_id" property="tenantId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove, client_name, prefix, create_time, update_time, create_by, update_by, version, deleted, extra, tenant_id
+    </sql>
+
+</mapper>

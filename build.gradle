@@ -39,6 +39,9 @@ allprojects {
         from('src/main/java') {
             include '**/*'
         }
+        from('src/main/resources') {
+            include '**/*'
+        }
     }
 
     configurations {
