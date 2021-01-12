@@ -53,7 +53,6 @@ public class SecurityAutoConfig {
     @ConditionalOnMissingBean(name = {"userDetailRedisTemplate"})
     @Bean("userDetailRedisTemplate")
     public RedisTemplate<String, AceUser> userDetailRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         RedisTemplate<String, AceUser> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
