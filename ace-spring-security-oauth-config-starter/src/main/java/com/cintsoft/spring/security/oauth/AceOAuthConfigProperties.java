@@ -20,10 +20,10 @@ public class AceOAuthConfigProperties {
 
     //是否启用租户模式
     private Boolean tenantEnable = true;
-    //统一登录页地址
+    //统一登录地址
     private String loginPage = "http://localhost:8080/oauth/authorize";
-    //注销成功跳转页
+    //注销成功跳转地址
     private String logoutSuccessUrl = "http://cintsoft.com";
     //code有效时间
-    private Integer codeExpire = 100;
+    private Integer codeExpire = 30;
 }

@@ -12,7 +12,6 @@ import com.cintsoft.spring.security.oauth.service.impl.AceOAuthServiceTenantImpl
 import com.cintsoft.spring.security.oauth.service.impl.SysOauthClientDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,7 +34,6 @@ public class SecurityOAuthAutoConfig {
         return new SysOauthClientDetailsServiceImpl();
     }
 
-    @ConditionalOnProperty(name = "ace.security.oauth.tenant-enable", havingValue = "true")
     @Bean
     public AceOAuthService aceOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, AceUser> userDetailRedisTemplate, RedisTemplate<String, AceOAuth2AccessToken> tokenRedisTemplate, AceSecurityConfigProperties aceSecurityConfigProperties, AceOAuthConfigProperties aceOAuthConfigProperties, AuthenticationManager authenticationManager, SysOauthClientDetailsService sysOauthClientDetailsService, ObjectMapper objectMapper) {
         if (!aceOAuthConfigProperties.getTenantEnable()) {

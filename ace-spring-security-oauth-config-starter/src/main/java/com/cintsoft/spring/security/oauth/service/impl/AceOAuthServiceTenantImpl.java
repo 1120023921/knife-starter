@@ -80,7 +80,8 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
             aceOAuth2AccessToken = getAceOAuth2AccessToken(username);
             clientDetails = sysOauthClientDetailsService.getOne(Wrappers.<SysOauthClientDetails>lambdaQuery().eq(SysOauthClientDetails::getClientId, aceAuthorizeParams.clientId));
             if (clientDetails == null) {
-                throw new BusinessException("clientId有误");
+                session.setAttribute("errMsg", SysOAuthCode.CLIENT_INFO_ERROR.getBusinessCode().getMsg());
+                return "redirect:" + aceOAuthConfigProperties.getLoginPage() + "?responseType=" + aceAuthorizeParams.responseType + "&state=" + aceAuthorizeParams.state + "&clientId=" + aceAuthorizeParams.clientId + "&tenantId=" + aceAuthorizeParams.tenantId;
             }
             assert aceOAuth2AccessToken != null;
         }
@@ -154,10 +155,12 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
         }
         final SysOauthClientDetails clientDetails = sysOauthClientDetailsService.getOne(Wrappers.<SysOauthClientDetails>lambdaQuery().eq(SysOauthClientDetails::getClientId, aceAuthorizeParams.clientId));
         if (clientDetails == null) {
-            throw new BusinessException(SysOAuthCode.CLIENT_INFO_ERROR.getBusinessCode());
+            session.setAttribute("errMsg", SysOAuthCode.CLIENT_INFO_ERROR.getBusinessCode().getMsg());
+            return "redirect:" + aceOAuthConfigProperties.getLoginPage() + "?responseType=" + aceAuthorizeParams.responseType + "&state=" + aceAuthorizeParams.state + "&clientId=" + aceAuthorizeParams.clientId + "&tenantId=" + aceAuthorizeParams.tenantId;
         }
         if (!Arrays.asList(clientDetails.getAuthorizedGrantTypes().split(",")).contains(aceAuthorizeParams.responseType)) {
-            throw new BusinessException(SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode());
+            session.setAttribute("errMsg", SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode().getMsg());
+            return "redirect:" + aceOAuthConfigProperties.getLoginPage() + "?responseType=" + aceAuthorizeParams.responseType + "&state=" + aceAuthorizeParams.state + "&clientId=" + aceAuthorizeParams.clientId + "&tenantId=" + aceAuthorizeParams.tenantId;
         }
         final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(aceAuthorizeParams.username, aceAuthorizeParams.password);
         try {
