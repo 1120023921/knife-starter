@@ -41,12 +41,12 @@ public class AceLogoutHandler implements LogoutHandler {
         final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final AceUser aceUser = userDatailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
+            final AceUser aceUser = userDatailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
             if (aceUser != null) {
                 //缓存删除用户
-                userDatailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
+                userDatailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
                 //缓存删除Token
-                tokenRedisTemplate.delete(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getTenantId(), aceUser.getUsername()));
+                tokenRedisTemplate.delete(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
             }
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Content-Type", "application/json");

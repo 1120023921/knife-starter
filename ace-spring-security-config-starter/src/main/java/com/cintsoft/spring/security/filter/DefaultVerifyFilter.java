@@ -41,7 +41,7 @@ public class DefaultVerifyFilter extends OncePerRequestFilter {
         final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final AceUser aceUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX, tenantId, header.split(" ")[1]));
+            final AceUser aceUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
             if (aceUser != null) {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(aceUser, null, aceUser.getAuthorities()));
             } else {

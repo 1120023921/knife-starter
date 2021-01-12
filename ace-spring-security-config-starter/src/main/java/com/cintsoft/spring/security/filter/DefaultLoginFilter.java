@@ -58,15 +58,15 @@ public class DefaultLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         final AceUser aceUser = (AceUser) authResult.getPrincipal();
         //判断当前用户是否已有token
-        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getTenantId(), aceUser.getUsername()));
+        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
         if (aceOAuth2AccessToken == null) {
             final String token = UUID.randomUUID().toString();
-            userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX, aceUser.getTenantId(), token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+            userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, aceUser.getTenantId(), token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
             aceOAuth2AccessToken = new AceOAuth2AccessToken();
             aceOAuth2AccessToken.setAccessToken(token);
             aceOAuth2AccessToken.setExpiresIn(String.valueOf(aceSecurityConfigProperties.getTokenExpire()));
             aceOAuth2AccessToken.setExpiresTime(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L + "");
-            tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getTenantId(), aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+            tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         }
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");
