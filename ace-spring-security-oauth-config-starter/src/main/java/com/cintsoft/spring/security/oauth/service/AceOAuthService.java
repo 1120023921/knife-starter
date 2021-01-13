@@ -29,7 +29,7 @@ public interface AceOAuthService {
      * @email huhao9277@gmail.com
      * @date 2021/1/12 10:41
      */
-    AceOAuth2AccessToken passwordToken(HttpServletResponse response, String clientId, String username, String password);
+    AceOAuth2AccessToken passwordToken(String clientId, String username, String password);
 
     /**
      * @param clientId     客户端id
@@ -39,9 +39,9 @@ public interface AceOAuthService {
      * @email huhao9277@gmail.com
      * @date 2021/1/12 10:32
      */
-    AceOAuth2AccessToken clientCredentialsToken(HttpServletResponse response, String clientId, String clientSecret);
+    AceOAuth2AccessToken clientCredentialsToken(String clientId, String clientSecret);
 
-    AceOAuth2AccessToken token(String code, String tenantId);
+    AceOAuth2AccessToken token(AceAuthorizeParams aceAuthorizeParams);
 
     String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, AceAuthorizeParams aceAuthorizeParams);
 

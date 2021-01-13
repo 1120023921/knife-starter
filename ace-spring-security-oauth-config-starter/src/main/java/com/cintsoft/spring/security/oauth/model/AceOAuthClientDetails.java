@@ -1,29 +1,24 @@
 package com.cintsoft.spring.security.oauth.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
-
 /**
- * <p>
- * 终端信息表
- * </p>
- *
  * @author 胡昊
- * @since 2021-01-12
+ * Description:
+ * Date: 2021/1/13
+ * Time: 10:56
+ * Mail: huhao9277@gmail.com
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SysOauthClientDetails implements Serializable {
+public class AceOAuthClientDetails {
 
     private static final long serialVersionUID = 1L;
 
+    private String id;
+
     //客户端ID
-    @TableId(value = "client_id", type = IdType.ASSIGN_ID)
     private String clientId;
 
     //资源列表
@@ -75,7 +70,6 @@ public class SysOauthClientDetails implements Serializable {
     private String updateBy;
 
     //版本
-    @Version
     private Integer version;
 
     //是否有效 0无效 1有效
@@ -86,6 +80,4 @@ public class SysOauthClientDetails implements Serializable {
 
     //租户id
     private String tenantId;
-
-
 }

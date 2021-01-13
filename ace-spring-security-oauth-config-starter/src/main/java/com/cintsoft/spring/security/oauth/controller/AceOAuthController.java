@@ -39,8 +39,8 @@ public class AceOAuthController {
 
     @GetMapping("/token")
     @ResponseBody
-    public ResultBean<AceOAuth2AccessToken> token(String code, String tenantId) {
-        return ResultBean.restResult(aceOAuthService.token(code, tenantId), ErrorCodeInfo.OK);
+    public ResultBean<AceOAuth2AccessToken> token(AceAuthorizeParams aceAuthorizeParams) {
+        return ResultBean.restResult(aceOAuthService.token(aceAuthorizeParams), ErrorCodeInfo.OK);
     }
 
     @PostMapping("/login")
@@ -58,6 +58,6 @@ public class AceOAuthController {
     @GetMapping("/userInfo")
     @ResponseBody
     public ResultBean<AceUser> userInfo(HttpServletRequest request) {
-        return ResultBean.restResult(aceOAuthService.userInfo(request.getHeader("Authorization"), request.getHeader("TENANT_ID")), ErrorCodeInfo.OK);
+        return ResultBean.restResult(aceOAuthService.userInfo(request.getHeader("Authorization").split(" ")[1], request.getHeader("TENANT_ID")), ErrorCodeInfo.OK);
     }
 }

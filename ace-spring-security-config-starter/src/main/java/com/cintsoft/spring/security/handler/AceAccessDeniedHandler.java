@@ -30,7 +30,7 @@ public class AceAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         //无权限返回403
-        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");
         final PrintWriter out = response.getWriter();

@@ -14,13 +14,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class AceAuthorizeParams {
 
-    public String responseType;
-    public String clientId;
-    public String clientSecret;
-    public String username;
-    public String password;
-    public String redirectUri;
-    public String scope;
-    public String state;
-    public String tenantId;
+    private String grantType;
+    private String clientId;
+    private String clientSecret;
+    private String username;
+    private String password;
+    private String redirectUri;
+    private String scope;
+    private String state;
+    private String tenantId;
+    private String code;
 }

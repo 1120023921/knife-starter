@@ -31,7 +31,7 @@ public class AceAuthenticationFailureHandler implements AuthenticationEntryPoint
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         //未认证返回401
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");
         final PrintWriter out = response.getWriter();

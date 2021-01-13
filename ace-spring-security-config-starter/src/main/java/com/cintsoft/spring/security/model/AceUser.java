@@ -43,13 +43,13 @@ public class AceUser implements Serializable, UserDetails {
 
     private String userSource;
 
-    private Boolean isAccountNonExpired;
+    private Boolean isAccountNonExpired = true;
 
-    private Boolean isAccountNonLocked;
+    private Boolean isAccountNonLocked = true;
 
-    private Boolean isCredentialsNonExpired;
+    private Boolean isCredentialsNonExpired = true;
 
-    private Boolean isEnabled;
+    private Boolean isEnabled = true;
 
     private Integer weight;
 
