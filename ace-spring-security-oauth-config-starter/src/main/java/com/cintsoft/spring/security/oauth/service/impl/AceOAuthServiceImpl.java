@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +75,7 @@ public class AceOAuthServiceImpl implements AceOAuthService {
             tokenRedisTemplate.opsForValue().set(String.format(AceOAuthConstant.CODE_PREFIX, code), aceOAuth2AccessToken, aceOAuthConfigProperties.getCodeExpire(), TimeUnit.SECONDS);
             response.sendRedirect(String.format(AceOAuthConstant.AUTHORIZATION_CODE_URL, clientDetails.getWebServerRedirectUri(), code, aceAuthorizeParams.getState()));
         } else if (AceOAuthConstant.GRANT_TYPE_TOKEN.equals(aceAuthorizeParams.getGrantType())) {
-            response.sendRedirect(String.format(AceOAuthConstant.IMPLICIT_REDIRECT_URL, clientDetails.getWebServerRedirectUri(), aceOAuth2AccessToken.getAccessToken(), aceAuthorizeParams.getState()));
+            response.sendRedirect(String.format(AceOAuthConstant.IMPLICIT_REDIRECT_URL, clientDetails.getWebServerRedirectUri(), aceOAuth2AccessToken.getValue(), aceAuthorizeParams.getState()));
         }
         return null;
     }
@@ -104,7 +106,7 @@ public class AceOAuthServiceImpl implements AceOAuthService {
     }
 
     @Override
-    public AceOAuth2AccessToken token(AceAuthorizeParams aceAuthorizeParams) {
+    public Map<String, Object> token(AceAuthorizeParams aceAuthorizeParams) {
         AceOAuth2AccessToken aceOAuth2AccessToken = null;
         if (AceOAuthConstant.GRANT_TYPE_CODE.equals(aceAuthorizeParams.getGrantType())) {
             aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(AceOAuthConstant.CODE_PREFIX, aceAuthorizeParams.getCode()));
@@ -116,7 +118,7 @@ public class AceOAuthServiceImpl implements AceOAuthService {
         } else if (AceOAuthConstant.GRANT_TYPE_CLIENT_CREDENTIALS.equals(aceAuthorizeParams.getGrantType())) {
             aceOAuth2AccessToken = clientCredentialsToken(aceAuthorizeParams.getClientId(), aceAuthorizeParams.getClientSecret());
         }
-        return aceOAuth2AccessToken;
+        return aceOAuth2AccessToken == null ? null : aceOAuth2AccessToken.getTokenMap();
     }
 
     @Override
@@ -154,7 +156,7 @@ public class AceOAuthServiceImpl implements AceOAuthService {
         final AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX, username));
         if (aceOAuth2AccessToken != null) {
             tokenRedisTemplate.delete(String.format(SecurityConstants.TOKEN_PREFIX, username));
-            userDetailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX, aceOAuth2AccessToken.getAccessToken()));
+            userDetailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX, aceOAuth2AccessToken.getValue()));
         }
     }
 
@@ -183,13 +185,12 @@ public class AceOAuthServiceImpl implements AceOAuthService {
         if (aceOAuth2AccessToken == null) {
             token = UUID.randomUUID().toString();
         } else {
-            token = aceOAuth2AccessToken.getAccessToken();
+            token = aceOAuth2AccessToken.getValue();
         }
         userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX, token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         aceOAuth2AccessToken = new AceOAuth2AccessToken();
-        aceOAuth2AccessToken.setAccessToken(token);
-        aceOAuth2AccessToken.setExpiresIn(String.valueOf(aceSecurityConfigProperties.getTokenExpire()));
-        aceOAuth2AccessToken.setExpiresTime(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L + "");
+        aceOAuth2AccessToken.setValue(token);
+        aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L));
         tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         return aceOAuth2AccessToken;
     }

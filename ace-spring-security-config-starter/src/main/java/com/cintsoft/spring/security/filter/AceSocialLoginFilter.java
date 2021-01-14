@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -59,20 +60,19 @@ public class AceSocialLoginFilter extends AbstractAuthenticationProcessingFilter
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         final AceUser aceUser = (AceUser) authResult.getPrincipal();
         //判断当前用户是否已有token
-        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX,  aceUser.getUsername()));
+        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getUsername()));
         if (aceOAuth2AccessToken == null) {
             final String token = UUID.randomUUID().toString();
             userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX, token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
             aceOAuth2AccessToken = new AceOAuth2AccessToken();
-            aceOAuth2AccessToken.setAccessToken(token);
-            aceOAuth2AccessToken.setExpiresIn(String.valueOf(aceSecurityConfigProperties.getTokenExpire()));
-            aceOAuth2AccessToken.setExpiresTime(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L + "");
+            aceOAuth2AccessToken.setValue(token);
+            aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire()*1000L));
             tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         }
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");
         final PrintWriter out = response.getWriter();
-        out.write(objectMapper.writeValueAsString(ResultBean.restResult(aceOAuth2AccessToken, ErrorCodeInfo.OK)));
+        out.write(objectMapper.writeValueAsString(aceOAuth2AccessToken.getTokenMap()));
         out.flush();
         out.close();
     }

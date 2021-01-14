@@ -4,24 +4,45 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.*;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class AceOAuth2AccessToken implements Serializable {
 
-	private String bearerType = "Bearer";
+    public static String BEARER_TYPE = "Bearer";
 
-	private String oauth2Type = "OAuth2";
+    public static String OAUTH2_TYPE = "OAuth2";
 
-	private String accessToken;
+    public static String ACCESS_TOKEN = "access_token";
 
-	private String tokenType = "cintsoft";
+    public static String TOKEN_TYPE = "token_type";
 
-	private String expiresIn;
+    public static String EXPIRES_IN = "expires_in";
 
-	private String expiresTime;
+    public static String REFRESH_TOKEN = "refresh_token";
 
-	private String refreshToken;
+    public static String SCOPE = "scope";
 
-	private String SCOPE = "scope";
+    private String value;
+
+    private Date expiration;
+
+    private String tokenType = BEARER_TYPE.toLowerCase();
+
+    private String refreshToken;
+
+    private Set<String> scope = Collections.emptySet();
+
+    private Map<String, Object> additionalInformation = Collections.emptyMap();
+
+    public Map<String, Object> getTokenMap() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put(ACCESS_TOKEN, value);
+        map.put(tokenType, tokenType);
+        map.put(REFRESH_TOKEN, "");
+        map.put(EXPIRES_IN, (expiration.getTime() - System.currentTimeMillis()) / 1000);
+        map.put(SCOPE, scope.toArray());
+        return map;
+    }
 }

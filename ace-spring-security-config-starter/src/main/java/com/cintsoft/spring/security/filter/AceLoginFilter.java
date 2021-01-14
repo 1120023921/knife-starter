@@ -1,6 +1,5 @@
 package com.cintsoft.spring.security.filter;
 
-import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties;
 import com.cintsoft.spring.security.common.constant.SecurityConstants;
@@ -19,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -63,15 +63,14 @@ public class AceLoginFilter extends AbstractAuthenticationProcessingFilter {
             final String token = UUID.randomUUID().toString();
             userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX, token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
             aceOAuth2AccessToken = new AceOAuth2AccessToken();
-            aceOAuth2AccessToken.setAccessToken(token);
-            aceOAuth2AccessToken.setExpiresIn(String.valueOf(aceSecurityConfigProperties.getTokenExpire()));
-            aceOAuth2AccessToken.setExpiresTime(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L + "");
+            aceOAuth2AccessToken.setValue(token);
+            aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L));
             tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         }
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");
         final PrintWriter out = response.getWriter();
-        out.write(objectMapper.writeValueAsString(ResultBean.restResult(aceOAuth2AccessToken, ErrorCodeInfo.OK)));
+        out.write(objectMapper.writeValueAsString(aceOAuth2AccessToken.getTokenMap()));
         out.flush();
         out.close();
     }

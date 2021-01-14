@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 public interface AceOAuthService {
 
@@ -41,7 +42,7 @@ public interface AceOAuthService {
      */
     AceOAuth2AccessToken clientCredentialsToken(String clientId, String clientSecret);
 
-    AceOAuth2AccessToken token(AceAuthorizeParams aceAuthorizeParams);
+    Map<String, Object> token(AceAuthorizeParams aceAuthorizeParams);
 
     String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, AceAuthorizeParams aceAuthorizeParams);
 

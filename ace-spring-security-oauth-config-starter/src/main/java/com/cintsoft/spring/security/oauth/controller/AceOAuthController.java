@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @author 胡昊
@@ -39,8 +40,8 @@ public class AceOAuthController {
 
     @GetMapping("/token")
     @ResponseBody
-    public ResultBean<AceOAuth2AccessToken> token(AceAuthorizeParams aceAuthorizeParams) {
-        return ResultBean.restResult(aceOAuthService.token(aceAuthorizeParams), ErrorCodeInfo.OK);
+    public Map<String, Object> token(AceAuthorizeParams aceAuthorizeParams) {
+        return aceOAuthService.token(aceAuthorizeParams);
     }
 
     @PostMapping("/login")
