@@ -1,6 +1,5 @@
 package com.cintsoft.spring.security.filter;
 
-import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties;
 import com.cintsoft.spring.security.common.constant.SecurityConstants;
@@ -60,14 +59,14 @@ public class AceSocialLoginTenantFilter extends AbstractAuthenticationProcessing
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         final AceUser aceUser = (AceUser) authResult.getPrincipal();
         //判断当前用户是否已有token
-        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
+        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
         if (aceOAuth2AccessToken == null) {
             final String token = UUID.randomUUID().toString();
             userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, aceUser.getTenantId(), token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
             aceOAuth2AccessToken = new AceOAuth2AccessToken();
             aceOAuth2AccessToken.setValue(token);
             aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire()*1000L));
-            tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+            tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         }
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");

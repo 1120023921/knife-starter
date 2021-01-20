@@ -69,8 +69,8 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
             return "login";
         }
 
-        final AceOAuth2AccessToken aceOAuth2AccessToken = getAceOAuth2AccessToken(username);
         final AceOAuthClientDetails clientDetails = aceOAuthClientDetailsService.getAceOauthClientDetails(aceAuthorizeParams.getClientId());
+        final AceOAuth2AccessToken aceOAuth2AccessToken = getAceOAuth2AccessToken(clientDetails, username);
 
         if (clientDetails == null || aceOAuth2AccessToken == null) {
             session.setAttribute("errMsg", SysOAuthCode.CLIENT_INFO_ERROR.getBusinessCode().getMsg());
@@ -96,7 +96,7 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
         if (!Arrays.asList(clientDetails.getAuthorizedGrantTypes().split(",")).contains(AceOAuthConstant.GRANT_TYPE_PASSWORD)) {
             throw new BusinessException(SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode());
         }
-        return getAceOAuth2AccessToken(username, password);
+        return getAceOAuth2AccessToken(clientDetails, username, password);
     }
 
     @Override
@@ -109,7 +109,24 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
             throw new BusinessException(SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode());
         }
         final AceUser aceUser = aceOAuthClientDetailsService.clientCredentialsAuthorize(clientId, clientSecret);
-        return getAceOAuth2AccessToken(aceUser);
+        return getAceOAuth2AccessToken(clientDetails, aceUser);
+    }
+
+    @Override
+    public AceOAuth2AccessToken refreshToken(AceAuthorizeParams aceAuthorizeParams) {
+        final AceOAuthClientDetails clientDetails = aceOAuthClientDetailsService.getAceOauthClientDetails(aceAuthorizeParams.getClientId());
+        if (clientDetails == null) {
+            throw new BusinessException(SysOAuthCode.CLIENT_INFO_ERROR.getBusinessCode());
+        }
+        if (!Arrays.asList(clientDetails.getAuthorizedGrantTypes().split(",")).contains(AceOAuthConstant.GRANT_TYPE_PASSWORD)) {
+            throw new BusinessException(SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode());
+        }
+        final AceUser aceUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.REFRESH_TOKEN_PREFIX_TENANT_ID, aceAuthorizeParams.getTenantId(), aceAuthorizeParams.getRefreshToken()));
+        if (aceUser == null) {
+            return null;
+        }
+        userDetailRedisTemplate.delete(String.format(SecurityConstants.REFRESH_TOKEN_PREFIX_TENANT_ID, aceAuthorizeParams.getTenantId(), aceAuthorizeParams.getRefreshToken()));
+        return getAceOAuth2AccessToken(clientDetails, aceUser);
     }
 
     @Override
@@ -124,6 +141,8 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
             aceOAuth2AccessToken = passwordToken(aceAuthorizeParams.getClientId(), aceAuthorizeParams.getUsername(), aceAuthorizeParams.getPassword());
         } else if (AceOAuthConstant.GRANT_TYPE_CLIENT_CREDENTIALS.equals(aceAuthorizeParams.getGrantType())) {
             aceOAuth2AccessToken = clientCredentialsToken(aceAuthorizeParams.getClientId(), aceAuthorizeParams.getClientSecret());
+        } else if (AceOAuthConstant.GRANT_TYPE_REFRESH_TOKEN.equals(aceAuthorizeParams.getGrantType())) {
+            aceOAuth2AccessToken = refreshToken(aceAuthorizeParams);
         }
         return aceOAuth2AccessToken == null ? null : aceOAuth2AccessToken.getTokenMap();
     }
@@ -164,45 +183,48 @@ public class AceOAuthServiceTenantImpl implements AceOAuthService {
 
     @Override
     public void logout(String username, String tenantId) {
-        final AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, tenantId, username));
+        final AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, tenantId, username));
         if (aceOAuth2AccessToken != null) {
-            tokenRedisTemplate.delete(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, tenantId, username));
+            tokenRedisTemplate.delete(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, tenantId, username));
             userDetailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, aceOAuth2AccessToken.getValue()));
         }
     }
 
-    private AceOAuth2AccessToken getAceOAuth2AccessToken(String username, String password) {
+    private AceOAuth2AccessToken getAceOAuth2AccessToken(AceOAuthClientDetails clientDetails, String username, String password) {
         final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         final Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         if (authenticate != null) {
             final AceUser aceUser = (AceUser) authenticate.getPrincipal();
-            return getAceOAuth2AccessToken(aceUser);
+            return getAceOAuth2AccessToken(clientDetails, aceUser);
         }
         throw new BadCredentialsException("用户名密码错误");
     }
 
-    private AceOAuth2AccessToken getAceOAuth2AccessToken(String username) {
+    private AceOAuth2AccessToken getAceOAuth2AccessToken(AceOAuthClientDetails clientDetails, String username) {
         final AceUser aceUser = (AceUser) userDetailsService.loadUserByUsername(username);
         if (aceUser != null) {
-            return getAceOAuth2AccessToken(aceUser);
+            return getAceOAuth2AccessToken(clientDetails, aceUser);
         }
         throw new BadCredentialsException("用户名密码错误");
     }
 
-    public AceOAuth2AccessToken getAceOAuth2AccessToken(AceUser aceUser) {
+    public AceOAuth2AccessToken getAceOAuth2AccessToken(AceOAuthClientDetails clientDetails, AceUser aceUser) {
         //判断当前用户是否已有token
-        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
+        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
         String token;
         if (aceOAuth2AccessToken == null) {
             token = UUID.randomUUID().toString();
         } else {
             token = aceOAuth2AccessToken.getValue();
         }
-        userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, aceUser.getTenantId(), token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+        final String refreshToken = UUID.randomUUID().toString();
+        userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, aceUser.getTenantId(), token), aceUser, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
         aceOAuth2AccessToken = new AceOAuth2AccessToken();
         aceOAuth2AccessToken.setValue(token);
+        aceOAuth2AccessToken.setRefreshToken(refreshToken);
         aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L));
-        tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+        tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()), aceOAuth2AccessToken, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
+        userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.REFRESH_TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), refreshToken), aceUser, clientDetails.getRefreshTokenValidity(), TimeUnit.SECONDS);
         return aceOAuth2AccessToken;
     }
 }

@@ -46,7 +46,7 @@ public class AceLogoutTenantHandler implements LogoutHandler {
                 //缓存删除用户
                 userDatailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
                 //缓存删除Token
-                tokenRedisTemplate.delete(String.format(SecurityConstants.TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
+                tokenRedisTemplate.delete(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, aceUser.getTenantId(), aceUser.getUsername()));
             }
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Content-Type", "application/json");

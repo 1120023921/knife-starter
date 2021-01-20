@@ -9,10 +9,14 @@ package com.cintsoft.spring.security.common.constant;
  */
 public class SecurityConstants {
 
-    //TOKEN存储前缀（带租户）
-    public final static String TOKEN_PREFIX_TENANT_ID = "ACE:TOKEN:%s:%s";
-    //TOKEN存储前缀
-    public final static String TOKEN_PREFIX = "ACE:TOKEN:%s";
+    //ACCESS_TOKEN存储前缀（带租户）
+    public final static String ACCESS_TOKEN_PREFIX_TENANT_ID = "ACE:ACCESS_TOKEN:%s:%s";
+    //ACCESS_TOKEN存储前缀
+    public final static String ACCESS_TOKEN_PREFIX = "ACE:ACCESS_TOKEN:%s";
+    //REFRESH_TOKEN存储前缀（带租户）
+    public final static String REFRESH_TOKEN_PREFIX_TENANT_ID = "ACE:REFRESH_TOKEN:%s:%s";
+    //REFRESH_TOKEN存储前缀
+    public final static String REFRESH_TOKEN_PREFIX = "ACE:REFRESH_TOKEN:%s";
     //用户信息存储前缀（带租户）
     public final static String USER_DETAIL_PREFIX_TENANT_ID = "ACE:USER_DETAIL:%s:%s";
     //用户信息存储前缀

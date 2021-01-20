@@ -58,14 +58,14 @@ public class AceLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         final AceUser aceUser = (AceUser) authResult.getPrincipal();
         //判断当前用户是否已有token
-        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getUsername()));
+        AceOAuth2AccessToken aceOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX, aceUser.getUsername()));
         if (aceOAuth2AccessToken == null) {
             final String token = UUID.randomUUID().toString();
             userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX, token), aceUser, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
             aceOAuth2AccessToken = new AceOAuth2AccessToken();
             aceOAuth2AccessToken.setValue(token);
             aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L));
-            tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.TOKEN_PREFIX, aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+            tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX, aceUser.getUsername()), aceOAuth2AccessToken, aceSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         }
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");

@@ -40,7 +40,7 @@ public class AceOAuth2AccessToken implements Serializable {
         final Map<String, Object> map = new HashMap<>();
         map.put(ACCESS_TOKEN, value);
         map.put(tokenType, tokenType);
-        map.put(REFRESH_TOKEN, "");
+        map.put(REFRESH_TOKEN, refreshToken);
         map.put(EXPIRES_IN, (expiration.getTime() - System.currentTimeMillis()) / 1000);
         map.put(SCOPE, scope.toArray());
         return map;

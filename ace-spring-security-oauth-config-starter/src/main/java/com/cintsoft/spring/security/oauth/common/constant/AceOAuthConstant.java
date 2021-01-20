@@ -29,4 +29,6 @@ public class AceOAuthConstant {
     public final static String GRANT_TYPE_PASSWORD = "password";
     //grantType-client_credentials
     public final static String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
+    //grantType-refresh_token
+    public final static String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
 }

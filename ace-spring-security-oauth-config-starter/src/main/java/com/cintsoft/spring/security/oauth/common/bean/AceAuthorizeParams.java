@@ -17,6 +17,7 @@ public class AceAuthorizeParams {
     private String grantType;
     private String clientId;
     private String clientSecret;
+    private String refreshToken;
     private String username;
     private String password;
     private String redirectUri;

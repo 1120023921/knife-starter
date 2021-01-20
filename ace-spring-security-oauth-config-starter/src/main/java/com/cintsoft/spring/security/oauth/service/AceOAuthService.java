@@ -42,6 +42,15 @@ public interface AceOAuthService {
      */
     AceOAuth2AccessToken clientCredentialsToken(String clientId, String clientSecret);
 
+    /**
+     * @param aceAuthorizeParams 认证参数
+     * @description 刷新密钥认证
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2021/1/20 20:42
+     */
+    AceOAuth2AccessToken refreshToken(AceAuthorizeParams aceAuthorizeParams);
+
     Map<String, Object> token(AceAuthorizeParams aceAuthorizeParams);
 
     String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, AceAuthorizeParams aceAuthorizeParams);
