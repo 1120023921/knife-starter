@@ -1,7 +1,6 @@
 package com.cintsoft.spring.security.oauth.service.impl;
 
 import com.cintsoft.common.exception.BusinessException;
-import com.cintsoft.mybatis.plus.tenant.TenantContextHolder;
 import com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties;
 import com.cintsoft.spring.security.common.constant.SecurityConstants;
 import com.cintsoft.spring.security.model.AceOAuth2AccessToken;
@@ -13,6 +12,7 @@ import com.cintsoft.spring.security.oauth.common.constant.SysOAuthCode;
 import com.cintsoft.spring.security.oauth.model.AceOAuthClientDetails;
 import com.cintsoft.spring.security.oauth.service.AceOAuthService;
 import com.cintsoft.spring.security.oauth.service.AceOAuthClientDetailsService;
+import com.cintsoft.spring.security.oauth.service.TenantContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

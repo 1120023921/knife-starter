@@ -16,6 +16,7 @@ public class BusinessException extends RuntimeException {
 
     private Integer code;
     private String msg;
+    private String errorMsg;
     private Object data;
 
     public BusinessException() {
@@ -38,6 +39,14 @@ public class BusinessException extends RuntimeException {
         super(msg);
         this.code = code;
         this.msg = msg;
+        this.data = data;
+    }
+
+    public BusinessException(Integer code, String msg,String errorMsg, Object data) {
+        super(msg);
+        this.code = code;
+        this.msg = msg;
+        this.errorMsg = errorMsg;
         this.data = data;
     }
 
