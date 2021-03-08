@@ -211,7 +211,7 @@ public class AceOAuthServiceImpl implements AceOAuthService {
         aceOAuth2AccessToken = new AceOAuth2AccessToken();
         aceOAuth2AccessToken.setValue(token);
         aceOAuth2AccessToken.setRefreshToken(refreshToken);
-        aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + aceSecurityConfigProperties.getTokenExpire() * 1000L));
+        aceOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + clientDetails.getAccessTokenValidity() * 1000L));
         tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX, aceUser.getUsername()), aceOAuth2AccessToken, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
         userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.REFRESH_TOKEN_PREFIX, refreshToken), aceUser, clientDetails.getRefreshTokenValidity(), TimeUnit.SECONDS);
         return aceOAuth2AccessToken;
