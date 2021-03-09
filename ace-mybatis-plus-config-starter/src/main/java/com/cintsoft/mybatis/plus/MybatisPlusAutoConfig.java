@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
  * Mail: huhao9277@gmail.com
  */
 @Configuration
-@MapperScan("com.cintsoft.**.dao")
 public class MybatisPlusAutoConfig {
 
     /**
