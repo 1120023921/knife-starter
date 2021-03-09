@@ -57,7 +57,7 @@ public class AceUser implements Serializable, UserDetails {
 
     private String tenantId;
 
-    private List<String> resourceKeyList;
+    private List<String> permissionList;
 
     private List<String> roleKeyList;
 
