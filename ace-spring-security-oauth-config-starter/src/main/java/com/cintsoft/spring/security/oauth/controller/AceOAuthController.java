@@ -2,7 +2,6 @@ package com.cintsoft.spring.security.oauth.controller;
 
 import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
-import com.cintsoft.spring.security.model.AceOAuth2AccessToken;
 import com.cintsoft.spring.security.model.AceUser;
 import com.cintsoft.spring.security.oauth.AceOAuthConfigProperties;
 import com.cintsoft.spring.security.oauth.common.bean.AceAuthorizeParams;
