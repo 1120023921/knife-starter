@@ -17,7 +17,17 @@ public class ResultBean<T> implements Serializable {
 
     private int code;
     private String msg;
+    private String errMsg;
     private T data;
+
+    public static <T> ResultBean<T> restResult(T data, int code, String msg, String errMsg) {
+        ResultBean<T> resultBean = new ResultBean<>();
+        resultBean.setCode(code);
+        resultBean.setData(data);
+        resultBean.setMsg(msg);
+        resultBean.setErrMsg(errMsg);
+        return resultBean;
+    }
 
     public static <T> ResultBean<T> restResult(T data, int code, String msg) {
         ResultBean<T> resultBean = new ResultBean<>();
