@@ -1,5 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.cintsoft.spring.security.oauth.AceOAuthConfigProperties, \
-com.cintsoft.spring.security.oauth.SecurityOAuthAutoConfig
-
-

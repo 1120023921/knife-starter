@@ -1,6 +1,6 @@
-rootProject.name = 'ace-starter'
-include 'ace-mybatis-plus-config-starter'
-include 'ace-spring-security-config-starter'
-include 'ace-common-starter'
-include 'ace-spring-security-oauth-config-starter'
+rootProject.name = 'knife-starter'
+include 'knife-mybatis-plus-config-starter'
+include 'knife-spring-security-config-starter'
+include 'knife-common-starter'
+include 'knife-spring-security-oauth-config-starter'
 

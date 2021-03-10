@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties, \
+com.cintsoft.mybatis.plus.MybatisPlusAutoConfig
+

@@ -1,0 +1,56 @@
+description('Spring Security自动配置')
+
+group 'com.cintsoft'
+version '1.3.5'
+
+compileJava.options.encoding = 'UTF-8'
+
+compileTestJava.options.encoding = 'UTF-8'
+
+compileJava.inputs.files(processResources)
+
+dependencies {
+    compile project(':knife-common-starter')
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.cloud:spring-cloud-starter-security'
+}
+
+// 上传source
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+}
+
+//上传到nexus-snapshot，记得改名字，version的值以snapshot结尾
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: "http://nexus.cintsoft.com/repository/cintsoft-snapshots/") {
+//                authentication(userName: "admin", password: "!Cint@2019")
+//            }
+//            pom.groupId = "$project.group"
+//            pom.version = "$project.version"
+//        }
+//    }
+//}
+
+//上传到 nexus-release，记得改名字，version的值以release结尾
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://nexus.cintsoft.com/repository/cintsoft-releases/") {
+                authentication(userName: "admin", password: "!Cint@2019")
+            }
+            pom.groupId = "$project.group"
+            pom.version = "$project.version"
+        }
+    }
+}

@@ -1,6 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.cintsoft.spring.security.common.constant.AceSecurityConfigProperties, \
-com.cintsoft.spring.security.SecurityAutoConfig, \
-com.cintsoft.spring.security.SecurityConfig
-
-

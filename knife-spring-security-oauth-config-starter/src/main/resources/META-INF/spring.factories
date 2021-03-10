@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties, \
+com.cintsoft.spring.security.oauth.SecurityOAuthAutoConfig
+
+

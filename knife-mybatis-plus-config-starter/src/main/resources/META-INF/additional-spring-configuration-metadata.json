@@ -1,0 +1,61 @@
+{
+  "hints": [
+    {
+      "name": "knife.tenant.enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
+    },
+    {
+      "name": "knife.tenant.column",
+      "values": [
+        {
+          "value": "tenant_id",
+          "description": "租户标识字段名"
+        }
+      ]
+    },
+    {
+      "name": "knife.tenant.tables",
+      "values": [
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "sourceType": "com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties",
+      "name": "knife.tenant",
+      "type": "com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties",
+      "name": "knife.tenant.enable",
+      "type": "java.lang.Boolean",
+      "description": "租户启用状态",
+      "defaultValue": false
+    },
+    {
+      "sourceType": "com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties",
+      "name": "knife.tenant.column",
+      "type": "java.lang.String",
+      "description": "租户标识字段名",
+      "defaultValue": "tenant_id"
+    },
+    {
+      "sourceType": "com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties",
+      "name": "knife.tenant.tables",
+      "type": "java.util.List",
+      "description": "忽略租户限制表",
+      "defaultValue": []
+    }
+  ]
+}
