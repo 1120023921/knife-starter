@@ -68,13 +68,14 @@ public class MybatisPlusAutoConfig {
      * @email huhao9277@gmail.com
      */
     @Bean
+    @ConditionalOnBean(MybatisPlusInterceptor.class)
     public MybatisPlusInterceptor mybatisPlusInterceptor(@Autowired(required = false) TenantLineHandler tenantLineHandler) {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
-        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         if (tenantLineHandler != null) {
             interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(tenantLineHandler));
         }
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         return interceptor;
     }
 }
