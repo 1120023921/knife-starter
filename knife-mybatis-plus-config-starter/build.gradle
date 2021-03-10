@@ -1,7 +1,7 @@
 description('Mybatis Plus自动配置')
 
 group 'com.cintsoft'
-version '1.1.6'
+version '1.1.7'
 
 compileJava.options.encoding = 'UTF-8'
 

@@ -68,7 +68,7 @@ public class MybatisPlusAutoConfig {
      * @email huhao9277@gmail.com
      */
     @Bean
-    @ConditionalOnBean(MybatisPlusInterceptor.class)
+    @ConditionalOnMissingBean(MybatisPlusInterceptor.class)
     public MybatisPlusInterceptor mybatisPlusInterceptor(@Autowired(required = false) TenantLineHandler tenantLineHandler) {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         if (tenantLineHandler != null) {
