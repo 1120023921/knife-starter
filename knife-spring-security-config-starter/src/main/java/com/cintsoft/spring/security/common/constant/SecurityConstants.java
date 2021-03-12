@@ -10,17 +10,17 @@ package com.cintsoft.spring.security.common.constant;
 public class SecurityConstants {
 
     //ACCESS_TOKEN存储前缀（带租户）
-    public final static String ACCESS_TOKEN_PREFIX_TENANT_ID = "KNIFE:ACCESS_TOKEN:%s:%s";
+//    public final static String ACCESS_TOKEN_PREFIX_TENANT_ID = "KNIFE:ACCESS_TOKEN:%s:%s";
     //ACCESS_TOKEN存储前缀
-    public final static String ACCESS_TOKEN_PREFIX = "KNIFE:ACCESS_TOKEN:%s";
+//    public final static String ACCESS_TOKEN_PREFIX = "KNIFE:ACCESS_TOKEN:%s";
     //REFRESH_TOKEN存储前缀（带租户）
-    public final static String REFRESH_TOKEN_PREFIX_TENANT_ID = "KNIFE:REFRESH_TOKEN:%s:%s";
+//    public final static String REFRESH_TOKEN_PREFIX_TENANT_ID = "KNIFE:REFRESH_TOKEN:%s:%s";
     //REFRESH_TOKEN存储前缀
-    public final static String REFRESH_TOKEN_PREFIX = "KNIFE:REFRESH_TOKEN:%s";
+//    public final static String REFRESH_TOKEN_PREFIX = "KNIFE:REFRESH_TOKEN:%s";
     //用户信息存储前缀（带租户）
-    public final static String USER_DETAIL_PREFIX_TENANT_ID = "KNIFE:USER_DETAIL:%s:%s";
+//    public final static String USER_DETAIL_PREFIX_TENANT_ID = "KNIFE:USER_DETAIL:%s:%s";
     //用户信息存储前缀
-    public final static String USER_DETAIL_PREFIX = "KNIFE:USER_DETAIL:%s";
+//    public final static String USER_DETAIL_PREFIX = "KNIFE:USER_DETAIL:%s";
     //客户端内部调用标志
     public final static String FROM_IN = "Y";
     //服务端请求严重头

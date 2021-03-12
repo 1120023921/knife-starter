@@ -2,7 +2,7 @@ package com.cintsoft.spring.security.handler;
 
 import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
-import com.cintsoft.spring.security.common.constant.SecurityConstants;
+import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.cintsoft.spring.security.model.KnifeOAuth2AccessToken;
 import com.cintsoft.spring.security.model.KnifeUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,11 +26,13 @@ public class KnifeLogoutTenantHandler implements LogoutHandler {
 
     private final RedisTemplate<String, KnifeUser> userDatailRedisTemplate;
     private final RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate;
+    private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
 
-    public KnifeLogoutTenantHandler(RedisTemplate<String, KnifeUser> userDatailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
+    public KnifeLogoutTenantHandler(RedisTemplate<String, KnifeUser> userDatailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
         this.userDatailRedisTemplate = userDatailRedisTemplate;
         this.tokenRedisTemplate = tokenRedisTemplate;
+        this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
     }
 
@@ -41,12 +43,12 @@ public class KnifeLogoutTenantHandler implements LogoutHandler {
         final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final KnifeUser knifeUser = userDatailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
+            final KnifeUser knifeUser = userDatailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
             if (knifeUser != null) {
                 //缓存删除用户
-                userDatailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
+                userDatailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
                 //缓存删除Token
-                tokenRedisTemplate.delete(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, knifeUser.getTenantId(), knifeUser.getUsername()));
+                tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()));
             }
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Content-Type", "application/json");

@@ -2,7 +2,6 @@ package com.cintsoft.spring.security.filter;
 
 import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
-import com.cintsoft.spring.security.common.constant.SecurityConstants;
 import com.cintsoft.spring.security.model.KnifeOAuth2AccessToken;
 import com.cintsoft.spring.security.model.KnifeUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,14 +57,14 @@ public class KnifeLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         final KnifeUser knifeUser = (KnifeUser) authResult.getPrincipal();
         //判断当前用户是否已有token
-        KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX, knifeUser.getUsername()));
+        KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), knifeUser.getUsername()));
         if (knifeOAuth2AccessToken == null) {
             final String token = UUID.randomUUID().toString();
-            userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX, token), knifeUser, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+            userDetailRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), token), knifeUser, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
             knifeOAuth2AccessToken = new KnifeOAuth2AccessToken();
             knifeOAuth2AccessToken.setValue(token);
             knifeOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + knifeSecurityConfigProperties.getTokenExpire() * 1000L));
-            tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX, knifeUser.getUsername()), knifeOAuth2AccessToken, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+            tokenRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), knifeUser.getUsername()), knifeOAuth2AccessToken, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
         }
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");

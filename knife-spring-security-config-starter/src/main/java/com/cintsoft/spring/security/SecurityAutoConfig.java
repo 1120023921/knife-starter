@@ -236,9 +236,9 @@ public class SecurityAutoConfig {
     @Bean("knifeVerifyFilter")
     public OncePerRequestFilter knifeVerifyFilter(KnifeSecurityConfigProperties knifeSecurityConfigProperties, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeVerifyTenantFilter(userDetailRedisTemplate, objectMapper);
+            return new KnifeVerifyTenantFilter(userDetailRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         } else {
-            return new KnifeVerifyFilter(userDetailRedisTemplate, objectMapper);
+            return new KnifeVerifyFilter(userDetailRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         }
     }
 
@@ -252,9 +252,9 @@ public class SecurityAutoConfig {
     @Bean("knifeLogoutHandler")
     public LogoutHandler knifeLogoutHandler(KnifeSecurityConfigProperties knifeSecurityConfigProperties, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeLogoutTenantHandler(userDetailRedisTemplate, tokenRedisTemplate, objectMapper);
+            return new KnifeLogoutTenantHandler(userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         } else {
-            return new KnifeLogoutHandler(userDetailRedisTemplate, tokenRedisTemplate, objectMapper);
+            return new KnifeLogoutHandler(userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         }
     }
 

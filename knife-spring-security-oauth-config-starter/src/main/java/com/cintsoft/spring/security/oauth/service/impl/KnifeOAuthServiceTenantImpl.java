@@ -2,7 +2,6 @@ package com.cintsoft.spring.security.oauth.service.impl;
 
 import com.cintsoft.common.exception.BusinessException;
 import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
-import com.cintsoft.spring.security.common.constant.SecurityConstants;
 import com.cintsoft.spring.security.model.KnifeOAuth2AccessToken;
 import com.cintsoft.spring.security.model.KnifeUser;
 import com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties;
@@ -79,7 +78,7 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
 
         if (KnifeOAuthConstant.GRANT_TYPE_CODE.equals(knifeAuthorizeParams.getGrantType())) {
             final String code = UUID.randomUUID().toString();
-            tokenRedisTemplate.opsForValue().set(String.format(KnifeOAuthConstant.CODE_PREFIX_TENANT_ID, knifeAuthorizeParams.getTenantId(), code), knifeOAuth2AccessToken, knifeOAuthConfigProperties.getCodeExpire(), TimeUnit.SECONDS);
+            tokenRedisTemplate.opsForValue().set(String.format(knifeOAuthConfigProperties.getCodePrefixTenantId(), knifeAuthorizeParams.getTenantId(), code), knifeOAuth2AccessToken, knifeOAuthConfigProperties.getCodeExpire(), TimeUnit.SECONDS);
             response.sendRedirect(String.format(KnifeOAuthConstant.AUTHORIZATION_CODE_URL_TENANT_ID, clientDetails.getWebServerRedirectUri(), code, knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getState()));
         } else if (KnifeOAuthConstant.GRANT_TYPE_TOKEN.equals(knifeAuthorizeParams.getGrantType())) {
             response.sendRedirect(String.format(KnifeOAuthConstant.IMPLICIT_REDIRECT_URL_TENANT_ID, clientDetails.getWebServerRedirectUri(), knifeOAuth2AccessToken.getValue(), knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getState()));
@@ -121,11 +120,11 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
         if (!Arrays.asList(clientDetails.getAuthorizedGrantTypes().split(",")).contains(KnifeOAuthConstant.GRANT_TYPE_PASSWORD)) {
             throw new BusinessException(SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode());
         }
-        final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.REFRESH_TOKEN_PREFIX_TENANT_ID, knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getRefreshToken()));
+        final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getRefreshTokenPrefixTenantId(), knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getRefreshToken()));
         if (knifeUser == null) {
             return null;
         }
-        userDetailRedisTemplate.delete(String.format(SecurityConstants.REFRESH_TOKEN_PREFIX_TENANT_ID, knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getRefreshToken()));
+        userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getRefreshTokenPrefixTenantId(), knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getRefreshToken()));
         return getKnifeOAuth2AccessToken(clientDetails, knifeUser);
     }
 
@@ -133,9 +132,9 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     public Map<String, Object> token(KnifeAuthorizeParams knifeAuthorizeParams) {
         KnifeOAuth2AccessToken knifeOAuth2AccessToken = null;
         if (KnifeOAuthConstant.GRANT_TYPE_CODE.equals(knifeAuthorizeParams.getGrantType())) {
-            knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(KnifeOAuthConstant.CODE_PREFIX_TENANT_ID, knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getCode()));
+            knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeOAuthConfigProperties.getCodePrefixTenantId(), knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getCode()));
             if (knifeOAuth2AccessToken != null) {
-                tokenRedisTemplate.delete(String.format(KnifeOAuthConstant.CODE_PREFIX_TENANT_ID, knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getCode()));
+                tokenRedisTemplate.delete(String.format(knifeOAuthConfigProperties.getCodePrefixTenantId(), knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getCode()));
             }
         } else if (KnifeOAuthConstant.GRANT_TYPE_PASSWORD.equals(knifeAuthorizeParams.getGrantType())) {
             knifeOAuth2AccessToken = passwordToken(knifeAuthorizeParams.getClientId(), knifeAuthorizeParams.getUsername(), knifeAuthorizeParams.getPassword());
@@ -178,15 +177,15 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
 
     @Override
     public KnifeUser userInfo(String token, String tenantId) {
-        return userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, token));
+        return userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, token));
     }
 
     @Override
     public void logout(String username, String tenantId) {
-        final KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, tenantId, username));
+        final KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, username));
         if (knifeOAuth2AccessToken != null) {
-            tokenRedisTemplate.delete(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, tenantId, username));
-            userDetailRedisTemplate.delete(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, knifeOAuth2AccessToken.getValue()));
+            tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, username));
+            userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, knifeOAuth2AccessToken.getValue()));
         }
     }
 
@@ -210,7 +209,7 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
 
     public KnifeOAuth2AccessToken getKnifeOAuth2AccessToken(KnifeOAuthClientDetails clientDetails, KnifeUser knifeUser) {
         //判断当前用户是否已有token
-        KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, knifeUser.getTenantId(), knifeUser.getUsername()));
+        KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()));
         String token;
         if (knifeOAuth2AccessToken == null) {
             token = UUID.randomUUID().toString();
@@ -218,13 +217,13 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
             token = knifeOAuth2AccessToken.getValue();
         }
         final String refreshToken = UUID.randomUUID().toString();
-        userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, knifeUser.getTenantId(), token), knifeUser, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
+        userDetailRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), knifeUser.getTenantId(), token), knifeUser, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
         knifeOAuth2AccessToken = new KnifeOAuth2AccessToken();
         knifeOAuth2AccessToken.setValue(token);
         knifeOAuth2AccessToken.setRefreshToken(refreshToken);
         knifeOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + clientDetails.getAccessTokenValidity() * 1000L));
-        tokenRedisTemplate.opsForValue().set(String.format(SecurityConstants.ACCESS_TOKEN_PREFIX_TENANT_ID, knifeUser.getTenantId(), knifeUser.getUsername()), knifeOAuth2AccessToken, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
-        userDetailRedisTemplate.opsForValue().set(String.format(SecurityConstants.REFRESH_TOKEN_PREFIX_TENANT_ID, knifeUser.getTenantId(), refreshToken), knifeUser, clientDetails.getRefreshTokenValidity(), TimeUnit.SECONDS);
+        tokenRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()), knifeOAuth2AccessToken, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
+        userDetailRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getRefreshTokenPrefixTenantId(), knifeUser.getTenantId(), refreshToken), knifeUser, clientDetails.getRefreshTokenValidity(), TimeUnit.SECONDS);
         return knifeOAuth2AccessToken;
     }
 }

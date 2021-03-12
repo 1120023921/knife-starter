@@ -26,4 +26,8 @@ public class KnifeOAuthConfigProperties {
     private String logoutSuccessUrl = "http://cintsoft.com";
     //code有效时间
     private Integer codeExpire = 30;
+    //code存储路径（带租户）
+    private String codePrefixTenantId = "KNIFE:CODE:%s:%s";
+    //code存储路径
+    private String codePrefix = "KNIFE:CODE:%s";
 }

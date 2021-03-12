@@ -24,4 +24,16 @@ public class KnifeSecurityConfigProperties {
     private Boolean defaultInMemoryEnable = false;
     //租户模式
     private Boolean tenantEnable = true;
+    //ACCESS_TOKEN存储前缀（带租户）
+    private String accessTokenPrefixTenantId = "KNIFE:ACCESS_TOKEN:%s:%s";
+    //ACCESS_TOKEN存储前缀
+    private String accessTokenPrefix = "KNIFE:ACCESS_TOKEN:%s";
+    //REFRESH_TOKEN存储前缀（带租户）
+    private String refreshTokenPrefixTenantId = "KNIFE:REFRESH_TOKEN:%s:%s";
+    //REFRESH_TOKEN存储前缀
+    private String refreshTokenPrefix = "KNIFE:REFRESH_TOKEN:%s";
+    //用户信息存储前缀（带租户）
+    private String userDetailPrefixTenantId = "KNIFE:USER_DETAIL:%s:%s";
+    //用户信息存储前缀
+    private String userDetailPrefix = "KNIFE:USER_DETAIL:%s";
 }

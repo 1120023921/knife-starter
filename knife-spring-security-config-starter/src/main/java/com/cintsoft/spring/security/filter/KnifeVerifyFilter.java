@@ -2,7 +2,7 @@ package com.cintsoft.spring.security.filter;
 
 import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
-import com.cintsoft.spring.security.common.constant.SecurityConstants;
+import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.cintsoft.spring.security.model.KnifeUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,9 +29,11 @@ public class KnifeVerifyFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
     private final ObjectMapper objectMapper;
+    private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
 
-    public KnifeVerifyFilter(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
+    public KnifeVerifyFilter(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
         this.userDetailRedisTemplate = userDetailRedisTemplate;
+        this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
     }
 
@@ -40,7 +42,7 @@ public class KnifeVerifyFilter extends OncePerRequestFilter {
         final String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX, header.split(" ")[1]));
+            final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), header.split(" ")[1]));
             if (knifeUser != null) {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(knifeUser, null, knifeUser.getAuthorities()));
             } else {

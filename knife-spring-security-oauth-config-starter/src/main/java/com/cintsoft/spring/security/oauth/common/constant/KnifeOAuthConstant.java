@@ -10,9 +10,9 @@ package com.cintsoft.spring.security.oauth.common.constant;
 public class KnifeOAuthConstant {
 
     //code存储路径（带租户）
-    public final static String CODE_PREFIX_TENANT_ID = "KNIFE:CODE:%s:%s";
+//    public final static String CODE_PREFIX_TENANT_ID = "KNIFE:CODE:%s:%s";
     //code存储路径
-    public final static String CODE_PREFIX = "KNIFE:CODE:%s";
+//    public final static String CODE_PREFIX = "KNIFE:CODE:%s";
     //隐藏式重定向地址（带租户）
     public final static String IMPLICIT_REDIRECT_URL_TENANT_ID = "%s?token=%s&tenantId=%s&state=%s";
     //隐藏式重定向地址

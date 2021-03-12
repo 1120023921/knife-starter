@@ -2,7 +2,7 @@ package com.cintsoft.spring.security.filter;
 
 import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
-import com.cintsoft.spring.security.common.constant.SecurityConstants;
+import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.cintsoft.spring.security.model.KnifeUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,10 +28,12 @@ import java.io.PrintWriter;
 public class KnifeVerifyTenantFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
+    private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
 
-    public KnifeVerifyTenantFilter(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
+    public KnifeVerifyTenantFilter(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
         this.userDetailRedisTemplate = userDetailRedisTemplate;
+        this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
     }
 
@@ -41,7 +43,7 @@ public class KnifeVerifyTenantFilter extends OncePerRequestFilter {
         final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(SecurityConstants.USER_DETAIL_PREFIX_TENANT_ID, tenantId, header.split(" ")[1]));
+            final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
             if (knifeUser != null) {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(knifeUser, null, knifeUser.getAuthorities()));
             } else {

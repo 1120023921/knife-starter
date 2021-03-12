@@ -1,9 +1,6 @@
 {
   "hints": [
     {
-      "name": "knife.security.token-expire"
-    },
-    {
       "name": "knife.security.tenant-enable",
       "values": [
         {
@@ -58,6 +55,48 @@
       "type": "java.lang.Boolean",
       "description": "默认内存用户启用状态",
       "defaultValue": true
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.access-token-prefix-tenantId",
+      "type": "java.lang.String",
+      "description": "ACCESS_TOKEN存储前缀（带租户）",
+      "defaultValue": "KNIFE:ACCESS_TOKEN:%s:%s"
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.access-token-prefix",
+      "type": "java.lang.String",
+      "description": "ACCESS_TOKEN存储前缀",
+      "defaultValue": "KNIFE:ACCESS_TOKEN:%s"
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.refresh-token-prefix-tenantId",
+      "type": "java.lang.String",
+      "description": "REFRESH_TOKEN存储前缀（带租户）",
+      "defaultValue": "KNIFE:REFRESH_TOKEN:%s:%s"
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.refresh-token-prefix",
+      "type": "java.lang.String",
+      "description": "REFRESH_TOKEN存储前缀",
+      "defaultValue": "KNIFE:REFRESH_TOKEN:%s"
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.user-detail-prefix-tenantId",
+      "type": "java.lang.String",
+      "description": "用户信息存储前缀（带租户）",
+      "defaultValue": "KNIFE:USER_DETAIL:%s:%s"
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.user-detail-prefix",
+      "type": "java.lang.String",
+      "description": "用户信息存储前缀",
+      "defaultValue": "KNIFE:USER_DETAIL:%s"
     }
   ]
 }

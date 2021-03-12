@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 public class SecurityOAuthAutoConfig {
 
+    @ConditionalOnMissingBean
     @Bean
     public KnifeOAuthService knifeOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, KnifeOAuthConfigProperties knifeOAuthConfigProperties, AuthenticationManager authenticationManager, KnifeOAuthClientDetailsService knifeOAuthClientDetailsService) {
         if (!knifeOAuthConfigProperties.getTenantEnable()) {
