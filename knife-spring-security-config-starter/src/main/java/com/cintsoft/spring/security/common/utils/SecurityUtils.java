@@ -15,7 +15,7 @@ public class SecurityUtils {
 
     public static KnifeUser getUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
+        if (authentication != null && authentication.getPrincipal() != null && !"anonymousUser".equals(authentication.getPrincipal())) {
             return (KnifeUser) authentication.getPrincipal();
         }
         return null;
