@@ -8,6 +8,7 @@ import com.cintsoft.spring.security.oauth.common.bean.KnifeAuthorizeParams;
 import com.cintsoft.spring.security.oauth.service.KnifeOAuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,9 +51,20 @@ public class KnifeOAuthController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session, String tenantId) {
-        knifeOAuthService.logout((String) session.getAttribute("username"), tenantId);
+        knifeOAuthService.logout((String) session.getAttribute("username"), null, tenantId);
         session.removeAttribute("username");
         return "redirect:" + knifeOAuthConfigProperties.getLogoutSuccessUrl();
+    }
+
+    @GetMapping("/logout/pwd")
+    @ResponseBody
+    public ResultBean<Boolean> logout(HttpServletRequest request, String tenantId) {
+        final String token = request.getHeader("Authorization") == null ? null : request.getHeader("Authorization").split(" ")[1];
+        if (StringUtils.isEmpty(tenantId)) {
+            tenantId = request.getHeader("TENANT_ID");
+        }
+        knifeOAuthService.logout(null, token, tenantId);
+        return ResultBean.restResult(true, ErrorCodeInfo.OK);
     }
 
     @GetMapping("/userInfo")

@@ -170,8 +170,17 @@ public class KnifeOAuthServiceImpl implements KnifeOAuthService {
     }
 
     @Override
-    public void logout(String username, String tenantId) {
-        final KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), username));
+    public void logout(String username, String token, String tenantId) {
+        KnifeOAuth2AccessToken knifeOAuth2AccessToken = null;
+        if (!StringUtils.isEmpty(username)) {
+            knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), username));
+        } else {
+            if (!StringUtils.isEmpty(token)) {
+                final KnifeUser knifeUser = userInfo(token, tenantId);
+                username = knifeUser.getUsername();
+                knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), knifeUser.getUsername()));
+            }
+        }
         if (knifeOAuth2AccessToken != null) {
             tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), username));
             userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), knifeOAuth2AccessToken.getValue()));

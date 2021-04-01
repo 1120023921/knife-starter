@@ -57,7 +57,7 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     @Override
     public String authorize(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, KnifeAuthorizeParams knifeAuthorizeParams) {
         if (StringUtils.isEmpty(knifeAuthorizeParams.getTenantId())) {
-            knifeAuthorizeParams.setTenantId("1");
+            knifeAuthorizeParams.setTenantId("0");
         }
         TenantContextHolder.setTenantId(knifeAuthorizeParams.getTenantId());
 
@@ -181,8 +181,17 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     }
 
     @Override
-    public void logout(String username, String tenantId) {
-        final KnifeOAuth2AccessToken knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, username));
+    public void logout(String username, String token, String tenantId) {
+        KnifeOAuth2AccessToken knifeOAuth2AccessToken = null;
+        if (!StringUtils.isEmpty(username)) {
+            knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, username));
+        } else {
+            if (!StringUtils.isEmpty(token)) {
+                final KnifeUser knifeUser = userInfo(token, tenantId);
+                username = knifeUser.getUsername();
+                knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, knifeUser.getUsername()));
+            }
+        }
         if (knifeOAuth2AccessToken != null) {
             tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, username));
             userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, knifeOAuth2AccessToken.getValue()));

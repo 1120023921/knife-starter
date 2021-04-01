@@ -63,5 +63,5 @@ public interface KnifeOAuthService {
      */
     KnifeUser userInfo(String token, String tenantId);
 
-    void logout(String username, String tenantId);
+    void logout(String username, String token, String tenantId);
 }
