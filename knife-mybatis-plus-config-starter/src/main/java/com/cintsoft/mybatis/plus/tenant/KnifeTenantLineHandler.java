@@ -1,6 +1,7 @@
 package com.cintsoft.mybatis.plus.tenant;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import com.cintsoft.common.mybatis.tenant.TenantContextHolder;
 import com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.NullValue;

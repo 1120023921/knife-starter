@@ -1,4 +1,4 @@
-package com.cintsoft.spring.security.oauth.service;
+package com.cintsoft.common.mybatis.tenant;
 
 import lombok.experimental.UtilityClass;
 

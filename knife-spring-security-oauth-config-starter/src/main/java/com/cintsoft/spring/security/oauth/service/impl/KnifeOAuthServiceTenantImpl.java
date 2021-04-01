@@ -1,6 +1,7 @@
 package com.cintsoft.spring.security.oauth.service.impl;
 
 import com.cintsoft.common.exception.BusinessException;
+import com.cintsoft.common.mybatis.tenant.TenantContextHolder;
 import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.cintsoft.spring.security.model.KnifeOAuth2AccessToken;
 import com.cintsoft.spring.security.model.KnifeUser;
@@ -11,7 +12,6 @@ import com.cintsoft.spring.security.oauth.common.constant.SysOAuthCode;
 import com.cintsoft.spring.security.oauth.model.KnifeOAuthClientDetails;
 import com.cintsoft.spring.security.oauth.service.KnifeOAuthService;
 import com.cintsoft.spring.security.oauth.service.KnifeOAuthClientDetailsService;
-import com.cintsoft.spring.security.oauth.service.TenantContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
