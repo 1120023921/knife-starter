@@ -27,11 +27,11 @@ public class SecurityOAuthAutoConfig {
 
     @ConditionalOnMissingBean
     @Bean
-    public KnifeOAuthService knifeOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, KnifeOAuthConfigProperties knifeOAuthConfigProperties, AuthenticationManager authenticationManager, KnifeOAuthClientDetailsService knifeOAuthClientDetailsService) {
+    public KnifeOAuthService knifeOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, KnifeOAuthConfigProperties knifeOAuthConfigProperties, AuthenticationManager authenticationManager, KnifeOAuthClientDetailsService knifeOAuthClientDetailsService) {
         if (!knifeOAuthConfigProperties.getTenantEnable()) {
-            return new KnifeOAuthServiceImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService);
+            return new KnifeOAuthServiceImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService);
         }
-        return new KnifeOAuthServiceTenantImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService);
+        return new KnifeOAuthServiceTenantImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService);
     }
 
     @ConditionalOnMissingBean

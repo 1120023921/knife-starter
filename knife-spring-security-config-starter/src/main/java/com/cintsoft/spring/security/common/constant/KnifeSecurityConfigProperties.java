@@ -36,4 +36,8 @@ public class KnifeSecurityConfigProperties {
     private String userDetailPrefixTenantId = "KNIFE:USER_DETAIL:%s:%s";
     //用户信息存储前缀
     private String userDetailPrefix = "KNIFE:USER_DETAIL:%s";
+    //USER_REFRESH_TOKEN存储前缀（带租户）
+    private String userRefreshTokenPrefixTenantId = "KNIFE:USER_REFRESH_TOKEN:%s:%s";
+    //USER_REFRESH_TOKEN存储前缀
+    private String userRefreshTokenPrefix = "KNIFE:USER_REFRESH_TOKEN:%s";
 }

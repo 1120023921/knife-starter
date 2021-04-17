@@ -97,6 +97,20 @@
       "type": "java.lang.String",
       "description": "用户信息存储前缀",
       "defaultValue": "KNIFE:USER_DETAIL:%s"
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.user-refresh-token-prefix-tenantId",
+      "type": "java.lang.String",
+      "description": "用户与RefreshToken信息存储前缀（带租户）",
+      "defaultValue": "KNIFE:USER_REFRESH_TOKEN:%s:%s"
+    },
+    {
+      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.user-refresh-token-prefix",
+      "type": "java.lang.String",
+      "description": "用户与RefreshToken信息存储前缀",
+      "defaultValue": "KNIFE:USER_REFRESH_TOKEN:%s"
     }
   ]
 }

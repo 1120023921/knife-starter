@@ -53,7 +53,7 @@ public class SecurityAutoConfig {
     @ConditionalOnMissingBean(name = {"userDetailRedisTemplate"})
     @Bean("userDetailRedisTemplate")
     public RedisTemplate<String, KnifeUser> userDetailRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, KnifeUser> redisTemplate = new RedisTemplate<>();
+        final RedisTemplate<String, KnifeUser> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
@@ -72,6 +72,17 @@ public class SecurityAutoConfig {
     @Bean("tokenRedisTemplate")
     public RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         final RedisTemplate<String, KnifeOAuth2AccessToken> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
+    }
+
+    @ConditionalOnMissingBean(name = {"userRefreshTokenRedisTemplate"})
+    @Bean("userRefreshTokenRedisTemplate")
+    public RedisTemplate<String, String> userRefreshTokenRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        final RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());

@@ -9,8 +9,8 @@ import com.cintsoft.spring.security.oauth.common.bean.KnifeAuthorizeParams;
 import com.cintsoft.spring.security.oauth.common.constant.KnifeOAuthConstant;
 import com.cintsoft.spring.security.oauth.common.constant.SysOAuthCode;
 import com.cintsoft.spring.security.oauth.model.KnifeOAuthClientDetails;
-import com.cintsoft.spring.security.oauth.service.KnifeOAuthService;
 import com.cintsoft.spring.security.oauth.service.KnifeOAuthClientDetailsService;
+import com.cintsoft.spring.security.oauth.service.KnifeOAuthService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +47,7 @@ public class KnifeOAuthServiceImpl implements KnifeOAuthService {
     private final UserDetailsService userDetailsService;
     private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
     private final RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate;
+    private final RedisTemplate<String, String> userRefreshTokenRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final KnifeOAuthConfigProperties knifeOAuthConfigProperties;
     private final AuthenticationManager authenticationManager;
@@ -184,6 +185,11 @@ public class KnifeOAuthServiceImpl implements KnifeOAuthService {
         if (knifeOAuth2AccessToken != null) {
             tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), username));
             userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), knifeOAuth2AccessToken.getValue()));
+            String refreshToken = userRefreshTokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefix(), username));
+            if (StringUtils.hasText(refreshToken)) {
+                userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getRefreshTokenPrefix(), refreshToken));
+                userRefreshTokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefix(), username));
+            }
         }
     }
 
@@ -214,7 +220,11 @@ public class KnifeOAuthServiceImpl implements KnifeOAuthService {
         } else {
             token = knifeOAuth2AccessToken.getValue();
         }
-        final String refreshToken = UUID.randomUUID().toString();
+        String refreshToken = userRefreshTokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefix(), knifeUser.getUsername()));
+        if (StringUtils.isEmpty(refreshToken)) {
+            refreshToken = UUID.randomUUID().toString();
+        }
+        userRefreshTokenRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefix(), knifeUser.getUsername()), refreshToken, clientDetails.getRefreshTokenValidity(), TimeUnit.SECONDS);
         userDetailRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), token), knifeUser, clientDetails.getAccessTokenValidity(), TimeUnit.SECONDS);
         knifeOAuth2AccessToken = new KnifeOAuth2AccessToken();
         knifeOAuth2AccessToken.setValue(token);
