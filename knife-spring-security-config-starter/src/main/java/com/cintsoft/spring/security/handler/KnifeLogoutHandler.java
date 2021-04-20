@@ -3,7 +3,6 @@ package com.cintsoft.spring.security.handler;
 import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
-import com.cintsoft.spring.security.common.constant.SecurityConstants;
 import com.cintsoft.spring.security.model.KnifeOAuth2AccessToken;
 import com.cintsoft.spring.security.model.KnifeUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +10,7 @@ import lombok.SneakyThrows;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,14 +25,16 @@ import java.io.PrintWriter;
  */
 public class KnifeLogoutHandler implements LogoutHandler {
 
-    private final RedisTemplate<String, KnifeUser> userDatailRedisTemplate;
+    private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
     private final RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate;
+    private final RedisTemplate<String, String> userRefreshTokenRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
 
-    public KnifeLogoutHandler(RedisTemplate<String, KnifeUser> userDatailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
-        this.userDatailRedisTemplate = userDatailRedisTemplate;
+    public KnifeLogoutHandler(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+        this.userDetailRedisTemplate = userDetailRedisTemplate;
         this.tokenRedisTemplate = tokenRedisTemplate;
+        this.userRefreshTokenRedisTemplate = userRefreshTokenRedisTemplate;
         this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
     }
@@ -43,12 +45,15 @@ public class KnifeLogoutHandler implements LogoutHandler {
         final String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final KnifeUser knifeUser = userDatailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), header.split(" ")[1]));
+            final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), header.split(" ")[1]));
             if (knifeUser != null) {
-                //缓存删除用户
-                userDatailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), header.split(" ")[1]));
-                //缓存删除Token
-                tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()));
+                tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), knifeUser.getUsername()));
+                userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefix(), header.split(" ")[1]));
+                String refreshToken = userRefreshTokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefix(), knifeUser.getUsername()));
+                if (StringUtils.hasText(refreshToken)) {
+                    userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getRefreshTokenPrefix(), refreshToken));
+                    userRefreshTokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefix(), knifeUser.getUsername()));
+                }
             }
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Content-Type", "application/json");

@@ -2,7 +2,6 @@ package com.cintsoft.spring.security.filter;
 
 import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
-import com.cintsoft.spring.security.common.constant.SecurityConstants;
 import com.cintsoft.spring.security.model.KnifeOAuth2AccessToken;
 import com.cintsoft.spring.security.model.KnifeSocialAuthenticationToken;
 import com.cintsoft.spring.security.model.KnifeUser;
@@ -13,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
@@ -35,14 +35,16 @@ public class KnifeSocialLoginTenantFilter extends AbstractAuthenticationProcessi
 
     private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
     private final RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate;
+    private final RedisTemplate<String, String> userRefreshTokenRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
 
-    public KnifeSocialLoginTenantFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+    public KnifeSocialLoginTenantFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
         super(new AntPathRequestMatcher("/social/login", "POST"));
         setAuthenticationManager(authenticationManager);
         this.userDetailRedisTemplate = userDetailRedisTemplate;
         this.tokenRedisTemplate = tokenRedisTemplate;
+        this.userRefreshTokenRedisTemplate = userRefreshTokenRedisTemplate;
         this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
     }
@@ -51,7 +53,8 @@ public class KnifeSocialLoginTenantFilter extends AbstractAuthenticationProcessi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         final String source = request.getParameter("source");
         final String code = request.getParameter("code");
-        final Authentication authRequest = new KnifeSocialAuthenticationToken(source, code);
+        final String tenantId = request.getParameter("tenantId");
+        final Authentication authRequest = new KnifeSocialAuthenticationToken(source, code, tenantId);
         return getAuthenticationManager().authenticate(authRequest);
     }
 
@@ -65,9 +68,18 @@ public class KnifeSocialLoginTenantFilter extends AbstractAuthenticationProcessi
             userDetailRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), knifeUser.getTenantId(), token), knifeUser, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
             knifeOAuth2AccessToken = new KnifeOAuth2AccessToken();
             knifeOAuth2AccessToken.setValue(token);
-            knifeOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + knifeSecurityConfigProperties.getTokenExpire()*1000L));
-            tokenRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()), knifeOAuth2AccessToken, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+            knifeOAuth2AccessToken.setExpiration(new Date(System.currentTimeMillis() + knifeSecurityConfigProperties.getTokenExpire() * 1000L));
         }
+        String refreshToken = userRefreshTokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()));
+        if (StringUtils.isEmpty(refreshToken)) {
+            refreshToken = UUID.randomUUID().toString();
+        }
+        knifeOAuth2AccessToken.setRefreshToken(refreshToken);
+        tokenRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()), knifeOAuth2AccessToken, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+
+        userRefreshTokenRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()), refreshToken, knifeSecurityConfigProperties.getRefreshTokenExpire(), TimeUnit.SECONDS);
+        userDetailRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), knifeUser.getTenantId(), knifeOAuth2AccessToken.getValue()), knifeUser, knifeSecurityConfigProperties.getTokenExpire(), TimeUnit.SECONDS);
+
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");
         final PrintWriter out = response.getWriter();

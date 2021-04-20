@@ -1,10 +1,10 @@
 package com.cintsoft.spring.security.model;
 
-import java.util.Collection;
-
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
+
+import java.util.Collection;
 
 public class KnifeSocialAuthenticationToken extends AbstractAuthenticationToken {
 
@@ -15,6 +15,7 @@ public class KnifeSocialAuthenticationToken extends AbstractAuthenticationToken 
 
     private final Object principal;
     private Object credentials;
+    private String tenantId;
 
     // ~ Constructors
     // ===================================================================================================
@@ -23,20 +24,21 @@ public class KnifeSocialAuthenticationToken extends AbstractAuthenticationToken 
      * This constructor can be safely used by any code that wishes to create a
      * <code>UsernamePasswordAuthenticationToken</code>, as the {@link #isAuthenticated()}
      * will return <code>false</code>.
-     *
      */
-    public KnifeSocialAuthenticationToken(Object principal, Object credentials) {
+    public KnifeSocialAuthenticationToken(Object principal, Object credentials, String tenantId) {
         super(null);
         this.principal = principal;
         this.credentials = credentials;
+        this.tenantId = tenantId;
         setAuthenticated(false);
     }
 
-    public KnifeSocialAuthenticationToken(Object principal, Object credentials,
+    public KnifeSocialAuthenticationToken(Object principal, Object credentials, String tenantId,
                                           Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
+        this.tenantId = tenantId;
         super.setAuthenticated(true); // must use super, as we override
     }
 

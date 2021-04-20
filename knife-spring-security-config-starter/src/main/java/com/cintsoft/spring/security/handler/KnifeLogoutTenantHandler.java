@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,14 +25,16 @@ import java.io.PrintWriter;
  */
 public class KnifeLogoutTenantHandler implements LogoutHandler {
 
-    private final RedisTemplate<String, KnifeUser> userDatailRedisTemplate;
+    private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
     private final RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate;
+    private final RedisTemplate<String, String> userRefreshTokenRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
 
-    public KnifeLogoutTenantHandler(RedisTemplate<String, KnifeUser> userDatailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
-        this.userDatailRedisTemplate = userDatailRedisTemplate;
+    public KnifeLogoutTenantHandler(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+        this.userDetailRedisTemplate = userDetailRedisTemplate;
         this.tokenRedisTemplate = tokenRedisTemplate;
+        this.userRefreshTokenRedisTemplate = userRefreshTokenRedisTemplate;
         this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
     }
@@ -43,12 +46,15 @@ public class KnifeLogoutTenantHandler implements LogoutHandler {
         final String tenantId = request.getHeader("TENANT_ID");
         if (header != null && header.startsWith("Bearer")) {
             //从token转用户
-            final KnifeUser knifeUser = userDatailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
+            final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
             if (knifeUser != null) {
-                //缓存删除用户
-                userDatailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
-                //缓存删除Token
-                tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()));
+                tokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, knifeUser.getUsername()));
+                userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
+                String refreshToken = userRefreshTokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefixTenantId(), tenantId, knifeUser.getUsername()));
+                if (StringUtils.hasText(refreshToken)) {
+                    userDetailRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getRefreshTokenPrefixTenantId(), tenantId, refreshToken));
+                    userRefreshTokenRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefixTenantId(), tenantId, knifeUser.getUsername()));
+                }
             }
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Content-Type", "application/json");

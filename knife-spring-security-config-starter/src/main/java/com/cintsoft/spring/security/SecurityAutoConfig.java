@@ -31,7 +31,10 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 胡昊
@@ -213,11 +216,11 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeLoginFilter")
     @Bean("knifeLoginFilter")
-    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         } else {
-            return new KnifeLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         }
     }
 
@@ -229,11 +232,11 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeSocialLoginFilter")
     @Bean("knifeSocialLoginFilter")
-    public AbstractAuthenticationProcessingFilter knifeSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+    public AbstractAuthenticationProcessingFilter knifeSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeSocialLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeSocialLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         } else {
-            return new KnifeSocialLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeSocialLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         }
     }
 
@@ -261,11 +264,11 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeLogoutHandler")
     @Bean("knifeLogoutHandler")
-    public LogoutHandler knifeLogoutHandler(KnifeSecurityConfigProperties knifeSecurityConfigProperties, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
+    public LogoutHandler knifeLogoutHandler(KnifeSecurityConfigProperties knifeSecurityConfigProperties, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, ObjectMapper objectMapper) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeLogoutTenantHandler(userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeLogoutTenantHandler(userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         } else {
-            return new KnifeLogoutHandler(userDetailRedisTemplate, tokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeLogoutHandler(userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         }
     }
 
