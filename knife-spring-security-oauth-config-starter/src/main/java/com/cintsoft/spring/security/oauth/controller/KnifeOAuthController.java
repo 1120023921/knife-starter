@@ -38,7 +38,7 @@ public class KnifeOAuthController {
         return knifeOAuthService.authorize(model, request, response, session, knifeAuthorizeParams);
     }
 
-    @GetMapping("/token")
+    @PostMapping("/token")
     @ResponseBody
     public Map<String, Object> token(KnifeAuthorizeParams knifeAuthorizeParams) {
         return knifeOAuthService.token(knifeAuthorizeParams);
