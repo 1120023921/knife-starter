@@ -2,6 +2,7 @@ package com.cintsoft.spring.security.filter;
 
 import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties;
+import com.cintsoft.spring.security.exception.KnifeAuthenticationException;
 import com.cintsoft.spring.security.model.KnifeOAuth2AccessToken;
 import com.cintsoft.spring.security.model.KnifeUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -100,6 +101,8 @@ public class KnifeLoginFilter extends AbstractAuthenticationProcessingFilter {
             out.write(objectMapper.writeValueAsString(ResultBean.restResult(failed.getMessage(), 500, "用户名已过期")));
         } else if (failed instanceof CredentialsExpiredException) {
             out.write(objectMapper.writeValueAsString(ResultBean.restResult(failed.getMessage(), 500, "密码已过期")));
+        } else if (failed instanceof KnifeAuthenticationException) {
+            out.write(objectMapper.writeValueAsString(ResultBean.restResult(failed.getMessage(), ((KnifeAuthenticationException) failed).getCode(), ((KnifeAuthenticationException) failed).getMsg())));
         }
         out.flush();
         out.close();
