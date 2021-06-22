@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ParameterValidateException extends RuntimeException {
 
-    private Integer code;
+    private Integer code = 500;
     private String msg;
 
     public ParameterValidateException() {
