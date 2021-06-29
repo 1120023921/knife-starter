@@ -1,7 +1,7 @@
-description('Knife公共模块')
+description('Knife日志模块')
 
 group 'com.cintsoft'
-version '1.1.6'
+version '1.0.7'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,6 +10,13 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
+    compile project(':knife-spring-security-config-starter')
+    compileOnly 'com.baomidou:mybatis-plus-boot-starter:3.4.1'
+    compileOnly 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.2'
+    compileOnly 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.springframework.boot:spring-boot-starter-aop'
+    compileOnly 'org.springframework.cloud:spring-cloud-starter-security'
+    compile 'cn.hutool:hutool-all:5.3.9'
 }
 
 // 上传source

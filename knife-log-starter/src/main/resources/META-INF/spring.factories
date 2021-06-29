@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cintsoft.log.properties.KnifeLogProperties,\
+com.cintsoft.log.KnifeLogAutoConfig
