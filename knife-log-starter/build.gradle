@@ -1,7 +1,7 @@
 description('Knife日志模块')
 
 group 'com.cintsoft'
-version '1.0.7'
+version '1.0.8'
 
 compileJava.options.encoding = 'UTF-8'
 

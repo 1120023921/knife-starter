@@ -1,6 +1,7 @@
 package com.cintsoft.log.aspect;
 
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.lang.Validator;
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.json.JSONUtil;
 import com.cintsoft.log.annotation.OperationLog;
 import com.cintsoft.log.model.SysOperationErrorLog;
@@ -15,13 +16,10 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author proven
@@ -40,6 +38,23 @@ public class OperationLogAspect {
 
     private final SysOperationLogService sysOperationLogService;
 
+    private static final String UNKNOWN = "unknown";
+
+    private static final String[] HEADERS_TO_TRY = {
+            "X-Forwarded-For",
+            "Proxy-Client-IP",
+            "WL-Proxy-Client-IP",
+            "HTTP_X_FORWARDED_FOR",
+            "HTTP_X_FORWARDED",
+            "HTTP_X_CLUSTER_CLIENT_IP",
+            "HTTP_CLIENT_IP",
+            "HTTP_FORWARDED_FOR",
+            "HTTP_FORWARDED",
+            "HTTP_VIA",
+            "REMOTE_ADDR",
+            "X-Real-IP"
+    };
+
     public OperationLogAspect(HttpServletRequest request, KnifeLogProperties knifeLogProperties, SysOperationErrorLogService sysOperationErrorLogService, SysOperationLogService sysOperationLogService) {
         this.request = request;
         this.knifeLogProperties = knifeLogProperties;
@@ -53,47 +68,48 @@ public class OperationLogAspect {
      * @date 2021/6/24 18:27
      */
     @AfterReturning(pointcut = "@annotation(operationLog)", returning = "result")
-    public void saveOperationLog(JoinPoint joinPoint, OperationLog operationLog, String result) {
-
-        SysOperationLog sysOperationLog = new SysOperationLog();
-
+    public void saveOperationLog(JoinPoint joinPoint, OperationLog operationLog, Object result) {
         try {
+            final SysOperationLog sysOperationLog = new SysOperationLog();
             // 从切面织入点处通过反射机制获取织入点处的方法
-            MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+            final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             // 获取切入的方法
-            Method method = methodSignature.getMethod();
+            final Method method = methodSignature.getMethod();
+            //填充基础信息
+            sysOperationLog.setOperationModule(operationLog.operationModule());
+            sysOperationLog.setOperationType(operationLog.operationType());
+            sysOperationLog.setOperationDesc(operationLog.operationDesc());
 
-            if (ObjectUtil.isNotNull(operationLog)) {
-                sysOperationLog.setOperationModule(operationLog.operationModule());
-                sysOperationLog.setOperationType(operationLog.operationType());
-                sysOperationLog.setOperationDesc(operationLog.operationDesc());
-            }
-
-            // 获取请求的类型
-            String className = joinPoint.getTarget().getClass().getName();
+            // 获取请求的类名
+            final String className = joinPoint.getTarget().getClass().getName();
             // 获取请求的方法名
             String methodName = method.getName();
             methodName = className + "." + methodName;
             sysOperationLog.setOperationMethod(methodName);
 
             // 请求的参数
-            assert request != null;
-            Map<String, String> paramMap = converMap(request.getParameterMap());
-            String params = JSONUtil.parseObj(paramMap).toString();
-            sysOperationLog.setOperationRequestParam(params);
+            sysOperationLog.setOperationRequestParam(JSONUtil.toJsonStr(joinPoint.getArgs()));
 
             // 返回的参数
-            sysOperationLog.setOperationResponseParam(result);
+            sysOperationLog.setOperationResponseParam(JSONUtil.toJsonStr(result));
 
             // 用户信息
             final KnifeUser user = SecurityUtils.getUser();
-            if (ObjectUtil.isNotNull(user)) {
+            if (user != null) {
                 sysOperationLog.setOperationUserId(user.getId());
                 sysOperationLog.setOperationUserName(user.getName());
             }
             // 设置ip
-            sysOperationLog.setOperationIp(request.getRemoteAddr());
-            sysOperationLog.setOperationUrl(request.getRequestURI());
+            sysOperationLog.setOperationIp(getRemoteIp(request));
+            //设置请求URL
+            final StringBuilder url = new StringBuilder(request.getRequestURI() + "?");
+            request.getParameterMap().forEach((k, v) -> {
+                for (String v1 : v) {
+                    url.append(k).append("=").append(v1).append("&");
+                }
+            });
+            url.deleteCharAt(url.length() - 1);
+            sysOperationLog.setOperationUrl(url.toString());
 
             // 设置时间
             sysOperationLog.setOperationCreateTime(System.currentTimeMillis());
@@ -106,67 +122,49 @@ public class OperationLogAspect {
     }
 
     /**
-     * @description: 转换request 请求参数
-     * @author proven
-     * @date 2021/6/24 18:40
-     */
-    private Map<String, String> converMap(Map<String, String[]> parameterMap) {
-        Map<String, String> rtnMap = new HashMap<>();
-        for (String key : parameterMap.keySet()) {
-            rtnMap.put(key, parameterMap.get(key)[0]);
-        }
-        return rtnMap;
-    }
-
-    /**
      * @description: 异常返回通知，用于拦截异常日志信息 连接点抛出异常后执行
      * @author proven
      * @date 2021/6/24 18:53
      */
     @AfterThrowing(pointcut = "@annotation(operationLog)", throwing = "e")
     public void saveExceptionLog(JoinPoint joinPoint, Throwable e, OperationLog operationLog) {
-        // 获取RequestAttributes
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        // 从获取RequestAttributes中获取HttpServletRequest的信息
-        if (ObjectUtil.isNull(requestAttributes)) {
-            return;
-        }
-        HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-        SysOperationErrorLog sysOperationLog = new SysOperationErrorLog();
-
         try {
+            final SysOperationErrorLog sysOperationLog = new SysOperationErrorLog();
             // 从切面织入点处通过反射机制获取织入点处的方法
-            MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+            final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             // 获取切入的方法
-            Method method = methodSignature.getMethod();
+            final Method method = methodSignature.getMethod();
             // 获取操作
-            if (ObjectUtil.isNotNull(operationLog)) {
-                sysOperationLog.setOperationModule(operationLog.operationModule());
-                sysOperationLog.setOperationType(operationLog.operationType());
-                sysOperationLog.setOperationDesc(operationLog.operationDesc());
-            }
+            sysOperationLog.setOperationModule(operationLog.operationModule());
+            sysOperationLog.setOperationType(operationLog.operationType());
+            sysOperationLog.setOperationDesc(operationLog.operationDesc());
 
-            // 获取请求的类型
-            String className = joinPoint.getTarget().getClass().getName();
+            // 获取请求的类名
+            final String className = joinPoint.getTarget().getClass().getName();
             // 获取请求的方法名
             String methodName = method.getName();
             methodName = className + "." + methodName;
             sysOperationLog.setOperationMethod(methodName);
             // 请求的参数
-            assert request != null;
-            Map<String, String> paramMap = converMap(request.getParameterMap());
-            String params = JSONUtil.parseObj(paramMap).toString();
-            sysOperationLog.setOperationRequestParam(params);
+            sysOperationLog.setOperationRequestParam(JSONUtil.toJsonStr(joinPoint.getArgs()));
             sysOperationLog.setOperationErrorMsg(stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace()));
             // 用户信息
             final KnifeUser user = SecurityUtils.getUser();
-            if (ObjectUtil.isNotNull(user)) {
+            if (user != null) {
                 sysOperationLog.setOperationUserId(user.getId());
                 sysOperationLog.setOperationUserName(user.getName());
             }
             // 设置ip
-            sysOperationLog.setOperationIp(request.getRemoteAddr());
-            sysOperationLog.setOperationUrl(request.getRequestURI());
+            sysOperationLog.setOperationIp(getRemoteIp(request));
+            //设置请求URL
+            final StringBuilder url = new StringBuilder(request.getRequestURI() + "?");
+            request.getParameterMap().forEach((k, v) -> {
+                for (String v1 : v) {
+                    url.append(k).append("=").append(v1).append("&");
+                }
+            });
+            url.deleteCharAt(url.length() - 1);
+            sysOperationLog.setOperationUrl(url.toString());
 
             // 设置时间
             sysOperationLog.setOperationCreateTime(System.currentTimeMillis());
@@ -178,16 +176,26 @@ public class OperationLogAspect {
         }
     }
 
-    /**
-     * @description: 转换异常信息为字符串
-     * @author proven
-     * @date 2021/6/24 18:56
-     */
-    public String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
+    private String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
         StringBuilder strbuff = new StringBuilder();
         for (StackTraceElement stet : elements) {
             strbuff.append(stet).append("\n");
         }
         return exceptionName + ":" + exceptionMessage + "\n\t" + strbuff;
+    }
+
+    private String getRemoteIp(HttpServletRequest request) {
+        for (String header : HEADERS_TO_TRY) {
+            String ip = request.getHeader(header);
+            if (StringUtils.hasText(ip) && !UNKNOWN.equalsIgnoreCase(ip)) {
+                String reverseProxyIp = NetUtil.getMultistageReverseProxyIp(ip);
+                if (Validator.isIpv4(reverseProxyIp) || Validator.isIpv6(reverseProxyIp)) {
+                    // 判断是否为IP 返回原始IP
+                    return ip;
+                }
+            }
+        }
+        // 否则返回 空地址
+        return request.getRemoteAddr();
     }
 }
