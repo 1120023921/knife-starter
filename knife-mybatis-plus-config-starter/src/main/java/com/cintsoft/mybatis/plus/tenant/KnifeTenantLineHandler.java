@@ -6,7 +6,7 @@ import com.cintsoft.mybatis.plus.properties.KnifeTenantConfigProperties;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.StringValue;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author 胡昊
@@ -42,7 +42,7 @@ public class KnifeTenantLineHandler implements TenantLineHandler {
     public boolean ignoreTable(String tableName) {
         final String tenantId = TenantContextHolder.getTenantId();
         // 租户中ID 为空，查询全部，不进行过滤
-        if (StringUtils.isEmpty(tenantId)) {
+        if (ObjectUtils.isEmpty(tenantId)) {
             return true;
         }
         return knifeTenantConfigProperties.getTables().contains(tableName);

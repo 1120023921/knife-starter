@@ -1,7 +1,7 @@
 description('Knife日志模块')
 
 group 'com.cintsoft'
-version '1.0.8'
+version '1.1.4'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,48 +10,12 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
-    compile project(':knife-spring-security-config-starter')
-    compileOnly 'com.baomidou:mybatis-plus-boot-starter:3.4.1'
-    compileOnly 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.2'
+    implementation project(':knife-spring-security-config-starter')
+    compileOnly 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
+    compileOnly 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
     compileOnly 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.springframework.boot:spring-boot-starter-aop'
-    compileOnly 'org.springframework.cloud:spring-cloud-starter-security'
-    compile 'cn.hutool:hutool-all:5.3.9'
+    compileOnly 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'cn.hutool:hutool-all:5.7.5'
 }
 
-// 上传source
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar) {
-    from javadoc
-    classifier = 'javadoc'
-}
-
-//上传到nexus-snapshot，记得改名字，version的值以snapshot结尾
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: "http://nexus.cintsoft.com/repository/cintsoft-snapshots/") {
-//                authentication(userName: "admin", password: "!Cint@2019")
-//            }
-//            pom.groupId = "$project.group"
-//            pom.version = "$project.version"
-//        }
-//    }
-//}
-
-//上传到 nexus-release，记得改名字，version的值以release结尾
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "http://nexus.cintsoft.com/repository/cintsoft-releases/") {
-                authentication(userName: "admin", password: "!Cint@2019")
-            }
-            pom.groupId = "$project.group"
-            pom.version = "$project.version"
-        }
-    }
-}

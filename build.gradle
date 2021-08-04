@@ -1,20 +1,17 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.5.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-    id 'java'
+    id 'org.springframework.boot' version '2.5.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java-library'
 }
 
 allprojects {
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'maven'
-
-    group 'com.cintsoft'
-    version '1.0-SNAPSHOT'
+    apply plugin: 'maven-publish'
 
     ext {
-        set('springCloudVersion', "Hoxton.SR9")
+        set('springCloudVersion', "2020.0.3")
     }
 
     repositories {
@@ -23,7 +20,7 @@ allprojects {
     }
 
     dependencies {
-        compile 'org.springframework.boot:spring-boot-autoconfigure'
+        implementation 'org.springframework.boot:spring-boot-autoconfigure'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         annotationProcessor 'org.projectlombok:lombok'
         compileOnly 'org.projectlombok:lombok'
@@ -39,9 +36,9 @@ allprojects {
         from('src/main/java') {
             include '**/*'
         }
-        from('src/main/resources') {
-            include '**/*'
-        }
+//        from('src/main/resources') {
+//            include '**/*'
+//        }
     }
 
     configurations {
@@ -52,5 +49,45 @@ allprojects {
 
     jar {
         enabled = true
+        archiveClassifier = ''
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        classifier = 'javadoc'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+                artifact sourcesJar
+            }
+        }
+        repositories {
+            maven {
+                allowInsecureProtocol = true
+                def releasesRepoUrl = 'http://nexus.cintsoft.com/repository/cintsoft-snapshots/'
+                def snapshotsRepoUrl = 'http://nexus.cintsoft.com/repository/cintsoft-releases/'
+                url = snapshotsRepoUrl
+                credentials {
+                    username = 'admin'
+                    password = '!Cint@2019'
+                }
+            }
+        }
     }
 }
