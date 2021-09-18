@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cintsoft.cas.common.constant.CasConfigProperties, \
+com.cintsoft.cas.CasAutoConfig

@@ -4,4 +4,5 @@ include 'knife-spring-security-config-starter'
 include 'knife-common-starter'
 include 'knife-spring-security-oauth-config-starter'
 include 'knife-log-starter'
+include 'knife-cas-starter'
 
