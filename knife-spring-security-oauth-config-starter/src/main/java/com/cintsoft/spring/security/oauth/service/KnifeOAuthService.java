@@ -23,6 +23,7 @@ public interface KnifeOAuthService {
 
     /**
      * @param clientId 客户端id
+     * @param clientSecret 客户端密钥
      * @param username 用户名
      * @param password 密码
      * @description 密码模式认证
@@ -30,7 +31,7 @@ public interface KnifeOAuthService {
      * @email huhao9277@gmail.com
      * @date 2021/1/12 10:41
      */
-    KnifeOAuth2AccessToken passwordToken(String clientId, String username, String password);
+    KnifeOAuth2AccessToken passwordToken(String clientId, String clientSecret, String username, String password);
 
     /**
      * @param clientId     客户端id

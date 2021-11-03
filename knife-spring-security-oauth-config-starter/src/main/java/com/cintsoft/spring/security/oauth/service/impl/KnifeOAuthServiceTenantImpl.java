@@ -88,10 +88,13 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     }
 
     @Override
-    public KnifeOAuth2AccessToken passwordToken(String clientId, String username, String password) {
+    public KnifeOAuth2AccessToken passwordToken(String clientId, String clientSecret, String username, String password) {
         final KnifeOAuthClientDetails clientDetails = knifeOAuthClientDetailsService.getKnifeOauthClientDetails(clientId);
         if (clientDetails == null) {
             throw new BusinessException(SysOAuthCode.CLIENT_INFO_ERROR.getBusinessCode());
+        }
+        if(!clientDetails.getClientSecret().equals(clientSecret)){
+            throw new BusinessException(SysOAuthCode.CLIENT_SECRET_INFO_ERROR.getBusinessCode());
         }
         if (!Arrays.asList(clientDetails.getAuthorizedGrantTypes().split(",")).contains(KnifeOAuthConstant.GRANT_TYPE_PASSWORD)) {
             throw new BusinessException(SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode());
@@ -138,7 +141,7 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
                 tokenRedisTemplate.delete(String.format(knifeOAuthConfigProperties.getCodePrefixTenantId(), knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getCode()));
             }
         } else if (KnifeOAuthConstant.GRANT_TYPE_PASSWORD.equals(knifeAuthorizeParams.getGrantType())) {
-            knifeOAuth2AccessToken = passwordToken(knifeAuthorizeParams.getClientId(), knifeAuthorizeParams.getUsername(), knifeAuthorizeParams.getPassword());
+            knifeOAuth2AccessToken = passwordToken(knifeAuthorizeParams.getClientId(), knifeAuthorizeParams.getClientSecret(), knifeAuthorizeParams.getUsername(), knifeAuthorizeParams.getPassword());
         } else if (KnifeOAuthConstant.GRANT_TYPE_CLIENT_CREDENTIALS.equals(knifeAuthorizeParams.getGrantType())) {
             knifeOAuth2AccessToken = clientCredentialsToken(knifeAuthorizeParams.getClientId(), knifeAuthorizeParams.getClientSecret());
         } else if (KnifeOAuthConstant.GRANT_TYPE_REFRESH_TOKEN.equals(knifeAuthorizeParams.getGrantType())) {

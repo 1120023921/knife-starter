@@ -13,7 +13,8 @@ public enum SysOAuthCode {
 
     AUTHORIZED_GRANT_TYPE_NOE_ALLOW(10000, "AUTHORIZED_GRANT_TYPE未授权"),
     CLIENT_INFO_ERROR(10001, "客户端信息有误"),
-    AUTHORIZE_FAILED(10002, "认证失败");
+    CLIENT_SECRET_INFO_ERROR(10002, "客户端Secret信息有误"),
+    AUTHORIZE_FAILED(10003, "认证失败");
 
     private final com.cintsoft.common.exception.BusinessCode businessCode = new com.cintsoft.common.exception.BusinessCode();
 
