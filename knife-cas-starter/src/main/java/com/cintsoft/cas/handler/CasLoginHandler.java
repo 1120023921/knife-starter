@@ -35,8 +35,8 @@ public class CasLoginHandler implements KnifeSocialLoginHandler {
     @Override
     public KnifeUser authenticate(String code) {
         final Map<String, Object> requestMap = new HashMap<>();
-        requestMap.put("ticket", code);
-        requestMap.put("service", casConfigProperties.getService());
+        requestMap.put("ticket", code.split("@")[0]);
+        requestMap.put("service", code.split("@")[1]);
         String passValidateUrl = casConfigProperties.getCasServerUrlPrefix() + "/serviceValidate";
         String responseStr = HttpUtil.post(passValidateUrl, requestMap);
         try {
@@ -52,8 +52,8 @@ public class CasLoginHandler implements KnifeSocialLoginHandler {
             Element authenticationSuccessNode = root.element("authenticationSuccess");
             if (authenticationSuccessNode != null) {
                 final String[] userInfo = casConfigProperties.getUserField().split(":");
-                for (int i = 0; i < userInfo.length; i++) {
-                    authenticationSuccessNode = authenticationSuccessNode.element(userInfo[i]);
+                for (String s : userInfo) {
+                    authenticationSuccessNode = authenticationSuccessNode.element(s);
                 }
                 log.info("CAS登录成功, 用户为: {}", authenticationSuccessNode.getText());
                 return (KnifeUser) userDetailsService.loadUserByUsername(authenticationSuccessNode.getText());

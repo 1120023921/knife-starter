@@ -18,6 +18,6 @@ public class CasConfigProperties {
 
     private Boolean enable = false;
     private String casServerUrlPrefix;
-    private String service;
+//    private String service;
     private String userField = "user";
 }
