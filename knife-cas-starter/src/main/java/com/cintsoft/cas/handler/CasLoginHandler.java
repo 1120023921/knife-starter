@@ -1,5 +1,6 @@
 package com.cintsoft.cas.handler;
 
+import cn.hutool.core.codec.Base64Decoder;
 import cn.hutool.http.HttpUtil;
 import com.cintsoft.cas.common.constant.CasConfigProperties;
 import com.cintsoft.spring.security.handler.KnifeSocialLoginHandler;
@@ -36,7 +37,7 @@ public class CasLoginHandler implements KnifeSocialLoginHandler {
     public KnifeUser authenticate(String code) {
         final Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("ticket", code.split("@")[0]);
-        requestMap.put("service", code.split("@")[1]);
+        requestMap.put("service", Base64Decoder.decodeStr(code.split("@")[1]));
         String passValidateUrl = casConfigProperties.getCasServerUrlPrefix() + "/serviceValidate";
         String responseStr = HttpUtil.post(passValidateUrl, requestMap);
         try {
