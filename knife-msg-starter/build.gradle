@@ -1,0 +1,22 @@
+description('消息服务自动配置')
+
+group 'com.cintsoft'
+version '1.1.4'
+
+compileJava.options.encoding = 'UTF-8'
+
+compileTestJava.options.encoding = 'UTF-8'
+
+compileJava.inputs.files(processResources)
+
+dependencies {
+    implementation project(':knife-common-starter')
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
+    implementation 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'dom4j:dom4j:1.6.1'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'com.aliyun:dysmsapi20170525:2.0.8'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+}
