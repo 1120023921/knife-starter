@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * <p>
@@ -38,6 +39,7 @@ public class MailAccountController {
      * @date 2022/1/11 17:07
      */
     @ApiOperation("保存邮件账户信息")
+    @ResponseBody
     @PostMapping("/saveOrUpdateMailAccount")
     public ResultBean<Boolean> saveOrUpdateMailAccount(@RequestBody MailAccount mailAccount) {
         MailAccountValidator.saveOrUpdateMailAccount(mailAccount);
@@ -51,6 +53,7 @@ public class MailAccountController {
      * @date 2022/1/11 17:14
      */
     @ApiOperation("删除邮件账户")
+    @ResponseBody
     @PostMapping("/deleteMailAccount")
     public ResultBean<Boolean> deleteMailAccount() {
         return ResultBean.restResult(mailAccountService.deleteMailAccount(), ErrorCodeInfo.OK);

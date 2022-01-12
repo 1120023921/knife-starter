@@ -94,7 +94,7 @@ public class MailAutoConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "knife.msg.mail.mailAccountApiEnable", havingValue = "true")
+    @ConditionalOnProperty(name = "knife.msg.mail.mail-account-api-enable", havingValue = "true")
     @ConditionalOnBean(name = {"mailAccountService"})
     public MailAccountController mailAccountController(MailAccountService mailAccountService) {
         return new MailAccountController(mailAccountService);
