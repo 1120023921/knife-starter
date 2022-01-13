@@ -51,35 +51,35 @@
   ],
   "groups": [
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.cintsoft.msg.mail.service.properties.KnifeMailProperties",
       "name": "knife.msg.mail",
-      "type": "com.cintsoft.msg.mail.properties.KnifeMailProperties"
+      "type": "com.cintsoft.msg.mail.service.properties.KnifeMailProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.cintsoft.msg.mail.service.properties.KnifeMailProperties",
       "name": "knife.msg.mail.enable",
       "type": "java.lang.Boolean",
       "description": "邮件启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.cintsoft.msg.mail.service.properties.KnifeMailProperties",
       "name": "knife.msg.mail.tenant-enable",
       "type": "java.lang.Boolean",
       "description": "租户启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.cintsoft.msg.mail.service.properties.KnifeMailProperties",
       "name": "knife.msg.mail.mail-account-api-enable",
       "type": "java.lang.Boolean",
       "description": "邮件账户管理API状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.cintsoft.msg.mail.service.properties.KnifeMailProperties",
       "name": "knife.msg.mail.cache-prefix",
       "type": "java.lang.String",
       "description": "邮件账户缓存路径",

@@ -2,13 +2,13 @@ package com.cintsoft.msg.mail;
 
 import com.cintsoft.msg.mail.controller.MailAccountController;
 import com.cintsoft.msg.mail.entity.MailAccount;
-import com.cintsoft.msg.mail.properties.KnifeMailProperties;
 import com.cintsoft.msg.mail.service.KnifeMailSenderContext;
 import com.cintsoft.msg.mail.service.KnifeMailService;
 import com.cintsoft.msg.mail.service.MailAccountService;
 import com.cintsoft.msg.mail.service.impl.KnifeKnifeMailSenderContextImpl;
 import com.cintsoft.msg.mail.service.impl.KnifeMailServiceImpl;
 import com.cintsoft.msg.mail.service.impl.MailAccountServiceImpl;
+import com.cintsoft.msg.mail.service.properties.KnifeMailProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
