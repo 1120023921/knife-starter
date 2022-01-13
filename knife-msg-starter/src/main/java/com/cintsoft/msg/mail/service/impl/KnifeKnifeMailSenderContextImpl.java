@@ -1,7 +1,7 @@
 package com.cintsoft.msg.mail.service.impl;
 
 import com.cintsoft.common.mybatis.tenant.TenantContextHolder;
-import com.cintsoft.msg.mail.entity.KnifeJavaMailSenderImpl;
+import com.cintsoft.msg.mail.entity.KnifeJavaMailSender;
 import com.cintsoft.msg.mail.entity.MailAccount;
 import com.cintsoft.msg.mail.exception.MailAccountNotFoundException;
 import com.cintsoft.msg.mail.exception.MultiMailAccountException;
@@ -40,7 +40,7 @@ public class KnifeKnifeMailSenderContextImpl implements KnifeMailSenderContext {
     private final static String MAIL_ACCOUNT_CACHE_KEY = "KNIFE_MAIL_ACCOUNT";
 
     @Override
-    public KnifeJavaMailSenderImpl getJavaMailSender() {
+    public KnifeJavaMailSender getJavaMailSender() {
         List<MailAccount> mailAccountList = mailAccountRedisTemplate.opsForValue().get(knifeMailProperties.getCachePrefix() + MAIL_ACCOUNT_CACHE_KEY);
         if (mailAccountList == null) {
             final String currentTenantId = TenantContextHolder.getTenantId();
@@ -75,8 +75,8 @@ public class KnifeKnifeMailSenderContextImpl implements KnifeMailSenderContext {
         return mailAccountList;
     }
 
-    private KnifeJavaMailSenderImpl buildJavaMailSender(MailAccount mailAccount) {
-        final KnifeJavaMailSenderImpl sender = new KnifeJavaMailSenderImpl();
+    private KnifeJavaMailSender buildJavaMailSender(MailAccount mailAccount) {
+        final KnifeJavaMailSender sender = new KnifeJavaMailSender();
         sender.setFrom(mailAccount.getMailFrom());
         sender.setProtocol("smtp");
         sender.setDefaultEncoding("UTF-8");

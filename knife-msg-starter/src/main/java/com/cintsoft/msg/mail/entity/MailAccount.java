@@ -1,9 +1,6 @@
 package com.cintsoft.msg.mail.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -56,15 +53,19 @@ public class MailAccount implements Serializable {
     private Integer weight;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private Long createTime;
 
     @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateTime;
 
     @ApiModelProperty(value = "创建者")
+    @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
     @ApiModelProperty(value = "更新者")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
     @ApiModelProperty(value = "版本")

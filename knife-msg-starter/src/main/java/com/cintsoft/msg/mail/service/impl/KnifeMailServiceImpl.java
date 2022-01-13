@@ -1,6 +1,6 @@
 package com.cintsoft.msg.mail.service.impl;
 
-import com.cintsoft.msg.mail.entity.KnifeJavaMailSenderImpl;
+import com.cintsoft.msg.mail.entity.KnifeJavaMailSender;
 import com.cintsoft.msg.mail.entity.MailInfo;
 import com.cintsoft.msg.mail.service.KnifeMailSenderContext;
 import com.cintsoft.msg.mail.service.KnifeMailService;
@@ -32,7 +32,7 @@ public class KnifeMailServiceImpl implements KnifeMailService {
 
     @Override
     public Boolean sendMail(MailInfo mailInfo) {
-        final KnifeJavaMailSenderImpl javaMailSender = (KnifeJavaMailSenderImpl) knifeMailSenderContext.getJavaMailSender();
+        final KnifeJavaMailSender javaMailSender = (KnifeJavaMailSender) knifeMailSenderContext.getJavaMailSender();
         try {
             final MimeMessageHelper messageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);//true表示支持复杂类型
             messageHelper.setFrom(javaMailSender.getFrom());//邮件发信人
@@ -62,7 +62,7 @@ public class KnifeMailServiceImpl implements KnifeMailService {
     @Override
     public List<MailInfo> sendMail(List<MailInfo> mailInfoList) {
         final List<MailInfo> errorMailInfoList = new ArrayList<>();
-        final KnifeJavaMailSenderImpl javaMailSender = (KnifeJavaMailSenderImpl) knifeMailSenderContext.getJavaMailSender();
+        final KnifeJavaMailSender javaMailSender = (KnifeJavaMailSender) knifeMailSenderContext.getJavaMailSender();
         mailInfoList.forEach(mailInfo -> {
             try {
                 final MimeMessageHelper messageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);//true表示支持复杂类型

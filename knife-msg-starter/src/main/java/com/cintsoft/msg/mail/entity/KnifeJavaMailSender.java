@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
  * Time: 18:16
  * Mail: huhao9277@gmail.com
  */
-public class KnifeJavaMailSenderImpl extends JavaMailSenderImpl {
+public class KnifeJavaMailSender extends JavaMailSenderImpl {
 
     private String from;
 
