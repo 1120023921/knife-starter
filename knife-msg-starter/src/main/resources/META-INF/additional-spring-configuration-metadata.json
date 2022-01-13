@@ -47,6 +47,54 @@
           "description": "邮件账户缓存路径"
         }
       ]
+    },
+    {
+      "name": "knife.msg.sms.ali.enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
+    },
+    {
+      "name": "knife.msg.sms.ali.tenant-enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
+    },
+    {
+      "name": "knife.msg.sms.ali.ali-account-api-enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
+    },
+    {
+      "name": "knife.msg.sms.ali.cache-prefix",
+      "values": [
+        {
+          "value": "KNIFE:MSG:SMS:ALI:",
+          "description": "阿里短信账户缓存路径"
+        }
+      ]
     }
   ],
   "groups": [
@@ -54,6 +102,11 @@
       "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
       "name": "knife.msg.mail",
       "type": "com.cintsoft.msg.mail.properties.KnifeMailProperties"
+    },
+    {
+      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "name": "knife.msg.sms.ali",
+      "type": "com.cintsoft.msg.ali.properties.KnifeAliProperties"
     }
   ],
   "properties": [
@@ -84,6 +137,34 @@
       "type": "java.lang.String",
       "description": "邮件账户缓存路径",
       "defaultValue": "KNIFE:MSG:MAIL:"
+    },
+    {
+      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "name": "knife.msg.sms.ali.enable",
+      "type": "java.lang.Boolean",
+      "description": "阿里短信启用状态",
+      "defaultValue": false
+    },
+    {
+      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "name": "knife.msg.sms.ali.tenant-enable",
+      "type": "java.lang.Boolean",
+      "description": "租户启用状态",
+      "defaultValue": false
+    },
+    {
+      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "name": "knife.msg.sms.ali.ali-account-api-enable",
+      "type": "java.lang.Boolean",
+      "description": "阿里账户管理API状态",
+      "defaultValue": false
+    },
+    {
+      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "name": "knife.msg.sms.ali.cache-prefix",
+      "type": "java.lang.String",
+      "description": "阿里账户缓存路径",
+      "defaultValue": "KNIFE:MSG:SMS:ALI:"
     }
   ]
 }

@@ -1,6 +1,7 @@
 package com.cintsoft.msg.mail.service;
 
-import com.cintsoft.msg.mail.entity.MailInfo;
+import com.cintsoft.msg.mail.vo.MailInfo;
+import com.cintsoft.msg.mail.vo.MailResult;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface KnifeMailService {
      * @email huhao9277@gmail.com
      * @date 2022/1/11 14:48
      */
-    Boolean sendMail(MailInfo mailInfo);
+    MailResult sendMail(MailInfo mailInfo);
 
     /**
      * @param mailInfoList 发送失败邮件列表
@@ -22,5 +23,5 @@ public interface KnifeMailService {
      * @email huhao9277@gmail.com
      * @date 2022/1/11 14:48
      */
-    List<MailInfo> sendMail(List<MailInfo> mailInfoList);
+    List<MailResult> sendMail(List<MailInfo> mailInfoList);
 }

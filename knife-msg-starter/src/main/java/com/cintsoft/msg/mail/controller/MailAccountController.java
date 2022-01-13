@@ -1,6 +1,7 @@
 package com.cintsoft.msg.mail.controller;
 
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.cintsoft.common.web.ErrorCodeInfo;
 import com.cintsoft.common.web.ResultBean;
 import com.cintsoft.msg.mail.entity.MailAccount;
@@ -8,10 +9,7 @@ import com.cintsoft.msg.mail.service.MailAccountService;
 import com.cintsoft.msg.mail.validator.MailAccountValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -57,6 +55,19 @@ public class MailAccountController {
     @PostMapping("/deleteMailAccount")
     public ResultBean<Boolean> deleteMailAccount() {
         return ResultBean.restResult(mailAccountService.deleteMailAccount(), ErrorCodeInfo.OK);
+    }
+
+    /**
+     * @description 获取邮件账户
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2022/1/13 18:42
+     */
+    @ApiOperation("获取邮件账户")
+    @ResponseBody
+    @GetMapping("/getMailAccount")
+    public ResultBean<MailAccount> getMailAccount() {
+        return ResultBean.restResult(mailAccountService.getOne(Wrappers.lambdaQuery()), ErrorCodeInfo.OK);
     }
 }
 

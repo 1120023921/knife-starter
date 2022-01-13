@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'dom4j:dom4j:1.6.1'
+    implementation 'cn.hutool:hutool-all:5.7.12'
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'com.aliyun:dysmsapi20170525:2.0.8'
     implementation 'org.springframework.boot:spring-boot-starter-mail'

@@ -1,6 +1,8 @@
 package com.cintsoft.msg.mail.service;
 
 import com.cintsoft.msg.mail.entity.MailAccount;
+import com.cintsoft.msg.mail.exception.MailAccountNotFoundException;
+import com.cintsoft.msg.mail.exception.MultiMailAccountException;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public interface KnifeMailSenderContext {
      * @email huhao9277@gmail.com
      * @date 2022/1/11 15:05
      */
-    JavaMailSender getJavaMailSender();
+    JavaMailSender getJavaMailSender() throws MailAccountNotFoundException, MultiMailAccountException;
 
     /**
      * @description 刷新邮件账户缓存

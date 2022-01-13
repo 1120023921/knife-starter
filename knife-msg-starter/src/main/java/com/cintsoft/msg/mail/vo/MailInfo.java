@@ -1,5 +1,6 @@
-package com.cintsoft.msg.mail.entity;
+package com.cintsoft.msg.mail.vo;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -10,9 +11,10 @@ import lombok.Data;
  * Mail: huhao9277@gmail.com
  */
 @Data
+@Builder
 public class MailInfo {
 
-    private String id;//邮件id
+    private String msgId;//邮件id
     private String from;//邮件发送人
     private String to;//邮件接收人（多个邮箱则用逗号","隔开）
     private String subject;//邮件主题
@@ -20,13 +22,13 @@ public class MailInfo {
     private Long sentDate;//发送时间
     private String cc;//抄送（多个邮箱则用逗号","隔开）
     private String bcc;//密送（多个邮箱则用逗号","隔开）
-    private Boolean multipart = true;//是否启用html
+    private Boolean multipart;//是否启用html
 
     public MailInfo() {
     }
 
-    public MailInfo(String id, String from, String to, String subject, String text, Long sentDate, String cc, String bcc, Boolean multipart) {
-        this.id = id;
+    public MailInfo(String msgId, String from, String to, String subject, String text, Long sentDate, String cc, String bcc, Boolean multipart) {
+        this.msgId = msgId;
         this.from = from;
         this.to = to;
         this.subject = subject;

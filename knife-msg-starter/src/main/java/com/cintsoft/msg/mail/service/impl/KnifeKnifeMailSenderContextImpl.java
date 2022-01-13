@@ -40,7 +40,7 @@ public class KnifeKnifeMailSenderContextImpl implements KnifeMailSenderContext {
     private final static String MAIL_ACCOUNT_CACHE_KEY = "KNIFE_MAIL_ACCOUNT";
 
     @Override
-    public KnifeJavaMailSender getJavaMailSender() {
+    public KnifeJavaMailSender getJavaMailSender() throws MailAccountNotFoundException, MultiMailAccountException {
         List<MailAccount> mailAccountList = mailAccountRedisTemplate.opsForValue().get(knifeMailProperties.getCachePrefix() + MAIL_ACCOUNT_CACHE_KEY);
         if (mailAccountList == null) {
             final String currentTenantId = TenantContextHolder.getTenantId();
@@ -69,8 +69,10 @@ public class KnifeKnifeMailSenderContextImpl implements KnifeMailSenderContext {
 
     @Override
     public List<MailAccount> refreshMailAccountCache() {
+        final String tenantId = TenantContextHolder.getTenantId();
         TenantContextHolder.setTenantId(null);
         final List<MailAccount> mailAccountList = mailAccountService.list();
+        TenantContextHolder.setTenantId(tenantId);
         mailAccountRedisTemplate.opsForValue().set(knifeMailProperties.getCachePrefix() + MAIL_ACCOUNT_CACHE_KEY, mailAccountList, 1, TimeUnit.DAYS);
         return mailAccountList;
     }
