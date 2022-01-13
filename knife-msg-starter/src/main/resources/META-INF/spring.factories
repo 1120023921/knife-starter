@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.cintsoft.msg.mail.service.properties.KnifeMailProperties, \
+com.cintsoft.msg.mail.properties.KnifeMailProperties, \
 com.cintsoft.msg.mail.MailAutoConfig
 

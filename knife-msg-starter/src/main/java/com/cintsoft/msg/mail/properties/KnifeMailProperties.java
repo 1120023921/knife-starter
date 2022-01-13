@@ -1,4 +1,4 @@
-package com.cintsoft.msg.mail.service.properties;
+package com.cintsoft.msg.mail.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
