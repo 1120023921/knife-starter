@@ -1,6 +1,7 @@
 package com.cintsoft.msg.mail.service.impl;
 
 import com.cintsoft.common.mybatis.tenant.TenantContextHolder;
+import com.cintsoft.msg.mail.entity.KnifeJavaMailSenderImpl;
 import com.cintsoft.msg.mail.entity.MailAccount;
 import com.cintsoft.msg.mail.exception.MailAccountNotFoundException;
 import com.cintsoft.msg.mail.exception.MultiMailAccountException;

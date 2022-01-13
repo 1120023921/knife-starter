@@ -1,4 +1,4 @@
-package com.cintsoft.msg.mail.service.impl;
+package com.cintsoft.msg.mail.entity;
 
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 

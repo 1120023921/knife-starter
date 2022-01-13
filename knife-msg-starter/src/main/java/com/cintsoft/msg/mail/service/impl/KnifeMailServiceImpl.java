@@ -1,5 +1,6 @@
 package com.cintsoft.msg.mail.service.impl;
 
+import com.cintsoft.msg.mail.entity.KnifeJavaMailSenderImpl;
 import com.cintsoft.msg.mail.entity.MailInfo;
 import com.cintsoft.msg.mail.service.KnifeMailSenderContext;
 import com.cintsoft.msg.mail.service.KnifeMailService;
