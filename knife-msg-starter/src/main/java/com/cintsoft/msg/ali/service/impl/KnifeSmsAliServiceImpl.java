@@ -3,7 +3,6 @@ package com.cintsoft.msg.ali.service.impl;
 import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
-import com.cintsoft.msg.ali.exception.AliClientException;
 import com.cintsoft.msg.ali.service.KnifeSmsAliSenderContext;
 import com.cintsoft.msg.ali.service.KnifeSmsAliService;
 import com.cintsoft.msg.ali.vo.AliSms;
@@ -41,12 +40,6 @@ public class KnifeSmsAliServiceImpl implements KnifeSmsAliService {
                     .msgId(aliSms.getMsgId())
                     .code(sendSmsResponse.getBody().getCode())
                     .errMsg(sendSmsResponse.getBody().getMessage())
-                    .build();
-        } catch (AliClientException e) {
-            return AliSmsResult.builder()
-                    .msgId(aliSms.getMsgId())
-                    .code("-1")
-                    .errMsg("构造阿里云短信Client失败")
                     .build();
         } catch (Exception e) {
             return AliSmsResult.builder()

@@ -33,8 +33,8 @@ public class KnifeMailServiceImpl implements KnifeMailService {
 
     @Override
     public MailResult sendMail(MailInfo mailInfo) {
-        final KnifeJavaMailSender javaMailSender = (KnifeJavaMailSender) knifeMailSenderContext.getJavaMailSender();
         try {
+            final KnifeJavaMailSender javaMailSender = (KnifeJavaMailSender) knifeMailSenderContext.getJavaMailSender();
             final MimeMessageHelper messageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), true);//true表示支持复杂类型
             messageHelper.setFrom(javaMailSender.getFrom());//邮件发信人
             messageHelper.setTo(mailInfo.getTo().split(","));//邮件收信人
@@ -55,19 +55,12 @@ public class KnifeMailServiceImpl implements KnifeMailService {
                     .code("0")
                     .errMsg("OK")
                     .build();
-        } catch (MessagingException e) {
+        } catch (Exception e) {
 //            log.error("KnifeMailServiceImpl [sendMail] 邮件消息构造失败", e);
             return MailResult.builder()
                     .msgId(mailInfo.getMsgId())
-                    .code("10000")
-                    .errMsg("邮件消息构造失败 " + e.getMessage())
-                    .build();
-        } catch (MailException e) {
-//            log.error("KnifeMailServiceImpl [sendMail] 邮件发送失败", e);
-            return MailResult.builder()
-                    .msgId(mailInfo.getMsgId())
-                    .code("10001")
-                    .errMsg("邮件发送失败 " + e.getMessage())
+                    .code("-1")
+                    .errMsg(e.getMessage())
                     .build();
         }
     }

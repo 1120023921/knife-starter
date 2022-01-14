@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cintsoft.msg.wechat.mp.mapper.WechatMpAccountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cintsoft.msg.wechat.mp.entity.WechatMpAccount">
+        <id column="id" property="id" />
+        <result column="appid" property="appid" />
+        <result column="secret" property="secret" />
+        <result column="access_token" property="accessToken" />
+        <result column="access_token_expires" property="accessTokenExpires" />
+        <result column="weight" property="weight" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="version" property="version" />
+        <result column="deleted" property="deleted" />
+        <result column="extra" property="extra" />
+        <result column="tenant_id" property="tenantId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, appid, secret, access_token, access_token_expires, weight, create_time, update_time, create_by, update_by, version, deleted, extra, tenant_id
+    </sql>
+
+</mapper>
