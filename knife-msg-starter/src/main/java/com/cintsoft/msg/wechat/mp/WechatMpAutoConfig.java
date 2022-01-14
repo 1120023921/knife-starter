@@ -75,7 +75,9 @@ public class WechatMpAutoConfig {
     @ConditionalOnMissingBean(name = {"knifeWechatMpSenderContext"})
     @ConditionalOnBean(name = {"wechatMpAccountService", "wechatMpAccountRedisTemplate"})
     public KnifeWechatMpSenderContext knifeWechatMpSenderContext(@Autowired KnifeWechatMpProperties knifeWechatMpProperties, @Autowired WechatMpAccountService wechatMpAccountService, @Autowired RedisTemplate<String, List<WechatMpAccount>> wechatMpAccountRedisTemplate) {
-        return new KnifeWechatMpSenderContextImpl(knifeWechatMpProperties, wechatMpAccountService, wechatMpAccountRedisTemplate);
+        final KnifeWechatMpSenderContextImpl knifeWechatMpSenderContext = new KnifeWechatMpSenderContextImpl(knifeWechatMpProperties, wechatMpAccountService, wechatMpAccountRedisTemplate);
+        wechatMpAccountService.configKnifeWechatMpSenderContext(knifeWechatMpSenderContext);
+        return knifeWechatMpSenderContext;
     }
 
     /**
@@ -92,7 +94,7 @@ public class WechatMpAutoConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "knife.msg.msg.wechat-mp-account-api-enable", havingValue = "true")
+    @ConditionalOnProperty(name = "knife.msg.wechat.mp.wechat-mp-account-api-enable", havingValue = "true")
     @ConditionalOnBean(name = {"wechatMpAccountService"})
     public WechatMpAccountController wechatMpAccountController(WechatMpAccountService wechatMpAccountService) {
         return new WechatMpAccountController(wechatMpAccountService);
