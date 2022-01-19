@@ -1,12 +1,16 @@
 package com.cintsoft.log;
 
 import com.cintsoft.log.aspect.OperationLogAspect;
+import com.cintsoft.log.controller.SysOperationErrorLogController;
+import com.cintsoft.log.controller.SysOperationLogController;
 import com.cintsoft.log.properties.KnifeLogProperties;
 import com.cintsoft.log.service.SysOperationErrorLogService;
 import com.cintsoft.log.service.SysOperationLogService;
 import com.cintsoft.log.service.impl.SysOperationErrorLogServiceImpl;
 import com.cintsoft.log.service.impl.SysOperationLogServiceImpl;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -51,5 +55,19 @@ public class KnifeLogAutoConfig {
     @Bean
     public OperationLogAspect operationLogAspect(KnifeLogProperties knifeLogProperties, SysOperationLogService sysOperationLogService, SysOperationErrorLogService sysOperationErrorLogService, HttpServletRequest request) {
         return new OperationLogAspect(request, knifeLogProperties, sysOperationErrorLogService, sysOperationLogService);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
+    @ConditionalOnBean(name = {"sysOperationLogService"})
+    public SysOperationLogController sysOperationLogController(SysOperationLogService sysOperationLogService) {
+        return new SysOperationLogController(sysOperationLogService);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
+    @ConditionalOnBean(name = {"sysOperationErrorLogService"})
+    public SysOperationErrorLogController sysOperationErrorLogController(SysOperationErrorLogService sysOperationErrorLogService) {
+        return new SysOperationErrorLogController(sysOperationErrorLogService);
     }
 }

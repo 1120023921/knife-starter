@@ -1,7 +1,7 @@
 description('Knife日志模块')
 
 group 'com.cintsoft'
-version '1.1.4'
+version '1.1.8'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,6 +10,7 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
+    implementation project(':knife-common-starter')
     implementation project(':knife-spring-security-config-starter')
     compileOnly 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
     compileOnly 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'

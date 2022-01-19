@@ -2,6 +2,19 @@
   "hints": [
     {
       "name": "knife.log.version"
+    },
+    {
+      "name": "knife.log.log-api-enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
     }
   ],
   "groups": [
@@ -18,6 +31,13 @@
       "type": "java.lang.String",
       "description": "日志版本",
       "defaultValue": "1.0.0"
+    },
+    {
+      "sourceType": "com.cintsoft.log.properties.KnifeLogProperties",
+      "name": "knife.log.log-api-enable",
+      "type": "java.lang.Boolean",
+      "description": "日志API启用状态",
+      "defaultValue": false
     }
   ]
 }

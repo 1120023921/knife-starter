@@ -11,4 +11,6 @@ public class KnifeLogProperties {
 
     //日志版本
     private String version = "1.0.0";
+    //是否启用默认API
+    private Boolean logApiEnable = false;
 }
