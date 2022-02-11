@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cintsoft.quartz.mapper.TaskLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cintsoft.quartz.entity.TaskLog">
+        <id column="id" property="id"/>
+        <result column="task_name" property="taskName"/>
+        <result column="exec_date" property="execDate"/>
+        <result column="exec_result" property="execResult"/>
+        <result column="exec_result_text" property="execResultText"/>
+        <result column="task_id" property="taskId"/>
+        <result column="weight" property="weight"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="version" property="version"/>
+        <result column="extra" property="extra"/>
+        <result column="tenant_id" property="tenantId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , task_name, exec_date, exec_result, exec_result_text, task_id, weight, create_time, update_time, create_by,
+        update_by, version, extra, tenant_id
+    </sql>
+
+</mapper>

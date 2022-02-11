@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cintsoft.quartz.properties.KnifeQuartzProperties,\
+com.cintsoft.quartz.KnifeQuartzAutoConfig

@@ -1,0 +1,33 @@
+{
+  "hints": [
+    {
+      "name": "knife.quartz.quartz-api-enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "sourceType": "com.cintsoft.quartz.properties.KnifeQuartzProperties",
+      "name": "knife.quartz",
+      "type": "com.cintsoft.quartz.properties.KnifeQuartzProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.cintsoft.quartz.properties.KnifeQuartzProperties",
+      "name": "knife.quartz.quartz-api-enable",
+      "type": "java.lang.Boolean",
+      "description": "定时任务API启用状态",
+      "defaultValue": false
+    }
+  ]
+}
