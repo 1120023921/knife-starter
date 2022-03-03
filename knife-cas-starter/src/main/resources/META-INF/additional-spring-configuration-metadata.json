@@ -16,35 +16,35 @@
   ],
   "groups": [
     {
-      "sourceType": "com.cintsoft.cas.common.constant.CasConfigProperties",
+      "sourceType": "com.wingice.cas.common.constant.CasConfigProperties",
       "name": "knife.security.cas",
-      "type": "com.cintsoft.cas.common.constant.CasConfigProperties"
+      "type": "com.wingice.cas.common.constant.CasConfigProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.cintsoft.cas.common.constant.CasConfigProperties",
+      "sourceType": "com.wingice.cas.common.constant.CasConfigProperties",
       "name": "knife.security.cas.enable",
       "type": "java.lang.Boolean",
       "description": "是否启动cas认证",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.cas.common.constant.CasConfigProperties",
+      "sourceType": "com.wingice.cas.common.constant.CasConfigProperties",
       "name": "knife.security.cas.cas-server-url-prefix",
       "type": "java.lang.String",
       "description": "CAS认证服务器地址",
       "defaultValue": ""
     },
     {
-      "sourceType": "com.cintsoft.cas.common.constant.CasConfigProperties",
+      "sourceType": "com.wingice.cas.common.constant.CasConfigProperties",
       "name": "knife.security.service",
       "type": "java.lang.String",
       "description": "认证应用服务地址",
       "defaultValue": ""
     },
     {
-      "sourceType": "com.cintsoft.cas.common.constant.CasConfigProperties",
+      "sourceType": "com.wingice.cas.common.constant.CasConfigProperties",
       "name": "knife.security.userField",
       "type": "java.lang.String",
       "description": "用户名字段路径（使用:分隔）",

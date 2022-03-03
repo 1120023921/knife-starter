@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cintsoft.msg.ali.mapper.AliAccountMapper">
+<mapper namespace="com.wingice.msg.ali.mapper.AliAccountMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cintsoft.msg.ali.entity.AliAccount">
+    <resultMap id="BaseResultMap" type="com.wingice.msg.ali.entity.AliAccount">
         <id column="id" property="id"/>
         <result column="access_key_id" property="accessKeyId"/>
         <result column="access_secret" property="accessSecret"/>

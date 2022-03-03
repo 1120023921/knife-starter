@@ -147,101 +147,101 @@
   ],
   "groups": [
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.wingice.msg.mail.properties.KnifeMailProperties",
       "name": "knife.msg.mail",
-      "type": "com.cintsoft.msg.mail.properties.KnifeMailProperties"
+      "type": "com.wingice.msg.mail.properties.KnifeMailProperties"
     },
     {
-      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "sourceType": "com.wingice.msg.ali.properties.KnifeAliProperties",
       "name": "knife.msg.sms.ali",
-      "type": "com.cintsoft.msg.ali.properties.KnifeAliProperties"
+      "type": "com.wingice.msg.ali.properties.KnifeAliProperties"
     },
     {
-      "sourceType": "com.cintsoft.msg.wechat.mp.properties.KnifeWechatMpProperties",
+      "sourceType": "com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties",
       "name": "knife.msg.wechat.mp",
-      "type": "com.cintsoft.msg.wechat.mp.properties.KnifeWechatMpProperties"
+      "type": "com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.wingice.msg.mail.properties.KnifeMailProperties",
       "name": "knife.msg.mail.enable",
       "type": "java.lang.Boolean",
       "description": "邮件启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.wingice.msg.mail.properties.KnifeMailProperties",
       "name": "knife.msg.mail.tenant-enable",
       "type": "java.lang.Boolean",
       "description": "租户启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.wingice.msg.mail.properties.KnifeMailProperties",
       "name": "knife.msg.mail.mail-account-api-enable",
       "type": "java.lang.Boolean",
       "description": "邮件账户管理API状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.mail.properties.KnifeMailProperties",
+      "sourceType": "com.wingice.msg.mail.properties.KnifeMailProperties",
       "name": "knife.msg.mail.cache-prefix",
       "type": "java.lang.String",
       "description": "邮件账户缓存路径",
       "defaultValue": "KNIFE:MSG:MAIL:"
     },
     {
-      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "sourceType": "com.wingice.msg.ali.properties.KnifeAliProperties",
       "name": "knife.msg.sms.ali.enable",
       "type": "java.lang.Boolean",
       "description": "阿里短信启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "sourceType": "com.wingice.msg.ali.properties.KnifeAliProperties",
       "name": "knife.msg.sms.ali.tenant-enable",
       "type": "java.lang.Boolean",
       "description": "租户启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "sourceType": "com.wingice.msg.ali.properties.KnifeAliProperties",
       "name": "knife.msg.sms.ali.ali-account-api-enable",
       "type": "java.lang.Boolean",
       "description": "阿里账户管理API状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.ali.properties.KnifeAliProperties",
+      "sourceType": "com.wingice.msg.ali.properties.KnifeAliProperties",
       "name": "knife.msg.sms.ali.cache-prefix",
       "type": "java.lang.String",
       "description": "阿里账户缓存路径",
       "defaultValue": "KNIFE:MSG:SMS:ALI:"
     },
     {
-      "sourceType": "com.cintsoft.msg.wechat.mp.properties.KnifeWechatMpProperties",
+      "sourceType": "com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties",
       "name": "knife.msg.wechat.mp.enable",
       "type": "java.lang.Boolean",
       "description": "微信公众号启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.wechat.mp.properties.KnifeWechatMpProperties",
+      "sourceType": "com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties",
       "name": "knife.msg.wechat.mp.tenant-enable",
       "type": "java.lang.Boolean",
       "description": "租户启用状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.wechat.mp.properties.KnifeWechatMpProperties",
+      "sourceType": "com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties",
       "name": "knife.msg.wechat.mp.wechat-mp-account-api-enable",
       "type": "java.lang.Boolean",
       "description": "微信公众号账户管理API状态",
       "defaultValue": false
     },
     {
-      "sourceType": "com.cintsoft.msg.wechat.mp.properties.KnifeWechatMpProperties",
+      "sourceType": "com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties",
       "name": "knife.msg.wechat.mp.cache-prefix",
       "type": "java.lang.String",
       "description": "微信公众号账户缓存路径",

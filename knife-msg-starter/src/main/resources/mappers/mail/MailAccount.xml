@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cintsoft.msg.mail.mapper.MailAccountMapper">
+<mapper namespace="com.wingice.msg.mail.mapper.MailAccountMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cintsoft.msg.mail.entity.MailAccount">
+    <resultMap id="BaseResultMap" type="com.wingice.msg.mail.entity.MailAccount">
         <id column="id" property="id"/>
         <result column="host" property="host"/>
         <result column="port" property="port"/>

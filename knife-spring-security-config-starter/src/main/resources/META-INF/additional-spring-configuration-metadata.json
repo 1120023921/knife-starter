@@ -29,91 +29,91 @@
   ],
   "groups": [
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security",
-      "type": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties"
+      "type": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.token-expire",
       "type": "java.lang.Integer",
       "description": "Token有效时间（秒）",
       "defaultValue": 7200
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.refresh-token-expire",
       "type": "java.lang.Integer",
       "description": "RefreshToken有效时间（秒）",
       "defaultValue": 7200
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.tenant-enable",
       "type": "java.lang.Boolean",
       "description": "是否启用租户模式",
       "defaultValue": true
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.default-inMemory-enable",
       "type": "java.lang.Boolean",
       "description": "默认内存用户启用状态",
       "defaultValue": true
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.access-token-prefix-tenantId",
       "type": "java.lang.String",
       "description": "ACCESS_TOKEN存储前缀（带租户）",
       "defaultValue": "KNIFE:ACCESS_TOKEN:%s:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.access-token-prefix",
       "type": "java.lang.String",
       "description": "ACCESS_TOKEN存储前缀",
       "defaultValue": "KNIFE:ACCESS_TOKEN:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.refresh-token-prefix-tenantId",
       "type": "java.lang.String",
       "description": "REFRESH_TOKEN存储前缀（带租户）",
       "defaultValue": "KNIFE:REFRESH_TOKEN:%s:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.refresh-token-prefix",
       "type": "java.lang.String",
       "description": "REFRESH_TOKEN存储前缀",
       "defaultValue": "KNIFE:REFRESH_TOKEN:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.user-detail-prefix-tenantId",
       "type": "java.lang.String",
       "description": "用户信息存储前缀（带租户）",
       "defaultValue": "KNIFE:USER_DETAIL:%s:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.user-detail-prefix",
       "type": "java.lang.String",
       "description": "用户信息存储前缀",
       "defaultValue": "KNIFE:USER_DETAIL:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.user-refresh-token-prefix-tenantId",
       "type": "java.lang.String",
       "description": "用户与RefreshToken信息存储前缀（带租户）",
       "defaultValue": "KNIFE:USER_REFRESH_TOKEN:%s:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
       "name": "knife.security.user-refresh-token-prefix",
       "type": "java.lang.String",
       "description": "用户与RefreshToken信息存储前缀",

@@ -16,49 +16,49 @@
   ],
   "groups": [
     {
-      "sourceType": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties",
+      "sourceType": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties",
       "name": "knife.security.oauth",
-      "type": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties"
+      "type": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties",
+      "sourceType": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties",
       "name": "knife.security.tenant-enable",
       "type": "java.lang.Boolean",
       "description": "是否启用租户模式",
       "defaultValue": true
     },
     {
-      "sourceType": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties",
+      "sourceType": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties",
       "name": "knife.security.logout-success-url",
       "type": "java.lang.String",
       "description": "注销成功默认跳转地址",
-      "defaultValue": "http://cintsoft.com"
+      "defaultValue": "http://wingice.com"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties",
+      "sourceType": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties",
       "name": "knife.security.login-page",
       "type": "java.lang.String",
       "description": "统一登录地址",
       "defaultValue": "http://localhost:8080/oauth/authorize"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties",
+      "sourceType": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties",
       "name": "knife.security.code-expire",
       "type": "java.lang.Integer",
       "description": "code有效时间",
       "defaultValue": 30
     },
     {
-      "sourceType": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties",
+      "sourceType": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties",
       "name": "knife.security.code-prefix-tenant-id",
       "type": "java.lang.String",
       "description": "code存储路径（带租户）",
       "defaultValue": "KNIFE:CODE:%s:%s"
     },
     {
-      "sourceType": "com.cintsoft.spring.security.oauth.KnifeOAuthConfigProperties",
+      "sourceType": "com.wingice.spring.security.oauth.KnifeOAuthConfigProperties",
       "name": "knife.security.code-prefix",
       "type": "java.lang.String",
       "description": "code存储路径",

@@ -16,14 +16,14 @@
   ],
   "groups": [
     {
-      "sourceType": "com.cintsoft.quartz.properties.KnifeQuartzProperties",
+      "sourceType": "com.wingice.quartz.properties.KnifeQuartzProperties",
       "name": "knife.quartz",
-      "type": "com.cintsoft.quartz.properties.KnifeQuartzProperties"
+      "type": "com.wingice.quartz.properties.KnifeQuartzProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.cintsoft.quartz.properties.KnifeQuartzProperties",
+      "sourceType": "com.wingice.quartz.properties.KnifeQuartzProperties",
       "name": "knife.quartz.quartz-api-enable",
       "type": "java.lang.Boolean",
       "description": "定时任务API启用状态",

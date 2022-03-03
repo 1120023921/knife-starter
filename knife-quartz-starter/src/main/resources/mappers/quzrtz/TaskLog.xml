@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cintsoft.quartz.mapper.TaskLogMapper">
+<mapper namespace="com.wingice.quartz.mapper.TaskLogMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cintsoft.quartz.entity.TaskLog">
+    <resultMap id="BaseResultMap" type="com.wingice.quartz.entity.TaskLog">
         <id column="id" property="id"/>
         <result column="task_name" property="taskName"/>
         <result column="exec_date" property="execDate"/>

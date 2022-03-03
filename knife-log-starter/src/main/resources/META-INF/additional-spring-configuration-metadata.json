@@ -19,21 +19,21 @@
   ],
   "groups": [
     {
-      "sourceType": "com.cintsoft.log.properties.KnifeLogProperties",
+      "sourceType": "com.wingice.log.properties.KnifeLogProperties",
       "name": "knife.log",
-      "type": "com.cintsoft.log.properties.KnifeLogProperties"
+      "type": "com.wingice.log.properties.KnifeLogProperties"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.cintsoft.log.properties.KnifeLogProperties",
+      "sourceType": "com.wingice.log.properties.KnifeLogProperties",
       "name": "knife.log.version",
       "type": "java.lang.String",
       "description": "日志版本",
       "defaultValue": "1.0.0"
     },
     {
-      "sourceType": "com.cintsoft.log.properties.KnifeLogProperties",
+      "sourceType": "com.wingice.log.properties.KnifeLogProperties",
       "name": "knife.log.log-api-enable",
       "type": "java.lang.Boolean",
       "description": "日志API启用状态",

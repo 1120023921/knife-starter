@@ -1,7 +1,7 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.cintsoft.msg.mail.properties.KnifeMailProperties, \
-com.cintsoft.msg.mail.MailAutoConfig, \
-com.cintsoft.msg.ali.properties.KnifeAliProperties, \
-com.cintsoft.msg.ali.SmsAliAutoConfig, \
-com.cintsoft.msg.wechat.mp.properties.KnifeWechatMpProperties, \
-com.cintsoft.msg.wechat.mp.WechatMpAutoConfig
+com.wingice.msg.mail.properties.KnifeMailProperties, \
+com.wingice.msg.mail.MailAutoConfig, \
+com.wingice.msg.ali.properties.KnifeAliProperties, \
+com.wingice.msg.ali.SmsAliAutoConfig, \
+com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties, \
+com.wingice.msg.wechat.mp.WechatMpAutoConfig

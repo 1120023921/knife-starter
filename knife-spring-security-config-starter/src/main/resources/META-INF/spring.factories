@@ -1,6 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.cintsoft.spring.security.common.constant.KnifeSecurityConfigProperties, \
-com.cintsoft.spring.security.SecurityAutoConfig, \
-com.cintsoft.spring.security.SecurityConfig
+com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties, \
+com.wingice.spring.security.SecurityAutoConfig, \
+com.wingice.spring.security.SecurityConfig
 
 

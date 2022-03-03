@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cintsoft.log.mapper.SysOperationLogMapper">
+<mapper namespace="com.wingice.log.mapper.SysOperationLogMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.cintsoft.log.model.SysOperationLog">
+    <resultMap id="BaseResultMap" type="com.wingice.log.model.SysOperationLog">
         <id column="id" property="id" />
         <result column="operation_module" property="operationModule" />
         <result column="operation_type" property="operationType" />
