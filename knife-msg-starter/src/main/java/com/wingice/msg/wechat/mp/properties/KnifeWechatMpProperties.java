@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "knife.wechat.mp")
+@ConfigurationProperties(prefix = "knife.msg.wechat.mp")
 public class KnifeWechatMpProperties {
 
     //启用状态
