@@ -80,12 +80,12 @@ allprojects {
         repositories {
             maven {
                 allowInsecureProtocol = true
-                def releasesRepoUrl = 'http://nexus.cintsoft.com/repository/cintsoft-snapshots/'
-                def snapshotsRepoUrl = 'http://nexus.cintsoft.com/repository/cintsoft-releases/'
+                def releasesRepoUrl = 'http://centos.doublehh.cn:8081/repository/cintsoft-snapshots/'
+                def snapshotsRepoUrl = 'http://centos.doublehh.cn:8081/repository/maven-releases/'
                 url = snapshotsRepoUrl
                 credentials {
                     username = 'admin'
-                    password = '!Cint@2019'
+                    password = '1120023921Hh'
                 }
             }
         }
