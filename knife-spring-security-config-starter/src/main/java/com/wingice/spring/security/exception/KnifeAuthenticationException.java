@@ -15,7 +15,7 @@ public class KnifeAuthenticationException extends AuthenticationException {
     private String msg;
 
     public KnifeAuthenticationException(int code, String data, String msg) {
-        super(data);
+        super(msg);
         this.code = code;
         this.msg = msg;
     }
