@@ -245,7 +245,7 @@
       "name": "knife.msg.wechat.mp.cache-prefix",
       "type": "java.lang.String",
       "description": "微信公众号账户缓存路径",
-      "defaultValue": "KNIFE:MSG:SMS:ALI:"
+      "defaultValue": "KNIFE:WECHAT:MP:"
     }
   ]
 }
