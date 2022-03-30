@@ -1,7 +1,7 @@
 description('消息服务自动配置')
 
 group 'com.wingice'
-version '1.0.2'
+version '1.0.4'
 
 compileJava.options.encoding = 'UTF-8'
 
