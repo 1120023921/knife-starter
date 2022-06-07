@@ -3,14 +3,12 @@ package com.wingice.mybatis.plus.properties;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@RefreshScope
 @Configuration
 @ConfigurationProperties(prefix = "knife.tenant")
 @ConditionalOnProperty(name = "knife.tenant.enable", havingValue = "true")

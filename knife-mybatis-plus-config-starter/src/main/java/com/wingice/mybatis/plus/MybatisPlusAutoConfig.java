@@ -1,6 +1,5 @@
 package com.wingice.mybatis.plus;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
@@ -74,7 +73,7 @@ public class MybatisPlusAutoConfig {
         if (tenantLineHandler != null) {
             interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(tenantLineHandler));
         }
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         return interceptor;
     }

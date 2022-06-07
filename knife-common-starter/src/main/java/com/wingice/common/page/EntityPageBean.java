@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class EntityPageBean<T> {
 
-    private PageBean<T> pageObject;
+    private PageBean pageObject;
 
     private T entity;
 }

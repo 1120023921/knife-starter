@@ -2,7 +2,6 @@ package com.wingice.spring.security.common.constant;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
  * Mail: huhao9277@gmail.com
  */
 @Data
-@RefreshScope
 @Configuration
 @ConfigurationProperties(prefix = "knife.security")
 public class KnifeSecurityConfigProperties {
@@ -42,4 +40,16 @@ public class KnifeSecurityConfigProperties {
     private String userRefreshTokenPrefixTenantId = "KNIFE:USER_REFRESH_TOKEN:%s:%s";
     //USER_REFRESH_TOKEN存储前缀
     private String userRefreshTokenPrefix = "KNIFE:USER_REFRESH_TOKEN:%s";
+    //是否密码加密
+    private Boolean passwordEncrypt = false;
+    //是否启用验证码
+    private Boolean captchaEnable = false;
+    //验证码存储前缀
+    private String captchaPrefix = "KNIFE:USER_CAPTCHA:%s";
+    //验证码有效期（秒）
+    private Long captchaTime = 120L;
+    //验证码宽度
+    private Integer captchaWidth = 250;
+    //验证码高度
+    private Integer captchaHeight = 100;
 }

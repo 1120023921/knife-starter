@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -27,11 +28,11 @@ public class SecurityOAuthAutoConfig {
 
     @ConditionalOnMissingBean
     @Bean
-    public KnifeOAuthService knifeOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, KnifeOAuthConfigProperties knifeOAuthConfigProperties, AuthenticationManager authenticationManager, KnifeOAuthClientDetailsService knifeOAuthClientDetailsService) {
+    public KnifeOAuthService knifeOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, KnifeOAuthConfigProperties knifeOAuthConfigProperties, AuthenticationManager authenticationManager, KnifeOAuthClientDetailsService knifeOAuthClientDetailsService, StringRedisTemplate stringRedisTemplate) {
         if (!knifeOAuthConfigProperties.getTenantEnable()) {
-            return new KnifeOAuthServiceImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService);
+            return new KnifeOAuthServiceImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService, stringRedisTemplate);
         }
-        return new KnifeOAuthServiceTenantImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService);
+        return new KnifeOAuthServiceTenantImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService, stringRedisTemplate);
     }
 
     @ConditionalOnMissingBean

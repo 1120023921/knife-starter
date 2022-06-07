@@ -57,6 +57,12 @@ public class KnifeOAuthClientDetails {
     //前缀
     private String prefix;
 
+    //私钥
+    private String privateKey;
+
+    //公钥
+    private String publicKey;
+
     //创建时间
     private Long createTime;
 

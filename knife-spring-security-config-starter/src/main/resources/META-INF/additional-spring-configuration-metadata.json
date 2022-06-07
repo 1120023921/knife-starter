@@ -25,6 +25,32 @@
           "description": "启用"
         }
       ]
+    },
+    {
+      "name": "knife.security.captcha-enable",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
+    },
+    {
+      "name": "knife.security.password-encrypt",
+      "values": [
+        {
+          "value": false,
+          "description": "禁用"
+        },
+        {
+          "value": true,
+          "description": "启用"
+        }
+      ]
     }
   ],
   "groups": [
@@ -118,6 +144,48 @@
       "type": "java.lang.String",
       "description": "用户与RefreshToken信息存储前缀",
       "defaultValue": "KNIFE:USER_REFRESH_TOKEN:%s"
+    },
+    {
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.passwordEncrypt",
+      "type": "java.lang.Boolean",
+      "description": "是否启用密码加密",
+      "defaultValue": false
+    },
+    {
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.captcha-enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用验证码",
+      "defaultValue": false
+    },
+    {
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.captcha-prefix",
+      "type": "java.lang.String",
+      "description": "验证码存储前缀",
+      "defaultValue": "KNIFE:USER_CAPTCHA:%s"
+    },
+    {
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.captcha-time",
+      "type": "java.lang.String",
+      "description": "验证码有效期（秒）",
+      "defaultValue": "120"
+    },
+    {
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.captcha-width",
+      "type": "java.lang.String",
+      "description": "验证码宽度",
+      "defaultValue": "250"
+    },
+    {
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.captcha-height",
+      "type": "java.lang.String",
+      "description": "验证码高度",
+      "defaultValue": "100"
     }
   ]
 }

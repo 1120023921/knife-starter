@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wingice.spring.security.aspect.KnifeSecurityInnerAspect;
 import com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties;
+import com.wingice.spring.security.controller.CaptchaController;
 import com.wingice.spring.security.expression.KnifeSecurity;
 import com.wingice.spring.security.filter.*;
 import com.wingice.spring.security.handler.*;
@@ -12,6 +13,8 @@ import com.wingice.spring.security.model.KnifeUser;
 import com.wingice.spring.security.provider.KnifeDaoAuthenticationProvider;
 import com.wingice.spring.security.provider.KnifeInMemoryAuthenticationProvider;
 import com.wingice.spring.security.provider.KnifeSocialAuthenticationProvider;
+import com.wingice.spring.security.service.CaptchaService;
+import com.wingice.spring.security.service.impl.CaptchaServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -216,11 +220,11 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeLoginFilter")
     @Bean("knifeLoginFilter")
-    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, StringRedisTemplate stringRedisTemplate) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper, stringRedisTemplate);
         } else {
-            return new KnifeLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper, stringRedisTemplate);
         }
     }
 
@@ -312,5 +316,32 @@ public class SecurityAutoConfig {
     @Bean
     public KnifeSecurity knifeSecurity() {
         return new KnifeSecurity();
+    }
+
+    /**
+     * @param knifeSecurityConfigProperties 配置信息
+     * @param stringRedisTemplate           缓存redis
+     * @description 验证码服务
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2022/4/12 11:10
+     */
+    @ConditionalOnMissingBean
+    @Bean
+    public CaptchaService captchaService(KnifeSecurityConfigProperties knifeSecurityConfigProperties, StringRedisTemplate stringRedisTemplate) {
+        return new CaptchaServiceImpl(knifeSecurityConfigProperties, stringRedisTemplate);
+    }
+
+    /**
+     * @param captchaService 验证码service
+     * @description 验证码controller
+     * @author 胡昊
+     * @email huhao9277@gmail.com
+     * @date 2022/4/12 11:14
+     */
+    @ConditionalOnMissingBean
+    @Bean
+    public CaptchaController captchaController(CaptchaService captchaService) {
+        return new CaptchaController(captchaService);
     }
 }

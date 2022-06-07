@@ -25,4 +25,8 @@ public class KnifeAuthorizeParams {
     private String state;
     private String tenantId;
     private String code;
+    //验证码key
+    private String captchaKey;
+    //验证码
+    private String captchaCode;
 }

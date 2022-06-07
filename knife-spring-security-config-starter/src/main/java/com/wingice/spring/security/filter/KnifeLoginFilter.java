@@ -1,12 +1,13 @@
 package com.wingice.spring.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wingice.common.web.ResultBean;
 import com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.wingice.spring.security.exception.KnifeAuthenticationException;
 import com.wingice.spring.security.model.KnifeOAuth2AccessToken;
 import com.wingice.spring.security.model.KnifeUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -38,8 +39,9 @@ public class KnifeLoginFilter extends AbstractAuthenticationProcessingFilter {
     private final RedisTemplate<String, String> userRefreshTokenRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
+    private final StringRedisTemplate stringRedisTemplate;
 
-    public KnifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+    public KnifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, StringRedisTemplate stringRedisTemplate) {
         super(new AntPathRequestMatcher("/login", "POST"));
         setAuthenticationManager(authenticationManager);
         this.userDetailRedisTemplate = userDetailRedisTemplate;
@@ -47,12 +49,24 @@ public class KnifeLoginFilter extends AbstractAuthenticationProcessingFilter {
         this.userRefreshTokenRedisTemplate = userRefreshTokenRedisTemplate;
         this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
+        this.stringRedisTemplate = stringRedisTemplate;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         final String username = request.getParameter("username");
         final String password = request.getParameter("password");
+        if (knifeSecurityConfigProperties.getCaptchaEnable()) {
+            final String captchaKey = request.getParameter("captchaKey");
+            final String captchaCode = request.getParameter("captchaCode");
+            if (!StringUtils.hasText(captchaCode)) {
+                throw new KnifeAuthenticationException("验证码未填写");
+            }
+            final String code = stringRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), captchaKey));
+            if (!captchaCode.equalsIgnoreCase(code)) {
+                throw new KnifeAuthenticationException("验证码错误");
+            }
+        }
         final Authentication authRequest = new UsernamePasswordAuthenticationToken(username, password);
         return getAuthenticationManager().authenticate(authRequest);
     }

@@ -1,8 +1,13 @@
 package com.wingice.spring.security.oauth.service.impl;
 
+import cn.hutool.core.codec.Base64Decoder;
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
 import com.wingice.common.exception.BusinessException;
 import com.wingice.common.mybatis.tenant.TenantContextHolder;
 import com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties;
+import com.wingice.spring.security.exception.KnifeAuthenticationException;
 import com.wingice.spring.security.model.KnifeOAuth2AccessToken;
 import com.wingice.spring.security.model.KnifeUser;
 import com.wingice.spring.security.oauth.KnifeOAuthConfigProperties;
@@ -16,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,18 +59,19 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     private final KnifeOAuthConfigProperties knifeOAuthConfigProperties;
     private final AuthenticationManager authenticationManager;
     private final KnifeOAuthClientDetailsService knifeOAuthClientDetailsService;
+    private final StringRedisTemplate stringRedisTemplate;
 
     @SneakyThrows
     @Override
     public String authorize(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, KnifeAuthorizeParams knifeAuthorizeParams) {
-        if (StringUtils.isEmpty(knifeAuthorizeParams.getTenantId())) {
+        if (!StringUtils.hasText(knifeAuthorizeParams.getTenantId())) {
             knifeAuthorizeParams.setTenantId("0");
         }
         TenantContextHolder.setTenantId(knifeAuthorizeParams.getTenantId());
 
         final String username = (String) session.getAttribute("username");
         final String tenantId = (String) session.getAttribute("tenantId");
-        if (StringUtils.isEmpty(username) || !knifeAuthorizeParams.getTenantId().equals(tenantId)) {
+        if (!StringUtils.hasText(username) || !knifeAuthorizeParams.getTenantId().equals(tenantId)) {
             model.addAttribute("knifeAuthorizeParams", knifeAuthorizeParams);
             return "login";
         }
@@ -134,6 +141,18 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
 
     @Override
     public Map<String, Object> token(KnifeAuthorizeParams knifeAuthorizeParams) {
+        if (!KnifeOAuthConstant.GRANT_TYPE_CLIENT_CREDENTIALS.equals(knifeAuthorizeParams.getGrantType())
+                && knifeSecurityConfigProperties.getCaptchaEnable()) {
+            //校验验证码
+            if (!StringUtils.hasText(knifeAuthorizeParams.getCaptchaCode())) {
+                throw new KnifeAuthenticationException("验证码未填写");
+            }
+            final String code = stringRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), knifeAuthorizeParams.getCaptchaKey()));
+            if (!knifeAuthorizeParams.getCaptchaCode().equalsIgnoreCase(code)) {
+                throw new KnifeAuthenticationException("验证码错误");
+            }
+        }
+
         KnifeOAuth2AccessToken knifeOAuth2AccessToken = null;
         if (KnifeOAuthConstant.GRANT_TYPE_CODE.equals(knifeAuthorizeParams.getGrantType())) {
             knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeOAuthConfigProperties.getCodePrefixTenantId(), knifeAuthorizeParams.getTenantId(), knifeAuthorizeParams.getCode()));
@@ -152,6 +171,16 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
 
     @Override
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, KnifeAuthorizeParams knifeAuthorizeParams) {
+        if (knifeSecurityConfigProperties.getCaptchaEnable()) {
+            //校验验证码
+            if (!StringUtils.hasText(knifeAuthorizeParams.getCaptchaCode())) {
+                throw new KnifeAuthenticationException("验证码未填写");
+            }
+            final String code = stringRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), knifeAuthorizeParams.getCaptchaKey()));
+            if (!knifeAuthorizeParams.getCaptchaCode().equalsIgnoreCase(code)) {
+                throw new KnifeAuthenticationException("验证码错误");
+            }
+        }
         if (StringUtils.hasText(knifeAuthorizeParams.getTenantId())) {
             TenantContextHolder.setTenantId(knifeAuthorizeParams.getTenantId());
         }
@@ -187,10 +216,10 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     @Override
     public void logout(String username, String token, String tenantId) {
         KnifeOAuth2AccessToken knifeOAuth2AccessToken = null;
-        if (!StringUtils.isEmpty(username)) {
+        if (StringUtils.hasText(username)) {
             knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, username));
         } else {
-            if (!StringUtils.isEmpty(token)) {
+            if (StringUtils.hasText(token)) {
                 final KnifeUser knifeUser = userInfo(token, tenantId);
                 username = knifeUser.getUsername();
                 knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefixTenantId(), tenantId, knifeUser.getUsername()));
@@ -208,6 +237,16 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     }
 
     private KnifeOAuth2AccessToken getKnifeOAuth2AccessToken(KnifeOAuthClientDetails clientDetails, String username, String password) {
+        if (knifeSecurityConfigProperties.getPasswordEncrypt()) {
+            //密码解密
+            final RSA rsa = new RSA(clientDetails.getPrivateKey(), clientDetails.getPublicKey());
+            try {
+                final byte[] decrypt = rsa.decrypt(Base64Decoder.decode(password), KeyType.PrivateKey);
+                password = new String(decrypt, CharsetUtil.CHARSET_UTF_8);
+            } catch (Exception e) {
+                throw new KnifeAuthenticationException("解密失败");
+            }
+        }
         final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         final Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         if (authenticate != null) {
@@ -235,7 +274,7 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
             token = knifeOAuth2AccessToken.getValue();
         }
         String refreshToken = userRefreshTokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()));
-        if (StringUtils.isEmpty(refreshToken)) {
+        if (!StringUtils.hasText(refreshToken)) {
             refreshToken = UUID.randomUUID().toString();
         }
         userRefreshTokenRedisTemplate.opsForValue().set(String.format(knifeSecurityConfigProperties.getUserRefreshTokenPrefixTenantId(), knifeUser.getTenantId(), knifeUser.getUsername()), refreshToken, clientDetails.getRefreshTokenValidity(), TimeUnit.SECONDS);

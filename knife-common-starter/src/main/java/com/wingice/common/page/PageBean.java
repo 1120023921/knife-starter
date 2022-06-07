@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
-public class PageBean<T> {
+public class PageBean {
 
     private Long pageNum;
     private Long total;
