@@ -256,7 +256,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Transactional(rollbackFor = Exception.class)
     public void checkTaskAlreadyExists(String taskName, String taskGroup) {
         // 每个任务组中的任务名称不能重复
-        final int count = count(Wrappers.<Task>lambdaQuery()
+        final long count = count(Wrappers.<Task>lambdaQuery()
                 .eq(Task::getTaskName, taskName)
                 .eq(Task::getTaskGroup, taskGroup)
         );

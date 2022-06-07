@@ -1,7 +1,7 @@
 description('定时任务服务自动配置')
 
 group 'com.wingice'
-version '1.0.0'
+version '1.0.1'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -11,11 +11,11 @@ compileJava.inputs.files(processResources)
 
 dependencies {
     implementation project(':knife-common-starter')
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.2'
     implementation 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'dom4j:dom4j:1.6.1'
-    implementation 'cn.hutool:hutool-all:5.7.12'
-    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'cn.hutool:hutool-all:5.8.2'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'org.springframework.boot:spring-boot-starter-quartz'
 }

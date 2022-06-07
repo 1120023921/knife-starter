@@ -1,7 +1,7 @@
 description('Mybatis Plus自动配置')
 
 group 'com.wingice'
-version '1.0.0'
+version '1.0.1'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -11,8 +11,8 @@ compileJava.inputs.files(processResources)
 
 dependencies {
     implementation project(':knife-common-starter')
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
-    implementation 'com.baomidou:mybatis-plus-generator:3.5.0'
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.2'
+    implementation 'com.baomidou:mybatis-plus-generator:3.5.2'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }

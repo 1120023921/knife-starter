@@ -1,7 +1,7 @@
 description('Spring Security OAuth自动配置')
 
 group 'com.wingice'
-version '1.0.0'
+version '1.0.2'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -12,11 +12,10 @@ compileJava.inputs.files(processResources)
 dependencies {
     implementation project(':knife-common-starter')
     implementation project(':knife-spring-security-config-starter')
-//    compile project(':knife-mybatis-plus-config-starter')
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.3.1'
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.2'
 }
