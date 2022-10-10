@@ -1,7 +1,7 @@
 description('Knife日志模块')
 
 group 'com.wingice'
-version '1.0.2'
+version '1.0.3'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,13 +10,16 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
-    implementation project(':knife-common-starter')
-    implementation project(':knife-spring-security-config-starter')
-    compileOnly 'com.baomidou:mybatis-plus-boot-starter:3.5.2'
-    compileOnly 'com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3'
-    compileOnly 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.springframework.boot:spring-boot-starter-aop'
-    compileOnly 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'cn.hutool:hutool-all:5.8.2'
+    compileOnly project(':knife-common-starter')
+    compileOnly project(':knife-spring-security-config-starter')
+    implementation "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusBootVersion}"
+    implementation("com.github.xiaoymin:knife4j-spring-boot-starter:${knife4jVersion}"){
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+    }
+    implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation "cn.hutool:hutool-all:${hutoolVersion}"
 }
 

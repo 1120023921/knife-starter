@@ -1,7 +1,7 @@
 description('Spring Security自动配置')
 
 group 'com.wingice'
-version '1.0.3'
+version '1.0.4'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,10 +10,10 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
-    implementation project(':knife-common-starter')
+    compileOnly project(':knife-common-starter')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'cn.hutool:hutool-all:5.8.2'
+    implementation "cn.hutool:hutool-all:${hutoolVersion}"
 }

@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.0'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '2.6.12'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
     id 'java-library'
 }
 
@@ -8,15 +8,18 @@ allprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'maven-publish'
 
     ext {
-        set('springCloudVersion', "2021.0.3")
-    }
-
-    repositories {
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        mavenCentral()
+        set('springBootVersion', "2.6.12")
+        set('springCloudVersion', "2021.0.4")
+        set('mybatisPlusBootVersion', "3.5.2")
+        set('mybatisPlusGeneratorVersion', "3.5.3")
+        set('hutoolVersion', "5.8.8")
+        set('knife4jVersion', "3.0.3")
+        set('jacksonDatabindVersion', "2.13.4")
+        set('dom4jVersion', "2.1.3")
+        set('slf4jApiVersion', "2.0.3")
+        set('dysmsapiVersion', "2.0.21")
     }
 
     dependencies {
@@ -36,9 +39,6 @@ allprojects {
         from('src/main/java') {
             include '**/*'
         }
-//        from('src/main/resources') {
-//            include '**/*'
-//        }
     }
 
     configurations {
@@ -47,47 +47,13 @@ allprojects {
         }
     }
 
-    jar {
-        enabled = true
-        archiveClassifier = ''
-    }
-
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    task javadocJar(type: Jar) {
-        from javadoc
-        classifier = 'javadoc'
-    }
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-                versionMapping {
-                    usage('java-api') {
-                        fromResolutionOf('runtimeClasspath')
-                    }
-                    usage('java-runtime') {
-                        fromResolutionResult()
-                    }
-                }
-                artifact sourcesJar
-            }
-        }
-        repositories {
-            maven {
-                allowInsecureProtocol = true
-                def releasesRepoUrl = 'http://doubleh.iok.la:8081/repository/cintsoft-snapshots/'
-                def snapshotsRepoUrl = 'http://doubleh.iok.la:8081/repository/maven-releases/'
-                url = snapshotsRepoUrl
-                credentials {
-                    username = 'admin'
-                    password = '1120023921Hh'
-                }
-            }
-        }
-    }
+//    jar {
+//        enabled = true
+//        archiveClassifier = ''
+//    }
+//
+//    task javadocJar(type: Jar) {
+//        from javadoc
+//        classifier = 'javadoc'
+//    }
 }
