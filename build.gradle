@@ -47,11 +47,11 @@ allprojects {
         }
     }
 
-//    jar {
-//        enabled = true
-//        archiveClassifier = ''
-//    }
-//
+    jar {
+        enabled = true
+        archiveClassifier = ''
+    }
+
 //    task javadocJar(type: Jar) {
 //        from javadoc
 //        classifier = 'javadoc'
