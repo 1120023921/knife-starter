@@ -252,11 +252,11 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeVerifyFilter")
     @Bean("knifeVerifyFilter")
-    public OncePerRequestFilter knifeVerifyFilter(KnifeSecurityConfigProperties knifeSecurityConfigProperties, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, ObjectMapper objectMapper) {
+    public OncePerRequestFilter knifeVerifyFilter(KnifeSecurityConfigProperties knifeSecurityConfigProperties, RedisTemplate<String, KnifeUser> userDetailRedisTemplate) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeVerifyTenantFilter(userDetailRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeVerifyTenantFilter(userDetailRedisTemplate, knifeSecurityConfigProperties);
         } else {
-            return new KnifeVerifyFilter(userDetailRedisTemplate, knifeSecurityConfigProperties, objectMapper);
+            return new KnifeVerifyFilter(userDetailRedisTemplate, knifeSecurityConfigProperties);
         }
     }
 

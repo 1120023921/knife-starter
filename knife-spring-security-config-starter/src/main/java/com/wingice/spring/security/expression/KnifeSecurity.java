@@ -1,5 +1,6 @@
 package com.wingice.spring.security.expression;
 
+import com.wingice.spring.security.exception.KnifeAuthenticationException;
 import com.wingice.spring.security.model.KnifeUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,5 +40,17 @@ public class KnifeSecurity {
             }
         }
         return false;
+    }
+
+    public boolean authenticated() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null || "anonymousUser".equals(authentication.getPrincipal())) {
+            throw new KnifeAuthenticationException(401, null, "未登录");
+        }
+        return true;
+    }
+
+    public final boolean permitAll() {
+        return true;
     }
 }

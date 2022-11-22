@@ -31,35 +31,21 @@ public class KnifeVerifyTenantFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
-    private final ObjectMapper objectMapper;
-    private final List<String> annoUrIList = Arrays.asList("/oauth/logout/pwd", "/oauth/token", "/captcha/generateCaptcha", "/sysOauthClientDetails/getSysOauthClientDetailsByClientIdAndSecret");
 
-    public KnifeVerifyTenantFilter(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+    public KnifeVerifyTenantFilter(RedisTemplate<String, KnifeUser> userDetailRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties) {
         this.userDetailRedisTemplate = userDetailRedisTemplate;
         this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
-        this.objectMapper = objectMapper;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if (!annoUrIList.contains(request.getServletPath())) {
-            final String header = request.getHeader("Authorization");
-            final String tenantId = request.getHeader("TENANT_ID");
-            if (header != null && header.startsWith("Bearer")) {
-                //从token转用户
-                final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
-                if (knifeUser != null) {
-                    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(knifeUser, null, knifeUser.getAuthorities()));
-                } else {
-                    //token无效
-                    response.setCharacterEncoding("UTF-8");
-                    response.setHeader("Content-Type", "application/json");
-                    final PrintWriter out = response.getWriter();
-                    out.write(objectMapper.writeValueAsString(ResultBean.restResult("未登录", ErrorCodeInfo.UNAUTHORIZED)));
-                    out.flush();
-                    out.close();
-                    return;
-                }
+        final String header = request.getHeader("Authorization");
+        final String tenantId = request.getHeader("TENANT_ID");
+        if (header != null && header.startsWith("Bearer")) {
+            //从token转用户
+            final KnifeUser knifeUser = userDetailRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getUserDetailPrefixTenantId(), tenantId, header.split(" ")[1]));
+            if (knifeUser != null) {
+                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(knifeUser, null, knifeUser.getAuthorities()));
             }
         }
         filterChain.doFilter(request, response);
