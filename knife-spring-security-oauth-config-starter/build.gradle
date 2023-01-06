@@ -1,7 +1,7 @@
 description('Spring Security OAuth自动配置')
 
 group 'com.wingice'
-version '1.0.4'
+version '1.0.5'
 
 compileJava.options.encoding = 'UTF-8'
 

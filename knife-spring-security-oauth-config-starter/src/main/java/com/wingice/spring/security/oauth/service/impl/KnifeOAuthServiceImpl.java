@@ -210,6 +210,9 @@ public class KnifeOAuthServiceImpl implements KnifeOAuthService {
         } else {
             if (StringUtils.hasText(token)) {
                 final KnifeUser knifeUser = userInfo(token, tenantId);
+                if (knifeUser == null) {
+                    return;
+                }
                 username = knifeUser.getUsername();
                 knifeOAuth2AccessToken = tokenRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getAccessTokenPrefix(), knifeUser.getUsername()));
             }
