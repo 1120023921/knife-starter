@@ -1,7 +1,7 @@
 description('消息服务自动配置')
 
 group 'com.wingice'
-version '1.0.7'
+version '1.0.8'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -19,7 +19,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "cn.hutool:hutool-all:${hutoolVersion}"
-    implementation "org.dom4j:dom4j:${dom4jVersion}"
     implementation "org.slf4j:slf4j-api:${slf4jApiVersion}"
     implementation("com.aliyun:dysmsapi20170525:${dysmsapiVersion}"){
         exclude group: 'org.dom4j', module: 'dom4j'
