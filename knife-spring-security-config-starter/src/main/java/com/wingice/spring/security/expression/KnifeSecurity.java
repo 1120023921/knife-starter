@@ -18,7 +18,7 @@ public class KnifeSecurity {
     public boolean hasPermission(String permission) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null || "anonymousUser".equals(authentication.getPrincipal())) {
-            return false;
+            throw new KnifeAuthenticationException(401, null, "未登录");
         }
         for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
             if (permission.equals(grantedAuthority.getAuthority()) || "INNER_USER".equals(grantedAuthority.getAuthority())) {
@@ -31,7 +31,7 @@ public class KnifeSecurity {
     public boolean hasRole(String roleKey) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null || "anonymousUser".equals(authentication.getPrincipal())) {
-            return false;
+            throw new KnifeAuthenticationException(401, null, "未登录");
         }
         final KnifeUser knifeUser = (KnifeUser) authentication.getPrincipal();
         for (String item : knifeUser.getRoleKeyList()) {
