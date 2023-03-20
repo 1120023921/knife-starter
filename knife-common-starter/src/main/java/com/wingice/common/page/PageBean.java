@@ -10,7 +10,7 @@ public class PageBean {
 
     private Long pageNum;
     private Long total;
-    private Long size;
+    private Long pageSize;
     private Long current;
     private List<String> ascs = Collections.emptyList();
     private List<String> descs = Collections.emptyList();

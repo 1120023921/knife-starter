@@ -90,7 +90,7 @@ public class TransferUtils {
     }
 
     public static <T> Page<T> pageEntityToPage(EntityPageBean<T> entityPageBean) {
-        Page<T> page = new Page<T>(entityPageBean.getPageObject().getPageNum(), entityPageBean.getPageObject().getSize());
+        Page<T> page = new Page<T>(entityPageBean.getPageObject().getPageNum(), entityPageBean.getPageObject().getPageSize());
         if (entityPageBean.getPageObject().getDescs() != null && entityPageBean.getPageObject().getDescs().size() > 0) {
             page.addOrder(OrderItem.descs(entityPageBean.getPageObject().getDescs().toArray(new String[0])));
         }

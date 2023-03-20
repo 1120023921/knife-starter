@@ -41,7 +41,7 @@ public class SysOperationLogServiceImpl extends ServiceImpl<SysOperationLogMappe
     @Override
     public Page<SysOperationLog> pageSysOperationLog(EntityPageBean<SysOperationLogQueryVO> entityPageBean) {
         final SysOperationLogQueryVO sysOperationLogQueryVO = entityPageBean.getEntity();
-        return page(new Page<SysOperationLog>(entityPageBean.getPageObject().getPageNum(), entityPageBean.getPageObject().getSize())
+        return page(new Page<SysOperationLog>(entityPageBean.getPageObject().getPageNum(), entityPageBean.getPageObject().getPageSize())
                         .addOrder(TransferUtils.transferOrderItem(entityPageBean))
                 , Wrappers.<SysOperationLog>lambdaQuery()
                         .eq(StringUtils.hasText(sysOperationLogQueryVO.getId()), SysOperationLog::getId, sysOperationLogQueryVO.getId())

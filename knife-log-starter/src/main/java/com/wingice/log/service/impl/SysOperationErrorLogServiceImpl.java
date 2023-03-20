@@ -42,7 +42,7 @@ public class SysOperationErrorLogServiceImpl extends ServiceImpl<SysOperationErr
     @Override
     public Page<SysOperationErrorLog> pageSysOperationErrorLog(EntityPageBean<SysOperationErrorLogQueryVO> entityPageBean) {
         final SysOperationErrorLogQueryVO sysOperationErrorLogQueryVO = entityPageBean.getEntity();
-        return page(new Page<SysOperationErrorLog>(entityPageBean.getPageObject().getPageNum(), entityPageBean.getPageObject().getSize())
+        return page(new Page<SysOperationErrorLog>(entityPageBean.getPageObject().getPageNum(), entityPageBean.getPageObject().getPageSize())
                         .addOrder(TransferUtils.transferOrderItem(entityPageBean))
                 , Wrappers.<SysOperationErrorLog>lambdaQuery()
                         .eq(StringUtils.hasText(sysOperationErrorLogQueryVO.getId()), SysOperationErrorLog::getId, sysOperationErrorLogQueryVO.getId())
