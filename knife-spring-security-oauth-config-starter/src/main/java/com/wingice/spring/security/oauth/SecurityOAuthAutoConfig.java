@@ -8,6 +8,7 @@ import com.wingice.spring.security.oauth.service.KnifeOAuthClientDetailsService;
 import com.wingice.spring.security.oauth.service.KnifeOAuthService;
 import com.wingice.spring.security.oauth.service.impl.KnifeOAuthServiceImpl;
 import com.wingice.spring.security.oauth.service.impl.KnifeOAuthServiceTenantImpl;
+import com.wingice.spring.security.service.CaptchaService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.Map;
 
 /**
  * @author 胡昊
@@ -28,11 +31,11 @@ public class SecurityOAuthAutoConfig {
 
     @ConditionalOnMissingBean
     @Bean
-    public KnifeOAuthService knifeOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, KnifeOAuthConfigProperties knifeOAuthConfigProperties, AuthenticationManager authenticationManager, KnifeOAuthClientDetailsService knifeOAuthClientDetailsService, StringRedisTemplate stringRedisTemplate) {
+    public KnifeOAuthService knifeOAuthService(UserDetailsService userDetailsService, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, KnifeOAuthConfigProperties knifeOAuthConfigProperties, AuthenticationManager authenticationManager, KnifeOAuthClientDetailsService knifeOAuthClientDetailsService, StringRedisTemplate stringRedisTemplate, Map<String, CaptchaService> captchaServiceMap) {
         if (!knifeOAuthConfigProperties.getTenantEnable()) {
-            return new KnifeOAuthServiceImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService, stringRedisTemplate);
+            return new KnifeOAuthServiceImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService, captchaServiceMap);
         }
-        return new KnifeOAuthServiceTenantImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService, stringRedisTemplate);
+        return new KnifeOAuthServiceTenantImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService, captchaServiceMap);
     }
 
     @ConditionalOnMissingBean

@@ -51,6 +51,15 @@
           "description": "启用"
         }
       ]
+    },
+    {
+      "name": "knife.security.captcha-mode",
+      "values": [
+        {
+          "value": "defaultCaptchaService",
+          "description": "默认验证码组件"
+        }
+      ]
     }
   ],
   "groups": [
@@ -186,6 +195,13 @@
       "type": "java.lang.String",
       "description": "验证码高度",
       "defaultValue": "100"
+    },
+    {
+      "sourceType": "com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties",
+      "name": "knife.security.captcha-mode",
+      "type": "java.lang.String",
+      "description": "验证码模式",
+      "defaultValue": "defaultCaptchaService"
     }
   ]
 }

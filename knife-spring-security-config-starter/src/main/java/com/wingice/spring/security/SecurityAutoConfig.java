@@ -220,11 +220,11 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeLoginFilter")
     @Bean("knifeLoginFilter")
-    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, StringRedisTemplate stringRedisTemplate) {
+    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, Map<String, CaptchaService> captchaServiceMap) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
-            return new KnifeLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper, stringRedisTemplate);
+            return new KnifeLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper, captchaServiceMap);
         } else {
-            return new KnifeLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper, stringRedisTemplate);
+            return new KnifeLoginFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper, captchaServiceMap);
         }
     }
 
@@ -327,7 +327,7 @@ public class SecurityAutoConfig {
      * @date 2022/4/12 11:10
      */
     @ConditionalOnMissingBean
-    @Bean
+    @Bean("defaultCaptchaService")
     public CaptchaService captchaService(KnifeSecurityConfigProperties knifeSecurityConfigProperties, StringRedisTemplate stringRedisTemplate) {
         return new CaptchaServiceImpl(knifeSecurityConfigProperties, stringRedisTemplate);
     }

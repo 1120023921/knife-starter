@@ -1,13 +1,14 @@
 package com.wingice.spring.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wingice.common.web.ErrorCodeInfo;
 import com.wingice.common.web.ResultBean;
 import com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.wingice.spring.security.exception.KnifeAuthenticationException;
 import com.wingice.spring.security.model.KnifeOAuth2AccessToken;
 import com.wingice.spring.security.model.KnifeUser;
+import com.wingice.spring.security.service.CaptchaService;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -39,9 +41,9 @@ public class KnifeLoginTenantFilter extends AbstractAuthenticationProcessingFilt
     private final RedisTemplate<String, String> userRefreshTokenRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
-    private final StringRedisTemplate stringRedisTemplate;
+    private final Map<String, CaptchaService> captchaServiceMap;
 
-    public KnifeLoginTenantFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, StringRedisTemplate stringRedisTemplate) {
+    public KnifeLoginTenantFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, Map<String, CaptchaService> captchaServiceMap) {
         super(new AntPathRequestMatcher("/login", "POST"));
         setAuthenticationManager(authenticationManager);
         this.userDetailRedisTemplate = userDetailRedisTemplate;
@@ -49,21 +51,18 @@ public class KnifeLoginTenantFilter extends AbstractAuthenticationProcessingFilt
         this.userRefreshTokenRedisTemplate = userRefreshTokenRedisTemplate;
         this.knifeSecurityConfigProperties = knifeSecurityConfigProperties;
         this.objectMapper = objectMapper;
-        this.stringRedisTemplate = stringRedisTemplate;
+        this.captchaServiceMap = captchaServiceMap;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         final String username = request.getParameter("username");
         final String password = request.getParameter("password");
+        final String captchaKey = request.getParameter("captchaKey");
+        final String captchaCode = request.getParameter("captchaCode");
         if (knifeSecurityConfigProperties.getCaptchaEnable()) {
-            final String captchaKey = request.getParameter("captchaKey");
-            final String captchaCode = request.getParameter("captchaCode");
-            if (!StringUtils.hasText(captchaCode)) {
-                throw new KnifeAuthenticationException("验证码未填写");
-            }
-            final String code = stringRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), captchaKey));
-            if (!captchaCode.equalsIgnoreCase(code)) {
+            final CaptchaService captchaService = captchaServiceMap.get(knifeSecurityConfigProperties.getCaptchaMode());
+            if (!captchaService.verifyCaptcha(captchaKey, captchaCode)) {
                 throw new KnifeAuthenticationException("验证码错误");
             }
         }
@@ -96,7 +95,7 @@ public class KnifeLoginTenantFilter extends AbstractAuthenticationProcessingFilt
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "application/json");
         final PrintWriter out = response.getWriter();
-        out.write(objectMapper.writeValueAsString(knifeOAuth2AccessToken.getTokenMap()));
+        out.write(objectMapper.writeValueAsString(ResultBean.restResult(knifeOAuth2AccessToken.getTokenMap(), ErrorCodeInfo.OK)));
         out.flush();
         out.close();
     }

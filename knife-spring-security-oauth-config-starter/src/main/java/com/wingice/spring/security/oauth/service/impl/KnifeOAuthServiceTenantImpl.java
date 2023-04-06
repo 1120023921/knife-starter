@@ -17,6 +17,7 @@ import com.wingice.spring.security.oauth.common.constant.SysOAuthCode;
 import com.wingice.spring.security.oauth.model.KnifeOAuthClientDetails;
 import com.wingice.spring.security.oauth.service.KnifeOAuthClientDetailsService;
 import com.wingice.spring.security.oauth.service.KnifeOAuthService;
+import com.wingice.spring.security.service.CaptchaService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     private final KnifeOAuthConfigProperties knifeOAuthConfigProperties;
     private final AuthenticationManager authenticationManager;
     private final KnifeOAuthClientDetailsService knifeOAuthClientDetailsService;
-    private final StringRedisTemplate stringRedisTemplate;
+    private final Map<String, CaptchaService> captchaServiceMap;
 
     @SneakyThrows
     @Override
@@ -143,12 +144,8 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     public Map<String, Object> token(KnifeAuthorizeParams knifeAuthorizeParams) {
         if (!KnifeOAuthConstant.GRANT_TYPE_CLIENT_CREDENTIALS.equals(knifeAuthorizeParams.getGrantType())
                 && knifeSecurityConfigProperties.getCaptchaEnable()) {
-            //校验验证码
-            if (!StringUtils.hasText(knifeAuthorizeParams.getCaptchaCode())) {
-                throw new KnifeAuthenticationException("验证码未填写");
-            }
-            final String code = stringRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), knifeAuthorizeParams.getCaptchaKey()));
-            if (!knifeAuthorizeParams.getCaptchaCode().equalsIgnoreCase(code)) {
+            final CaptchaService captchaService = captchaServiceMap.get(knifeSecurityConfigProperties.getCaptchaMode());
+            if (!captchaService.verifyCaptcha(knifeAuthorizeParams.getCaptchaKey(), knifeAuthorizeParams.getCaptchaCode())) {
                 throw new KnifeAuthenticationException("验证码错误");
             }
         }
@@ -172,12 +169,8 @@ public class KnifeOAuthServiceTenantImpl implements KnifeOAuthService {
     @Override
     public String login(HttpServletRequest request, HttpServletResponse response, HttpSession session, KnifeAuthorizeParams knifeAuthorizeParams) {
         if (knifeSecurityConfigProperties.getCaptchaEnable()) {
-            //校验验证码
-            if (!StringUtils.hasText(knifeAuthorizeParams.getCaptchaCode())) {
-                throw new KnifeAuthenticationException("验证码未填写");
-            }
-            final String code = stringRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), knifeAuthorizeParams.getCaptchaKey()));
-            if (!knifeAuthorizeParams.getCaptchaCode().equalsIgnoreCase(code)) {
+            final CaptchaService captchaService = captchaServiceMap.get(knifeSecurityConfigProperties.getCaptchaMode());
+            if (!captchaService.verifyCaptcha(knifeAuthorizeParams.getCaptchaKey(), knifeAuthorizeParams.getCaptchaCode())) {
                 throw new KnifeAuthenticationException("验证码错误");
             }
         }

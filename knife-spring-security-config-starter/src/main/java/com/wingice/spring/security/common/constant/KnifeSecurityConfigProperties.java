@@ -52,4 +52,6 @@ public class KnifeSecurityConfigProperties {
     private Integer captchaWidth = 250;
     //验证码高度
     private Integer captchaHeight = 100;
+    //验证码模式
+    private String captchaMode = "defaultCaptchaService";
 }
