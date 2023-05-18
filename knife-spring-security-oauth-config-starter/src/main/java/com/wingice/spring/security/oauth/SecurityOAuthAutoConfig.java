@@ -38,9 +38,9 @@ public class SecurityOAuthAutoConfig {
         return new KnifeOAuthServiceTenantImpl(userDetailsService, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, knifeOAuthConfigProperties, authenticationManager, knifeOAuthClientDetailsService, captchaServiceMap);
     }
 
-    @ConditionalOnMissingBean
-    @Bean
-    public KnifeOAuthController knifeOAuthController(KnifeOAuthService knifeOAuthService, KnifeOAuthConfigProperties knifeOAuthConfigProperties) {
-        return new KnifeOAuthController(knifeOAuthService, knifeOAuthConfigProperties);
-    }
+//    @ConditionalOnMissingBean
+//    @Bean
+//    public KnifeOAuthController knifeOAuthController(KnifeOAuthService knifeOAuthService, KnifeOAuthConfigProperties knifeOAuthConfigProperties) {
+//        return new KnifeOAuthController(knifeOAuthService, knifeOAuthConfigProperties);
+//    }
 }

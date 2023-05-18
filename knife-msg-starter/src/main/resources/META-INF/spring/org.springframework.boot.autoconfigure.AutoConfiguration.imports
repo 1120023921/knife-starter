@@ -1,0 +1,9 @@
+com.wingice.msg.mail.properties.KnifeMailProperties
+com.wingice.msg.mail.MailAutoConfig
+com.wingice.msg.ali.properties.KnifeAliProperties
+com.wingice.msg.ali.SmsAliAutoConfig
+com.wingice.msg.wechat.mp.properties.KnifeWechatMpProperties
+com.wingice.msg.wechat.mp.WechatMpAutoConfig
+com.wingice.msg.dingtalk.properties.KnifeDingtalkProperties
+com.wingice.msg.dingtalk.DingtalkAutoConfig
+com.wingice.msg.PackageScanConfig

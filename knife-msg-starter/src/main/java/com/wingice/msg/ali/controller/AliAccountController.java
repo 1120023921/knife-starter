@@ -9,6 +9,8 @@ import com.wingice.msg.ali.service.AliAccountService;
 import com.wingice.msg.ali.validator.AliAccountValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-01-13
  */
 @Api(value = "/aliAccount", tags = "阿里短信账户管理")
+@ConditionalOnProperty(name = "knife.msg.sms.ali.ali-account-api-enable", havingValue = "true")
+@Controller
 @RequestMapping("/aliAccount")
 public class AliAccountController {
 

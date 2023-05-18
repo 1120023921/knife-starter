@@ -9,6 +9,8 @@ import com.wingice.msg.dingtalk.service.DingtalkAccountService;
 import com.wingice.msg.dingtalk.validator.DingtalkAccountValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-01-14
  */
 @Api(value = "/dingtalkAccount", tags = "钉钉账户管理")
+@ConditionalOnProperty(name = "knife.msg.dingtalk.wechat-mp-account-api-enable", havingValue = "true")
+@Controller
 @RequestMapping("/dingtalkAccount")
 public class DingtalkAccountController {
 

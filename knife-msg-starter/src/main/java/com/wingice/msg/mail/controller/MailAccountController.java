@@ -9,6 +9,8 @@ import com.wingice.msg.mail.service.MailAccountService;
 import com.wingice.msg.mail.validator.MailAccountValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-01-11
  */
 @Api(value = "/mailAccount", tags = "邮件账户管理")
+@ConditionalOnProperty(name = "knife.msg.mail.mail-account-api-enable", havingValue = "true")
+@Controller
 @RequestMapping("/mailAccount")
 public class MailAccountController {
 

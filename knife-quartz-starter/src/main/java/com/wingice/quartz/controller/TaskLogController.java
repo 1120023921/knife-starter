@@ -11,6 +11,8 @@ import com.wingice.quartz.service.TaskLogService;
 import com.wingice.quartz.utils.transfer.TransferUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,8 @@ import java.util.List;
  * @since 2022-02-10
  */
 @Api(value = "/taskLog", tags = "定时任务日志")
+@ConditionalOnProperty(name = "knife.quartz.quartz-api-enable", havingValue = "true")
+@Controller
 @RequestMapping("/taskLog")
 public class TaskLogController {
 

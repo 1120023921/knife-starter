@@ -1,0 +1,3 @@
+com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties
+com.wingice.spring.security.SecurityAutoConfig
+com.wingice.spring.security.SecurityConfig

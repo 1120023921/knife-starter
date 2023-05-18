@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @since 2022-02-10
  */
 @Api(value = "/task", tags = "定时任务管理")
+@ConditionalOnProperty(name = "knife.quartz.quartz-api-enable", havingValue = "true")
+@Controller
 @RequestMapping("/task")
 public class TaskController {
 

@@ -93,10 +93,10 @@ public class DingtalkAutoConfig {
         return new KnifeDingtalkMsgServiceImpl(knifeDingtalkSenderContext);
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "knife.msg.dingtalk.wechat-mp-account-api-enable", havingValue = "true")
-    @ConditionalOnBean(name = {"dingtalkAccountService"})
-    public DingtalkAccountController dingtalkAccountController(DingtalkAccountService dingtalkAccountService) {
-        return new DingtalkAccountController(dingtalkAccountService);
-    }
+//    @Bean
+//    @ConditionalOnProperty(name = "knife.msg.dingtalk.wechat-mp-account-api-enable", havingValue = "true")
+//    @ConditionalOnBean(name = {"dingtalkAccountService"})
+//    public DingtalkAccountController dingtalkAccountController(DingtalkAccountService dingtalkAccountService) {
+//        return new DingtalkAccountController(dingtalkAccountService);
+//    }
 }

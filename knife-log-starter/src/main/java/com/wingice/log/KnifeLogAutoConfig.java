@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author 胡昊
@@ -57,17 +57,17 @@ public class KnifeLogAutoConfig {
         return new OperationLogAspect(request, knifeLogProperties, sysOperationErrorLogService, sysOperationLogService);
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
-    @ConditionalOnBean(name = {"sysOperationLogService"})
-    public SysOperationLogController sysOperationLogController(SysOperationLogService sysOperationLogService) {
-        return new SysOperationLogController(sysOperationLogService);
-    }
+//    @Bean
+//    @ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
+//    @ConditionalOnBean(name = {"sysOperationLogService"})
+//    public SysOperationLogController sysOperationLogController(SysOperationLogService sysOperationLogService) {
+//        return new SysOperationLogController(sysOperationLogService);
+//    }
 
-    @Bean
-    @ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
-    @ConditionalOnBean(name = {"sysOperationErrorLogService"})
-    public SysOperationErrorLogController sysOperationErrorLogController(SysOperationErrorLogService sysOperationErrorLogService) {
-        return new SysOperationErrorLogController(sysOperationErrorLogService);
-    }
+//    @Bean
+//    @ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
+//    @ConditionalOnBean(name = {"sysOperationErrorLogService"})
+//    public SysOperationErrorLogController sysOperationErrorLogController(SysOperationErrorLogService sysOperationErrorLogService) {
+//        return new SysOperationErrorLogController(sysOperationErrorLogService);
+//    }
 }

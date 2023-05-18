@@ -8,10 +8,10 @@ import com.wingice.quartz.service.TaskLogService;
 import com.wingice.quartz.service.TaskService;
 import com.wingice.quartz.utils.transfer.DateTimeUtils;
 import com.wingice.quartz.vo.TaskExecuteVO;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.Map;
 
 @Service

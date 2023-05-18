@@ -1,7 +1,7 @@
 description('定时任务服务自动配置')
 
 group 'com.wingice'
-version '1.0.5'
+version '2.0.0'
 
 compileJava.options.encoding = 'UTF-8'
 

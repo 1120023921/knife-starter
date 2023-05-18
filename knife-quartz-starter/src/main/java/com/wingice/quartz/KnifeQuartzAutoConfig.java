@@ -44,19 +44,19 @@ public class KnifeQuartzAutoConfig {
         return new TaskServiceImpl(quartzJobService, taskLogService);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = "knife.quartz.quartz-api-enable", havingValue = "true")
-    @ConditionalOnBean(name = "taskService")
-    public TaskController taskController(TaskService taskService) {
-        return new TaskController(taskService);
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    @ConditionalOnProperty(name = "knife.quartz.quartz-api-enable", havingValue = "true")
+//    @ConditionalOnBean(name = "taskService")
+//    public TaskController taskController(TaskService taskService) {
+//        return new TaskController(taskService);
+//    }
 
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = "knife.quartz.quartz-api-enable", havingValue = "true")
-    @ConditionalOnBean(name = "taskLogService")
-    public TaskLogController taskLogController(TaskLogService taskLogService) {
-        return new TaskLogController(taskLogService);
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    @ConditionalOnProperty(name = "knife.quartz.quartz-api-enable", havingValue = "true")
+//    @ConditionalOnBean(name = "taskLogService")
+//    public TaskLogController taskLogController(TaskLogService taskLogService) {
+//        return new TaskLogController(taskLogService);
+//    }
 }

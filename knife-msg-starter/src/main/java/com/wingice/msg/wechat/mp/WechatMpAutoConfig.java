@@ -93,10 +93,10 @@ public class WechatMpAutoConfig {
         return new KnifeWechatMpMsgServiceImpl(knifeWechatMpSenderContext);
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "knife.msg.wechat.mp.wechat-mp-account-api-enable", havingValue = "true")
-    @ConditionalOnBean(name = {"wechatMpAccountService"})
-    public WechatMpAccountController wechatMpAccountController(WechatMpAccountService wechatMpAccountService) {
-        return new WechatMpAccountController(wechatMpAccountService);
-    }
+//    @Bean
+//    @ConditionalOnProperty(name = "knife.msg.wechat.mp.wechat-mp-account-api-enable", havingValue = "true")
+//    @ConditionalOnBean(name = {"wechatMpAccountService"})
+//    public WechatMpAccountController wechatMpAccountController(WechatMpAccountService wechatMpAccountService) {
+//        return new WechatMpAccountController(wechatMpAccountService);
+//    }
 }

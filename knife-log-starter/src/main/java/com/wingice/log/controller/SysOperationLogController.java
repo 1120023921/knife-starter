@@ -9,6 +9,8 @@ import com.wingice.log.service.SysOperationLogService;
 import com.wingice.log.vo.SysOperationLogQueryVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Mail: huhao9277@gmail.com
  */
 @Api(value = "/sysOperationLog", tags = "操作日志管理")
+@ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
+@Controller
 @RequestMapping("/sysOperationLog")
 public class SysOperationLogController {
 

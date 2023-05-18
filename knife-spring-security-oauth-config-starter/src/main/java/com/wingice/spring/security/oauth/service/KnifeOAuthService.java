@@ -5,9 +5,9 @@ import com.wingice.spring.security.model.KnifeUser;
 import com.wingice.spring.security.oauth.common.bean.KnifeAuthorizeParams;
 import org.springframework.ui.Model;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
 public interface KnifeOAuthService {

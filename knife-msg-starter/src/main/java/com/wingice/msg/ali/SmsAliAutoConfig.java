@@ -93,10 +93,10 @@ public class SmsAliAutoConfig {
         return new KnifeSmsAliServiceImpl(knifeSmsAliSenderContext);
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "knife.msg.sms.ali.ali-account-api-enable", havingValue = "true")
-    @ConditionalOnBean(name = {"aliAccountService"})
-    public AliAccountController aliAccountController(AliAccountService aliAccountService) {
-        return new AliAccountController(aliAccountService);
-    }
+//    @Bean
+//    @ConditionalOnProperty(name = "knife.msg.sms.ali.ali-account-api-enable", havingValue = "true")
+//    @ConditionalOnBean(name = {"aliAccountService"})
+//    public AliAccountController aliAccountController(AliAccountService aliAccountService) {
+//        return new AliAccountController(aliAccountService);
+//    }
 }

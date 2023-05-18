@@ -9,6 +9,8 @@ import com.wingice.msg.wechat.mp.service.WechatMpAccountService;
 import com.wingice.msg.wechat.mp.validator.WechatMpAccountValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022-01-14
  */
 @Api(value = "/wechatMpAccount", tags = "微信公众号账户管理")
+@ConditionalOnProperty(name = "knife.msg.wechat.mp.wechat-mp-account-api-enable", havingValue = "true")
+@Controller
 @RequestMapping("/wechatMpAccount")
 public class WechatMpAccountController {
 

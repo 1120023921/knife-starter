@@ -5,12 +5,12 @@ import com.wingice.msg.mail.service.KnifeMailSenderContext;
 import com.wingice.msg.mail.service.KnifeMailService;
 import com.wingice.msg.mail.vo.MailInfo;
 import com.wingice.msg.mail.vo.MailResult;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.util.StringUtils;
 
-import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
