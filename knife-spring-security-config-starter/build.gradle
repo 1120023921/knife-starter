@@ -1,7 +1,7 @@
 description('Spring Security自动配置')
 
 group 'com.wingice'
-version '1.0.7'
+version '1.0.8'
 
 compileJava.options.encoding = 'UTF-8'
 
