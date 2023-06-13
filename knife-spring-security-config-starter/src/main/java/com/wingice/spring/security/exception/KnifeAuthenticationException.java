@@ -22,10 +22,12 @@ public class KnifeAuthenticationException extends AuthenticationException {
 
     public KnifeAuthenticationException(String msg, Throwable t) {
         super(msg, t);
+        this.msg = msg;
     }
 
     public KnifeAuthenticationException(String msg) {
         super(msg);
+        this.msg = msg;
     }
 
     public int getCode() {
