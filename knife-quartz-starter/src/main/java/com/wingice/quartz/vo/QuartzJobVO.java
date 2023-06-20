@@ -1,13 +1,13 @@
 package com.wingice.quartz.vo;
 
-import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -30,10 +30,10 @@ public class QuartzJobVO implements Serializable {
 
 
     public void transExecParams(String execParams) {
-        if (StringUtils.isEmpty(execParams)) {
+        if (!StringUtils.hasText(execParams)) {
             return;
         }
-        dataMap = Maps.newHashMapWithExpectedSize(5);
+        dataMap = new HashMap<>();
         final String[] paramList = execParams.split(";");
         for (String param : paramList) {
             dataMap.put(param.split("=")[0], param.split("=")[1]);
