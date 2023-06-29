@@ -12,7 +12,7 @@ allprojects {
     ext {
         set('springBootVersion', "2.6.12")
         set('springCloudVersion', "2021.0.4")
-        set('mybatisPlusBootVersion', "3.5.2")
+        set('mybatisPlusBootVersion', "3.5.3")
         set('mybatisPlusGeneratorVersion', "3.5.3")
         set('hutoolVersion', "5.8.8")
         set('knife4jVersion', "4.1.0")
