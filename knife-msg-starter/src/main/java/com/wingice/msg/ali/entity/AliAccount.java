@@ -1,8 +1,8 @@
 package com.wingice.msg.ali.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,51 +19,51 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("msg_ali_account")
-@ApiModel(value = "AliAccount对象", description = "表基础信息")
+@Schema(name = "表基础信息")
 public class AliAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @Schema(description = "id")
     private String id;
 
-    @ApiModelProperty(value = "accessKeyId")
+    @Schema(description = "accessKeyId")
     private String accessKeyId;
 
-    @ApiModelProperty(value = "accessSecret")
+    @Schema(description = "accessSecret")
     private String accessSecret;
 
-    @ApiModelProperty(value = "权重")
+    @Schema(description = "权重")
     private Integer weight;
 
-    @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建时间")
     private Long createTime;
 
-    @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(description = "更新时间")
     private Long updateTime;
 
-    @ApiModelProperty(value = "创建者")
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建者")
     private String createBy;
 
-    @ApiModelProperty(value = "更新者")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(description = "更新者")
     private String updateBy;
 
-    @ApiModelProperty(value = "版本")
     @Version
+    @Schema(description = "版本")
     private Integer version;
 
-    @ApiModelProperty(value = "是否有效 0-未删除 1-已删除")
+    @Schema(description = "是否有效 0-未删除 1-已删除")
     private Integer deleted;
 
-    @ApiModelProperty(value = "额外信息")
+    @Schema(description = "额外信息")
     private String extra;
 
-    @ApiModelProperty(value = "租户id")
+    @Schema(description = "租户id")
     private String tenantId;
 
 

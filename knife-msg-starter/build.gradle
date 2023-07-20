@@ -1,7 +1,7 @@
 description('消息服务自动配置')
 
 group 'com.wingice'
-version '1.0.9'
+version '1.1.9'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -11,16 +11,15 @@ compileJava.inputs.files(processResources)
 
 dependencies {
     compileOnly project(':knife-common-starter')
-    implementation "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusBootVersion}"
-    implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
+    implementation "com.baomidou:mybatis-plus-boot-starter"
+    implementation 'io.swagger.core.v3:swagger-annotations'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation "cn.hutool:hutool-all:${hutoolVersion}"
-    implementation "org.slf4j:slf4j-api:${slf4jApiVersion}"
-    implementation("com.aliyun:dysmsapi20170525:${dysmsapiVersion}"){
+    implementation "org.slf4j:slf4j-api"
+    implementation("com.aliyun:dysmsapi20170525") {
         exclude group: 'org.dom4j', module: 'dom4j'
     }
-    implementation "org.dom4j:dom4j:${dom4jVersion}"
+    implementation "org.dom4j:dom4j"
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation("com.github.xiaoymin:knife4j-openapi2-spring-boot-starter:${knife4jVersion}")
 }

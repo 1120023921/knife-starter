@@ -1,7 +1,7 @@
 description('Knife公共模块')
 
 group 'com.wingice'
-version '1.0.4'
+version '1.1.4'
 
 compileJava.options.encoding = 'UTF-8'
 

@@ -1,7 +1,7 @@
 package com.wingice.log.vo;
 
 import com.wingice.log.model.SysOperationErrorLog;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,8 +16,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class SysOperationErrorLogQueryVO extends SysOperationErrorLog {
 
-    @ApiModelProperty("开始时间")
+    @Schema(description = "开始时间")
     private Long startTime;
-    @ApiModelProperty("结束时间")
+    @Schema(description = "结束时间")
     private Long endTime;
 }

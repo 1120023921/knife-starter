@@ -9,8 +9,8 @@ import com.wingice.common.web.ResultBean;
 import com.wingice.quartz.entity.TaskLog;
 import com.wingice.quartz.service.TaskLogService;
 import com.wingice.quartz.utils.transfer.TransferUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +26,8 @@ import java.util.List;
  * @author 胡昊
  * @since 2022-02-10
  */
-@Api(value = "/taskLog", tags = "定时任务日志")
 @RequestMapping("/taskLog")
+@Tag(name = "定时任务日志")
 public class TaskLogController {
 
     private final TaskLogService taskLogService;
@@ -43,9 +43,9 @@ public class TaskLogController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 10:13
      */
-    @ApiOperation("分页查询任务日志")
     @PostMapping("/pageTaskLog")
     @ResponseBody
+    @Operation(summary = "分页查询任务日志")
     public ResultBean<Page<TaskLog>> pageTaskLog(@RequestBody EntityPageBean<TaskLog> entityPageBean) {
         return ResultBean.restResult(taskLogService.page(TransferUtils.pageEntityToPage(entityPageBean), Wrappers.lambdaQuery(entityPageBean.getEntity())), ErrorCodeInfo.OK);
     }
@@ -57,9 +57,9 @@ public class TaskLogController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 10:15
      */
-    @ApiOperation("删除任务日志")
     @PostMapping("/deleteTaskLog")
     @ResponseBody
+    @Operation(summary = "删除任务日志")
     public ResultBean<Boolean> deleteTaskLog(@RequestBody List<String> idList) {
         return ResultBean.restResult(taskLogService.removeByIds(idList), ErrorCodeInfo.OK);
     }

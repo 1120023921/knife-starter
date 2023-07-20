@@ -2,6 +2,7 @@ package com.wingice.spring.security.oauth.common.bean;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springdoc.api.annotations.ParameterObject;
 
 /**
  * @author 胡昊
@@ -12,6 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
+@ParameterObject
 public class KnifeAuthorizeParams {
 
     private String grantType;

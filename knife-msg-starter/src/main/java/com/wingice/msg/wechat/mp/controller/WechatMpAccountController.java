@@ -7,8 +7,8 @@ import com.wingice.common.web.ResultBean;
 import com.wingice.msg.wechat.mp.entity.WechatMpAccount;
 import com.wingice.msg.wechat.mp.service.WechatMpAccountService;
 import com.wingice.msg.wechat.mp.validator.WechatMpAccountValidator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
  * @author 胡昊
  * @since 2022-01-14
  */
-@Api(value = "/wechatMpAccount", tags = "微信公众号账户管理")
 @RequestMapping("/wechatMpAccount")
+@Tag(name = "微信公众号账户管理")
 public class WechatMpAccountController {
 
     private final WechatMpAccountService wechatMpAccountService;
@@ -36,9 +36,9 @@ public class WechatMpAccountController {
      * @email huhao9277@gmail.com
      * @date 2022/1/11 17:07
      */
-    @ApiOperation("保存微信公众号账户账户信息")
     @ResponseBody
     @PostMapping("/saveOrUpdateWechatMpAccount")
+    @Operation(summary = "保存微信公众号账户账户信息")
     public ResultBean<Boolean> saveOrUpdateWechatMpAccount(@RequestBody WechatMpAccount wechatMpAccount) {
         WechatMpAccountValidator.saveOrUpdateWechatMpAccount(wechatMpAccount);
         return ResultBean.restResult(wechatMpAccountService.saveOrUpdateWechatMpAccount(wechatMpAccount), ErrorCodeInfo.OK);
@@ -50,9 +50,9 @@ public class WechatMpAccountController {
      * @email huhao9277@gmail.com
      * @date 2022/1/11 17:14
      */
-    @ApiOperation("删除微信公众号账户账户")
     @ResponseBody
     @PostMapping("/deleteWechatMpAccount")
+    @Operation(summary = "删除微信公众号账户账户")
     public ResultBean<Boolean> deleteWechatMpAccount() {
         return ResultBean.restResult(wechatMpAccountService.deleteWechatMpAccount(), ErrorCodeInfo.OK);
     }
@@ -63,9 +63,9 @@ public class WechatMpAccountController {
      * @email huhao9277@gmail.com
      * @date 2022/1/13 18:42
      */
-    @ApiOperation("获取微信公众号账户账户")
     @ResponseBody
     @GetMapping("/getWechatMpAccount")
+    @Operation(summary = "获取微信公众号账户账户")
     public ResultBean<WechatMpAccount> getWechatMpAccount() {
         return ResultBean.restResult(wechatMpAccountService.getOne(Wrappers.lambdaQuery()), ErrorCodeInfo.OK);
     }
