@@ -109,7 +109,7 @@ public class KnifeOAuthServiceImpl implements KnifeOAuthService {
         if (clientDetails == null) {
             throw new BusinessException(SysOAuthCode.CLIENT_INFO_ERROR.getBusinessCode());
         }
-        if (!Arrays.asList(clientDetails.getAuthorizedGrantTypes().split(",")).contains(KnifeOAuthConstant.GRANT_TYPE_PASSWORD)) {
+        if (!Arrays.asList(clientDetails.getAuthorizedGrantTypes().split(",")).contains(KnifeOAuthConstant.GRANT_TYPE_CLIENT_CREDENTIALS)) {
             throw new BusinessException(SysOAuthCode.AUTHORIZED_GRANT_TYPE_NOE_ALLOW.getBusinessCode());
         }
         final KnifeUser knifeUser = knifeOAuthClientDetailsService.clientCredentialsAuthorize(clientId, clientSecret);
