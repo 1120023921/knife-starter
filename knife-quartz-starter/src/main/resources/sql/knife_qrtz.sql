@@ -40,9 +40,7 @@ CREATE TABLE `qrtz_task`  (
   `version` bigint(20) NOT NULL DEFAULT 0 COMMENT '版本',
   `extra` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '额外信息',
   `tenant_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '租户id',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `uk_task_class`(`task_class`) USING BTREE,
-  UNIQUE INDEX `uk_task_name_task_group`(`task_name`, `task_group`) USING BTREE COMMENT '任务名任务组复合唯一索引'
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

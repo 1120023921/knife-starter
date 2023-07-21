@@ -24,7 +24,7 @@ public class QuartzJobVO implements Serializable {
     private String note;
     private String cron;
     //是否允许并发执行
-    private Boolean concurrent;
+    private Integer concurrent;
     //执行参数
     private Map<String, Object> dataMap;
 

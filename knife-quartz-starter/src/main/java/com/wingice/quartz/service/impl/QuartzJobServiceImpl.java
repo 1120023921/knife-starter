@@ -29,7 +29,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     @Override
     public void addJob(QuartzJobVO quartzJobVO) throws SchedulerException {
         //是否允许并发执行
-        final Class<? extends Job> jobClass = Boolean.TRUE.equals(quartzJobVO.getConcurrent()) ? BaseJob.class : BaseJobDisallowConcurrent.class;
+        final Class<? extends Job> jobClass = quartzJobVO.getConcurrent().equals(1) ? BaseJob.class : BaseJobDisallowConcurrent.class;
 
         final String taskName = quartzJobVO.getTaskName();
         final String taskGroup = quartzJobVO.getTaskGroup();
