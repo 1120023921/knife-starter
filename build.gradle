@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '3.0.5'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '2.6.13'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
     id 'java-library'
 }
 
@@ -9,19 +9,17 @@ allprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
-    sourceCompatibility = '17'
-
     ext {
-        set('springBootVersion', "3.0.5")
-        set('springCloudVersion', "2022.0.2")
-        set('mybatisPlusBootVersion', "3.5.3.1")
-        set('mybatisPlusGeneratorVersion', "3.5.3.1")
-        set('hutoolVersion', "5.8.18")
-        set('knife4jVersion', "3.0.3")
-        set('jacksonDatabindVersion', "2.15.0")
+        set('springBootVersion', "2.6.13")
+        set('springCloudVersion', "2021.0.5")
+        set('mybatisPlusBootVersion', "3.5.3")
+        set('mybatisPlusGeneratorVersion', "3.5.3")
+        set('hutoolVersion', "5.8.20")
+        set('knife4jVersion', "4.1.0")
+        set('jacksonDatabindVersion', "2.13.4")
         set('dom4jVersion', "2.1.4")
         set('slf4jApiVersion', "2.0.7")
-        set('dysmsapiVersion', "2.0.23")
+        set('dysmsapiVersion', "2.0.24")
     }
 
     dependencies {
@@ -29,11 +27,24 @@ allprojects {
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         annotationProcessor 'org.projectlombok:lombok'
         compileOnly 'org.projectlombok:lombok'
+        implementation "cn.hutool:hutool-all"
     }
 
     dependencyManagement {
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+        imports {
+            mavenBom "com.github.xiaoymin:knife4j-dependencies:${knife4jVersion}"
+        }
+        dependencies {
+            dependency "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusBootVersion}"
+            dependency "com.baomidou:mybatis-plus-generator:${mybatisPlusGeneratorVersion}"
+            dependency "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+            dependency "cn.hutool:hutool-all:${hutoolVersion}"
+            dependency "org.dom4j:dom4j:${dom4jVersion}"
+            dependency "org.slf4j:slf4j-api:${slf4jApiVersion}"
+            dependency "com.aliyun:dysmsapi20170525:${dysmsapiVersion}"
         }
     }
 

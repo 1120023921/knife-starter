@@ -7,10 +7,8 @@ import com.wingice.common.web.ResultBean;
 import com.wingice.msg.mail.entity.MailAccount;
 import com.wingice.msg.mail.service.MailAccountService;
 import com.wingice.msg.mail.validator.MailAccountValidator;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Controller;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -21,10 +19,8 @@ import org.springframework.web.bind.annotation.*;
  * @author 胡昊
  * @since 2022-01-11
  */
-@Api(value = "/mailAccount", tags = "邮件账户管理")
-@ConditionalOnProperty(name = "knife.msg.mail.mail-account-api-enable", havingValue = "true")
-@Controller
 @RequestMapping("/mailAccount")
+@Tag(name = "邮件账户管理")
 public class MailAccountController {
 
     private final MailAccountService mailAccountService;
@@ -40,9 +36,9 @@ public class MailAccountController {
      * @email huhao9277@gmail.com
      * @date 2022/1/11 17:07
      */
-    @ApiOperation("保存邮件账户信息")
     @ResponseBody
     @PostMapping("/saveOrUpdateMailAccount")
+    @Operation(summary = "保存邮件账户信息")
     public ResultBean<Boolean> saveOrUpdateMailAccount(@RequestBody MailAccount mailAccount) {
         MailAccountValidator.saveOrUpdateMailAccount(mailAccount);
         return ResultBean.restResult(mailAccountService.saveOrUpdateMailAccount(mailAccount), ErrorCodeInfo.OK);
@@ -54,9 +50,9 @@ public class MailAccountController {
      * @email huhao9277@gmail.com
      * @date 2022/1/11 17:14
      */
-    @ApiOperation("删除邮件账户")
     @ResponseBody
     @PostMapping("/deleteMailAccount")
+    @Operation(summary = "删除邮件账户")
     public ResultBean<Boolean> deleteMailAccount() {
         return ResultBean.restResult(mailAccountService.deleteMailAccount(), ErrorCodeInfo.OK);
     }
@@ -67,9 +63,9 @@ public class MailAccountController {
      * @email huhao9277@gmail.com
      * @date 2022/1/13 18:42
      */
-    @ApiOperation("获取邮件账户")
     @ResponseBody
     @GetMapping("/getMailAccount")
+    @Operation(summary = "获取邮件账户")
     public ResultBean<MailAccount> getMailAccount() {
         return ResultBean.restResult(mailAccountService.getOne(Wrappers.lambdaQuery()), ErrorCodeInfo.OK);
     }

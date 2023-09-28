@@ -1,7 +1,7 @@
 description('Spring Security自动配置')
 
 group 'com.wingice'
-version '2.0.1'
+version '1.1.8'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -15,5 +15,4 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation "cn.hutool:hutool-all:${hutoolVersion}"
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -18,5 +19,5 @@ public class TaskExecuteVO implements Serializable {
     /**
      * 执行参数
      */
-    private String dataMap;
+    private Map<String, Object> dataMap;
 }

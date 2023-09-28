@@ -9,7 +9,6 @@ import com.wingice.quartz.mapper.TaskLogMapper;
 import com.wingice.quartz.quartzenum.TaskExecResultEnum;
 import com.wingice.quartz.service.TaskLogService;
 import com.wingice.quartz.utils.transfer.TransferUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -82,7 +81,7 @@ public class TaskLogServiceImpl extends ServiceImpl<TaskLogMapper, TaskLog> impl
     public boolean updateExecResultToFail(String logId, Throwable e) {
         return this.update(Wrappers.<TaskLog>lambdaUpdate()
                 .set(TaskLog::getExecResult, TaskExecResultEnum.FAILURE.getValue())
-                .set(TaskLog::getExecResultText, ExceptionUtils.getStackTrace(e))
+                .set(TaskLog::getExecResultText, e.getMessage())
                 .eq(TaskLog::getId, logId)
         );
     }

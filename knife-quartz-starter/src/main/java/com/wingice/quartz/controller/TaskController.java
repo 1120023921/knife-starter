@@ -10,12 +10,10 @@ import com.wingice.quartz.entity.Task;
 import com.wingice.quartz.exception.KnifeQuartzException;
 import com.wingice.quartz.job.BaseTaskExecute;
 import com.wingice.quartz.service.TaskService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author 胡昊
  * @since 2022-02-10
  */
-@Api(value = "/task", tags = "定时任务管理")
-@ConditionalOnProperty(name = "knife.quartz.quartz-api-enable", havingValue = "true")
-@Controller
 @RequestMapping("/task")
+@Tag(name = "定时任务管理")
 public class TaskController {
 
     private final TaskService taskService;
@@ -48,9 +44,9 @@ public class TaskController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 9:17
      */
-    @ApiOperation("添加任务")
     @PostMapping("/addTask")
     @ResponseBody
+    @Operation(summary = "添加任务")
     public ResultBean<Boolean> addTask(@RequestBody Task task) {
         checkTaskClassName(task.getTaskClass());
         checkCron(task.getCron());
@@ -65,9 +61,9 @@ public class TaskController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 9:19
      */
-    @ApiOperation("更新任务")
     @PostMapping("/updateTask")
     @ResponseBody
+    @Operation(summary = "更新任务")
     public ResultBean<Boolean> updateTask(@RequestBody Task task) {
         checkTaskClassName(task.getTaskClass());
         checkCron(task.getCron());
@@ -83,9 +79,9 @@ public class TaskController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 10:03
      */
-    @ApiOperation("执行任务")
     @PostMapping("/executeTask")
     @ResponseBody
+    @Operation(summary = "执行任务")
     public ResultBean<Boolean> executeTask(String taskName, String taskGroup) {
         taskService.executeTask(taskName, taskGroup);
         return ResultBean.restResult(true, ErrorCodeInfo.OK);
@@ -100,9 +96,9 @@ public class TaskController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 10:04
      */
-    @ApiOperation("暂停任务")
     @PostMapping("/pauseTask")
     @ResponseBody
+    @Operation(summary = "暂停任务")
     public ResultBean<Boolean> pauseTask(String taskName, String taskGroup) {
         taskService.pauseTask(taskName, taskGroup);
         return ResultBean.restResult(true, ErrorCodeInfo.OK);
@@ -116,9 +112,9 @@ public class TaskController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 10:05
      */
-    @ApiOperation("恢复任务")
     @PostMapping("/resumeTask")
     @ResponseBody
+    @Operation(summary = "恢复任务")
     public ResultBean<Boolean> resumeTask(String taskName, String taskGroup) {
         taskService.resumeTask(taskName, taskGroup);
         return ResultBean.restResult(true, ErrorCodeInfo.OK);
@@ -132,9 +128,9 @@ public class TaskController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 10:05
      */
-    @ApiOperation("删除任务")
     @PostMapping("/deleteTask")
     @ResponseBody
+    @Operation(summary = "删除任务")
     public ResultBean<Boolean> deleteTask(String taskName, String taskGroup) {
         taskService.deleteTask(taskName, taskGroup);
         return ResultBean.restResult(true, ErrorCodeInfo.OK);
@@ -147,9 +143,9 @@ public class TaskController {
      * @email huhao9277@gmail.com
      * @date 2022/2/11 10:06
      */
-    @ApiOperation("分页查询定时任务")
     @PostMapping("/pageTask")
     @ResponseBody
+    @Operation(summary = "分页查询定时任务")
     public ResultBean<Page<Task>> pageTask(@RequestBody EntityPageBean<Task> entityPageBean) {
         return ResultBean.restResult(taskService.pageTask(entityPageBean), ErrorCodeInfo.OK);
     }

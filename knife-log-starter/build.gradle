@@ -1,7 +1,7 @@
 description('Knife日志模块')
 
 group 'com.wingice'
-version '2.0.0'
+version '1.1.5'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -12,14 +12,11 @@ compileJava.inputs.files(processResources)
 dependencies {
     compileOnly project(':knife-common-starter')
     compileOnly project(':knife-spring-security-config-starter')
-    implementation "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusBootVersion}"
-    implementation("com.github.xiaoymin:knife4j-spring-boot-starter:${knife4jVersion}"){
-        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
-    }
-    implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
+    implementation "com.baomidou:mybatis-plus-boot-starter"
+    implementation 'io.swagger.core.v3:swagger-annotations'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation "cn.hutool:hutool-all:${hutoolVersion}"
 }
 

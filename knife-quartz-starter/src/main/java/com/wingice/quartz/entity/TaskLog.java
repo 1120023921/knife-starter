@@ -1,8 +1,8 @@
 package com.wingice.quartz.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,60 +19,57 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("qrtz_task_log")
-@ApiModel(value = "TaskLog对象", description = "")
+@Schema(name = "")
 public class TaskLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "自增主键")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @Schema(description = "自增主键")
     private String id;
 
-    @ApiModelProperty(value = "任务名")
+    @Schema(description = "任务名")
     private String taskName;
 
-    @ApiModelProperty(value = "执行时间")
+    @Schema(description = "执行时间")
     private Long execDate;
 
-    @ApiModelProperty(value = "执行结果（成功:1、失败:0、正在执行：-1)")
+    @Schema(description = "执行结果（成功:1、失败:0、正在执行：-1)")
     private Integer execResult;
 
-    @ApiModelProperty(value = "成功信息或抛出的异常信息")
+    @Schema(description = "成功信息或抛出的异常信息")
     private String execResultText;
 
-    @ApiModelProperty(value = "任务id")
+    @Schema(description = "任务id")
     private String taskId;
 
-    @ApiModelProperty(value = "权重")
+    @Schema(description = "权重")
     private Integer weight;
 
-    @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建时间")
     private Long createTime;
 
-    @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(description = "更新时间")
     private Long updateTime;
 
-    @ApiModelProperty(value = "创建者")
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建者")
     private String createBy;
 
-    @ApiModelProperty(value = "更新者")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(description = "更新者")
     private String updateBy;
 
-    @ApiModelProperty(value = "版本")
     @Version
+    @Schema(description = "版本")
     private Long version;
 
-//    @ApiModelProperty(value = "是否有效 0-未删除 1-已删除")
-//    private Integer deleted;
-
-    @ApiModelProperty(value = "额外信息")
+    @Schema(description = "额外信息")
     private String extra;
 
-    @ApiModelProperty(value = "租户id")
+    @Schema(description = "租户id")
     private String tenantId;
 
 

@@ -7,10 +7,8 @@ import com.wingice.common.web.ResultBean;
 import com.wingice.log.model.SysOperationLog;
 import com.wingice.log.service.SysOperationLogService;
 import com.wingice.log.vo.SysOperationLogQueryVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Controller;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Time: 10:19
  * Mail: huhao9277@gmail.com
  */
-@Api(value = "/sysOperationLog", tags = "操作日志管理")
-@ConditionalOnProperty(name = "knife.log.log-api-enable", havingValue = "true")
-@Controller
 @RequestMapping("/sysOperationLog")
+@Tag(name = "操作日志管理")
 public class SysOperationLogController {
 
     private final SysOperationLogService sysOperationLogService;
@@ -42,9 +38,9 @@ public class SysOperationLogController {
      * @email huhao9277@gmail.com
      * @date 2022/1/19 10:52
      */
-    @ApiOperation("删除操作日志")
     @PostMapping("/deleteSysOperationLog")
     @ResponseBody
+    @Operation(summary = "删除操作日志")
     public ResultBean<Boolean> deleteSysOperationLog(@RequestBody SysOperationLogQueryVO sysOperationLogQueryVO) {
         return ResultBean.restResult(sysOperationLogService.deleteSysOperationLog(sysOperationLogQueryVO), ErrorCodeInfo.OK);
     }
@@ -56,9 +52,9 @@ public class SysOperationLogController {
      * @email huhao9277@gmail.com
      * @date 2022/1/19 10:26
      */
-    @ApiOperation("分页查询操作日志")
     @PostMapping("/pageSysOperationLog")
     @ResponseBody
+    @Operation(summary = "分页查询操作日志")
     public ResultBean<Page<SysOperationLog>> pageSysOperationLog(@RequestBody EntityPageBean<SysOperationLogQueryVO> entityPageBean) {
         return ResultBean.restResult(sysOperationLogService.pageSysOperationLog(entityPageBean), ErrorCodeInfo.OK);
     }

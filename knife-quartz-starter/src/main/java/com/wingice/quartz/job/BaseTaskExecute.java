@@ -56,13 +56,10 @@ public abstract class BaseTaskExecute {
         taskService.updateExecDateAndExecResult(taskExecuteVO.getTaskId(), TaskExecResultEnum.EXECUTING);
 
         try {
-            // 获取任务携带的参数
-            final Map<String, Object> dataMap = JSONUtil.toBean(taskExecuteVO.getDataMap(), new TypeReference<Map<String, Object>>() {
-            }, false);
 
             final long startTime = System.currentTimeMillis();
             // 调用子类的任务
-            execute(dataMap);
+            execute(taskExecuteVO.getDataMap());
             final long endTime = System.currentTimeMillis();
 
 

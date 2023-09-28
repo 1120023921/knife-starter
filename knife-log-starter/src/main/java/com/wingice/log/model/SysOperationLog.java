@@ -1,8 +1,8 @@
 package com.wingice.log.model;
 
 import com.baomidou.mybatisplus.annotation.*;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,75 +18,75 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "SysOperationLog对象", description = "普通操作日志")
+@Schema(name = "普通操作日志")
 public class SysOperationLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @Schema(description = "id")
     private String id;
 
-    @ApiModelProperty(value = "功能模块")
+    @Schema(description = "功能模块")
     private String operationModule;
 
-    @ApiModelProperty(value = "操作类型")
+    @Schema(description = "操作类型")
     private String operationType;
 
-    @ApiModelProperty(value = "操作描述")
+    @Schema(description = "操作描述")
     private String operationDesc;
 
-    @ApiModelProperty(value = "请求参数")
+    @Schema(description = "请求参数")
     private String operationRequestParam;
 
-    @ApiModelProperty(value = "返回参数")
+    @Schema(description = "返回参数")
     private String operationResponseParam;
 
-    @ApiModelProperty(value = "操作人id")
+    @Schema(description = "操作人id")
     private String operationUserId;
 
-    @ApiModelProperty(value = "操作人名称")
+    @Schema(description = "操作人名称")
     private String operationUserName;
 
-    @ApiModelProperty(value = "操作方法")
+    @Schema(description = "操作方法")
     private String operationMethod;
 
-    @ApiModelProperty(value = "请求url")
+    @Schema(description = "请求url")
     private String operationUrl;
 
-    @ApiModelProperty(value = "请求ip")
+    @Schema(description = "请求ip")
     private String operationIp;
 
-    @ApiModelProperty(value = "操作时间")
+    @Schema(description = "操作时间")
     private Long operationCreateTime;
 
-    @ApiModelProperty(value = "操作版本号")
+    @Schema(description = "操作版本号")
     private String operationVersion;
 
-    @ApiModelProperty(value = "权重")
+    @Schema(description = "权重")
     private Integer weight;
 
-    @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建时间")
     private Long createTime;
 
-    @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(description = "更新时间")
     private Long updateTime;
 
-    @ApiModelProperty(value = "创建者")
     @TableField(fill = FieldFill.INSERT)
+    @Schema(description = "创建者")
     private String createBy;
 
-    @ApiModelProperty(value = "更新者")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(description = "更新者")
     private String updateBy;
 
-    @ApiModelProperty(value = "版本")
     @Version
+    @Schema(description = "版本")
     private Long version;
 
-    @ApiModelProperty(value = "额外信息")
+    @Schema(description = "额外信息")
     private String extra;
 
 
