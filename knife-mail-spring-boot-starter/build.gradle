@@ -1,0 +1,16 @@
+description('Mail自动配置')
+
+group 'com.wingice'
+version '1.0.0'
+
+compileJava.options.encoding = 'UTF-8'
+
+compileTestJava.options.encoding = 'UTF-8'
+
+compileJava.inputs.files(processResources)
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-mail"
+    implementation "org.dom4j:dom4j"
+    implementation "org.slf4j:slf4j-api"
+}
