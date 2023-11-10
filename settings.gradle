@@ -7,4 +7,6 @@ include 'knife-log-starter'
 include 'knife-cas-starter'
 include 'knife-msg-starter'
 include 'knife-quartz-starter'
+include 'knife-mail-spring-boot-starter'
+include 'knife-test-starter'
 
