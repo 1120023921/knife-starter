@@ -1,4 +1,4 @@
-package com.wingice.test.model;
+package com.wingice.mail.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -10,20 +10,24 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 发送邮件信息
+ * 转发邮件信息
  */
 @Data
 @Builder
 @ToString
 @EqualsAndHashCode
-public class MailSendInfo {
+public class MailForwardInfo {
 
     @Tolerate
-    public MailSendInfo() {
+    public MailForwardInfo() {
     }
 
-    //发件人
-    private String from;
+    //账户名
+    private String username;
+    //邮箱文件夹
+    private String folderName;
+    //邮件消息号
+    private Integer messageNumber;
     //收件人列表
     @Builder.Default
     private List<String> toList = Collections.emptyList();
@@ -33,11 +37,4 @@ public class MailSendInfo {
     //密送人列表
     @Builder.Default
     private List<String> bccList = Collections.emptyList();
-    //主题
-    private String subject;
-    //正文
-    private String content;
-    //附件信息
-    @Builder.Default
-    private List<MailSendFileInfo> mailSendFileInfoList = Collections.emptyList();
 }

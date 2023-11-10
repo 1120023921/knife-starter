@@ -1,4 +1,4 @@
-package com.wingice.test.model;
+package com.wingice.mail.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -41,6 +41,8 @@ public class MailInfo {
     private Integer messageNumber;
     //发送日期
     private Long sentDate;
+    //是否已读
+    private Boolean seen;
     //附件列表
     @Builder.Default
     private List<MailInfoAttachmentInfo> mailInfoAttachmentInfoList = Collections.emptyList();

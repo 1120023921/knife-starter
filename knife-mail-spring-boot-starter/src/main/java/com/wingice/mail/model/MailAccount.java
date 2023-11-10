@@ -1,4 +1,4 @@
-package com.wingice.test.model;
+package com.wingice.mail.model;
 
 import lombok.Builder;
 import lombok.Data;
@@ -15,9 +15,13 @@ import lombok.ToString;
 public class MailAccount {
 
     //邮件服务器地址
-    private String host;
+    private String imapHost;
     //邮件服务器端口
-    private Integer port;
+    private Integer imapPort;
+    //邮件服务器地址
+    private String smtpHost;
+    //邮件服务器端口
+    private Integer smtpPort;
     //用户名
     private String username;
     //密码
@@ -26,4 +30,6 @@ public class MailAccount {
     private Integer encryption;
     //是否认证 0-无需认证 1-需要认证
     private Integer auth;
+    //发件人
+    private String from;
 }

@@ -1,4 +1,4 @@
-package com.wingice.test.model;
+package com.wingice.mail.model;
 
 import lombok.Builder;
 import lombok.Data;

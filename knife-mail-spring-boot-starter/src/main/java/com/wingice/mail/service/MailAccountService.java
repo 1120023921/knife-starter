@@ -1,7 +1,7 @@
-package com.wingice.test.service;
+package com.wingice.mail.service;
 
 
-import com.wingice.test.model.MailAccount;
+import com.wingice.mail.model.MailAccount;
 
 /**
  * 邮件账户服务接口
