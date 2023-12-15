@@ -1,7 +1,7 @@
 description('Knife日志模块')
 
 group 'com.wingice'
-version '2.0.0'
+version '2.0.1'
 
 compileJava.options.encoding = 'UTF-8'
 

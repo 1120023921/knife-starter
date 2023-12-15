@@ -1,6 +1,5 @@
 package com.wingice.mail.service.impl;
 
-import com.sun.mail.imap.IMAPBodyPart;
 import com.wingice.mail.model.MailInfo;
 import com.wingice.mail.model.MailInfoAttachmentInfo;
 import com.wingice.mail.service.MailReceiveService;
@@ -11,6 +10,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeUtility;
 import jakarta.mail.search.*;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.angus.mail.imap.IMAPBodyPart;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
