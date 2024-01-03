@@ -12,9 +12,8 @@ allprojects {
     ext {
         set('springBootVersion', "3.2.0")
         set('springCloudVersion', "2023.0.0")
-        set('mybatisPlusBootVersion', "3.5.4.1")
-        set('mybatisPlusGeneratorVersion', "3.5.4.1")
-        set('mybatisSpring', "3.0.3")
+        set('mybatisPlusBootVersion', "3.5.5")
+        set('mybatisPlusGeneratorVersion', "3.5.5")
         set('hutoolVersion', "5.8.22")
         set('knife4jVersion', "4.4.0")
 //        set('jacksonDatabindVersion', "2.16.0")
@@ -40,9 +39,8 @@ allprojects {
             mavenBom "com.github.xiaoymin:knife4j-dependencies:${knife4jVersion}"
         }
         dependencies {
-            dependency "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusBootVersion}"
+            dependency "com.baomidou:mybatis-plus-spring-boot3-starter:${mybatisPlusBootVersion}"
             dependency "com.baomidou:mybatis-plus-generator:${mybatisPlusGeneratorVersion}"
-            dependency "org.mybatis:mybatis-spring:${mybatisSpring}"
 //            dependency "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
             dependency "org.projectlombok:lombok:${lombokVersion}"
             dependency "cn.hutool:hutool-all:${hutoolVersion}"

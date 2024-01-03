@@ -1,7 +1,7 @@
 description('定时任务服务自动配置')
 
 group 'com.wingice'
-version '2.0.1'
+version '2.0.2'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -11,7 +11,7 @@ compileJava.inputs.files(processResources)
 
 dependencies {
     compileOnly project(':knife-common-starter')
-    implementation "com.baomidou:mybatis-plus-boot-starter"
+    implementation "com.baomidou:mybatis-plus-spring-boot3-starter"
     implementation 'io.swagger.core.v3:swagger-annotations'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -6,11 +6,13 @@ import cn.hutool.json.JSONUtil;
 import com.wingice.quartz.exception.KnifeQuartzException;
 import com.wingice.quartz.vo.QuartzJobVO;
 import com.wingice.quartz.vo.TaskExecuteVO;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.BeanUtils;
 
+@Slf4j
 public class BaseJob implements Job {
 
     @Override
@@ -35,6 +37,7 @@ public class BaseJob implements Job {
             baseTaskExecute.execute();
         } catch (Exception e) {
             final String errorMessage = String.format("任务: [%s] 未执行成功，请检查执行类是否配置正确！！！", quartzJobDetails.getTaskName());
+            log.error(errorMessage, e);
             throw new KnifeQuartzException(errorMessage);
         }
     }
