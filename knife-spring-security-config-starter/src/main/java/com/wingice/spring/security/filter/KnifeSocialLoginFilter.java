@@ -1,23 +1,25 @@
 package com.wingice.spring.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wingice.common.web.ResultBean;
 import com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.wingice.spring.security.exception.KnifeAuthenticationException;
 import com.wingice.spring.security.model.KnifeOAuth2AccessToken;
 import com.wingice.spring.security.model.KnifeSocialAuthenticationToken;
 import com.wingice.spring.security.model.KnifeUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.util.StringUtils;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -36,12 +38,12 @@ public class KnifeSocialLoginFilter extends AbstractAuthenticationProcessingFilt
 
     private final RedisTemplate<String, KnifeUser> userDetailRedisTemplate;
     private final RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate;
-    private final RedisTemplate<String, String> userRefreshTokenRedisTemplate;
+    private final StringRedisTemplate userRefreshTokenRedisTemplate;
     private final KnifeSecurityConfigProperties knifeSecurityConfigProperties;
     private final ObjectMapper objectMapper;
 
-    public KnifeSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
-        super(new AntPathRequestMatcher("/social/login", "POST"));
+    public KnifeSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, StringRedisTemplate userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+        super(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/social/login"));
         setAuthenticationManager(authenticationManager);
         this.userDetailRedisTemplate = userDetailRedisTemplate;
         this.tokenRedisTemplate = tokenRedisTemplate;

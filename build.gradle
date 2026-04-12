@@ -1,26 +1,25 @@
 plugins {
-    id 'org.springframework.boot' version '3.2.0'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.5.13'
+    id 'io.spring.dependency-management' version '1.1.7'
     id 'java-library'
 }
 
 allprojects {
     apply plugin: 'java-library'
-    apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
     ext {
-        set('springBootVersion', "3.2.0")
-        set('springCloudVersion', "2023.0.0")
-        set('mybatisPlusBootVersion', "3.5.5")
-        set('mybatisPlusGeneratorVersion', "3.5.5")
-        set('hutoolVersion', "5.8.22")
-        set('knife4jVersion', "4.4.0")
-//        set('jacksonDatabindVersion', "2.16.0")
+        set('springBootVersion', "3.5.13")
+        set('springCloudVersion', "2025.0.2")
+        set('mybatisPlusBootVersion', "3.5.16")
+        set('mybatisPlusGeneratorVersion', "3.5.16")
+        set('hutoolVersion', "5.8.34")
+        set('knife4jVersion', "4.5.0")
+        set('springdocVersion', "2.8.13")
         set('dom4jVersion', "2.1.4")
-        set('slf4jApiVersion', "2.0.7")
+        set('slf4jApiVersion', "2.0.16")
         set('dysmsapiVersion', "2.0.24")
-        set('lombokVersion', "1.18.30")
+        set('lombokVersion', "1.18.44")
     }
 
     dependencies {
@@ -33,6 +32,9 @@ allprojects {
 
     dependencyManagement {
         imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        }
+        imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
         }
         imports {
@@ -40,8 +42,9 @@ allprojects {
         }
         dependencies {
             dependency "com.baomidou:mybatis-plus-spring-boot3-starter:${mybatisPlusBootVersion}"
+            dependency "com.baomidou:mybatis-plus-jsqlparser:${mybatisPlusBootVersion}"
             dependency "com.baomidou:mybatis-plus-generator:${mybatisPlusGeneratorVersion}"
-//            dependency "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+            dependency "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
             dependency "org.projectlombok:lombok:${lombokVersion}"
             dependency "cn.hutool:hutool-all:${hutoolVersion}"
             dependency "org.dom4j:dom4j:${dom4jVersion}"
@@ -50,9 +53,12 @@ allprojects {
         }
     }
 
-    processResources {
-        from('src/main/java') {
-            include '**/*'
+    sourceSets {
+        main {
+            resources {
+                srcDirs = ['src/main/resources', 'src/main/java']
+                includes = ['**/*.xml', '**/*.properties', '**/*.yml', '**/*.yaml']
+            }
         }
     }
 
@@ -62,10 +68,10 @@ allprojects {
         }
     }
 
-    jar {
-        enabled = true
-        archiveClassifier = ''
-    }
+//    jar {
+//        enabled = true
+//        archiveClassifier = ''
+//    }
 
 //    task javadocJar(type: Jar) {
 //        from javadoc

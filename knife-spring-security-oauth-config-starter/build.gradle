@@ -1,7 +1,7 @@
 description('Spring Security OAuth自动配置')
 
 group 'com.wingice'
-version '2.0.2'
+version '2.0.3'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -10,8 +10,8 @@ compileTestJava.options.encoding = 'UTF-8'
 compileJava.inputs.files(processResources)
 
 dependencies {
-    compileOnly project(':knife-common-starter')
-    compileOnly project(':knife-spring-security-config-starter')
+    api project(':knife-common-starter')
+    api project(':knife-spring-security-config-starter')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'

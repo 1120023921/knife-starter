@@ -15,6 +15,7 @@ import com.wingice.spring.security.provider.KnifeInMemoryAuthenticationProvider;
 import com.wingice.spring.security.provider.KnifeSocialAuthenticationProvider;
 import com.wingice.spring.security.service.CaptchaService;
 import com.wingice.spring.security.service.impl.CaptchaServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,7 +35,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -86,16 +86,16 @@ public class SecurityAutoConfig {
         return redisTemplate;
     }
 
-    @ConditionalOnMissingBean(name = {"userRefreshTokenRedisTemplate"})
-    @Bean("userRefreshTokenRedisTemplate")
-    public RedisTemplate<String, String> userRefreshTokenRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        final RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
+//    @ConditionalOnMissingBean(name = {"userRefreshTokenRedisTemplate"})
+//    @Bean("userRefreshTokenRedisTemplate")
+//    public RedisTemplate<String, String> userRefreshTokenRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+//        final RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setConnectionFactory(redisConnectionFactory);
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+//        redisTemplate.afterPropertiesSet();
+//        return redisTemplate;
+//    }
 
     /**
      * @description 内部调用拦截器
@@ -220,7 +220,7 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeLoginFilter")
     @Bean("knifeLoginFilter")
-    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, Map<String, CaptchaService> captchaServiceMap) {
+    public AbstractAuthenticationProcessingFilter knifeLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, StringRedisTemplate userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper, Map<String, CaptchaService> captchaServiceMap) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
             return new KnifeLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper, captchaServiceMap);
         } else {
@@ -236,7 +236,7 @@ public class SecurityAutoConfig {
      */
     @ConditionalOnMissingBean(name = "knifeSocialLoginFilter")
     @Bean("knifeSocialLoginFilter")
-    public AbstractAuthenticationProcessingFilter knifeSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, RedisTemplate<String, String> userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
+    public AbstractAuthenticationProcessingFilter knifeSocialLoginFilter(AuthenticationManager authenticationManager, RedisTemplate<String, KnifeUser> userDetailRedisTemplate, RedisTemplate<String, KnifeOAuth2AccessToken> tokenRedisTemplate, StringRedisTemplate userRefreshTokenRedisTemplate, KnifeSecurityConfigProperties knifeSecurityConfigProperties, ObjectMapper objectMapper) {
         if (knifeSecurityConfigProperties.getTenantEnable()) {
             return new KnifeSocialLoginTenantFilter(authenticationManager, userDetailRedisTemplate, tokenRedisTemplate, userRefreshTokenRedisTemplate, knifeSecurityConfigProperties, objectMapper);
         } else {

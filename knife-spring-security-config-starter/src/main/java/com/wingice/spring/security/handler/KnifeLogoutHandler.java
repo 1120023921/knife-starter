@@ -1,19 +1,19 @@
 package com.wingice.spring.security.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wingice.common.web.ErrorCodeInfo;
 import com.wingice.common.web.ResultBean;
 import com.wingice.spring.security.common.constant.KnifeSecurityConfigProperties;
 import com.wingice.spring.security.model.KnifeOAuth2AccessToken;
 import com.wingice.spring.security.model.KnifeUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.util.StringUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
