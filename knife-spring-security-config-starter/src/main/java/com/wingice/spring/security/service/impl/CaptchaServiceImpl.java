@@ -42,6 +42,8 @@ public class CaptchaServiceImpl implements CaptchaService {
             throw new KnifeAuthenticationException("验证码未填写");
         }
         final String code = stringRedisTemplate.opsForValue().get(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), captchaKey));
+        //验证码一次有效
+        stringRedisTemplate.delete(String.format(knifeSecurityConfigProperties.getCaptchaPrefix(), captchaKey));
         return userInputCode.equalsIgnoreCase(code);
     }
 }
