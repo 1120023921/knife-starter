@@ -1,12 +1,14 @@
 package com.wingice.spring.security.oauth.controller;
 
-import cn.hutool.core.util.StrUtil;
 import com.wingice.common.web.ErrorCodeInfo;
 import com.wingice.common.web.ResultBean;
 import com.wingice.spring.security.model.KnifeUser;
 import com.wingice.spring.security.oauth.KnifeOAuthConfigProperties;
 import com.wingice.spring.security.oauth.common.bean.KnifeAuthorizeParams;
 import com.wingice.spring.security.oauth.service.KnifeOAuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -60,11 +59,9 @@ public class KnifeOAuthController {
 
     @GetMapping("/logout/pwd")
     @ResponseBody
-    public ResultBean<Boolean> logout(HttpServletRequest request, String tenantId) {
+    public ResultBean<Boolean> logout(HttpServletRequest request) {
         final String token = request.getHeader("Authorization") == null ? null : request.getHeader("Authorization").split(" ")[1];
-        if (StrUtil.isBlank(tenantId)) {
-            tenantId = request.getHeader("TENANT_ID");
-        }
+        String tenantId = request.getHeader("TENANT_ID");
         knifeOAuthService.logout(null, token, tenantId);
         return ResultBean.restResult(true, ErrorCodeInfo.OK);
     }
