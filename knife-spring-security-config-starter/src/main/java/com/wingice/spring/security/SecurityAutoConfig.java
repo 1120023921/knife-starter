@@ -340,7 +340,6 @@ public class SecurityAutoConfig {
      * @date 2022/4/12 11:14
      */
     @ConditionalOnMissingBean
-    @Bean
     public CaptchaController captchaController(CaptchaService captchaService) {
         return new CaptchaController(captchaService);
     }
