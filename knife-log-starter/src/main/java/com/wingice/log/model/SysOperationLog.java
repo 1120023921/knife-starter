@@ -2,7 +2,6 @@ package com.wingice.log.model;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,6 +16,7 @@ import java.io.Serializable;
  * @since 2021-06-24
  */
 @Data
+@TableName("base_operation_log")
 @EqualsAndHashCode(callSuper = false)
 @Schema(name = "普通操作日志")
 public class SysOperationLog implements Serializable {
