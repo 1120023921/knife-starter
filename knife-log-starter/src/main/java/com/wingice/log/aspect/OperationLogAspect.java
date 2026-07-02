@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author proven
@@ -41,6 +42,8 @@ public class OperationLogAspect {
     private static final String UNKNOWN = "unknown";
 
     private static final String[] HEADERS_TO_TRY = {
+            "REMOTE_ADDR",
+            "X-Real-IP",
             "X-Forwarded-For",
             "Proxy-Client-IP",
             "WL-Proxy-Client-IP",
@@ -51,8 +54,7 @@ public class OperationLogAspect {
             "HTTP_FORWARDED_FOR",
             "HTTP_FORWARDED",
             "HTTP_VIA",
-            "REMOTE_ADDR",
-            "X-Real-IP"
+
     };
 
     public OperationLogAspect(HttpServletRequest request, KnifeLogProperties knifeLogProperties, SysOperationErrorLogService sysOperationErrorLogService, SysOperationLogService sysOperationLogService) {
@@ -185,17 +187,24 @@ public class OperationLogAspect {
     }
 
     private String getRemoteIp(HttpServletRequest request) {
+        String remoteAddr = request.getRemoteAddr();
+        List<String> trustedIps = knifeLogProperties.getTrustedProxyIpList();
+
+        // 可信代理校验：列表为空或 remoteAddr 不在列表中，直接返回 remoteAddr
+        if (trustedIps == null || trustedIps.isEmpty() || !trustedIps.contains(remoteAddr)) {
+            return remoteAddr;
+        }
+
+        // 来自信任代理，解析代理头，返回第一个合法 IP
         for (String header : HEADERS_TO_TRY) {
             String ip = request.getHeader(header);
             if (StringUtils.hasText(ip) && !UNKNOWN.equalsIgnoreCase(ip)) {
-                String reverseProxyIp = NetUtil.getMultistageReverseProxyIp(ip);
-                if (Validator.isIpv4(reverseProxyIp) || Validator.isIpv6(reverseProxyIp)) {
-                    // 判断是否为IP 返回原始IP
-                    return ip;
+                String firstIp = NetUtil.getMultistageReverseProxyIp(ip);
+                if (Validator.isIpv4(firstIp) || Validator.isIpv6(firstIp)) {
+                    return firstIp;
                 }
             }
         }
-        // 否则返回 空地址
-        return request.getRemoteAddr();
+        return remoteAddr;
     }
 }

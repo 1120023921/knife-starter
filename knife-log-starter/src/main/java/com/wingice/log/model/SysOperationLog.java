@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @since 2021-06-24
  */
 @Data
-@TableName("base_operation_log")
+@TableName("sys_operation_log")
 @EqualsAndHashCode(callSuper = false)
 @Schema(name = "普通操作日志")
 public class SysOperationLog implements Serializable {
